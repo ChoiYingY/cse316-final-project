@@ -1,6 +1,9 @@
 import React, { useContext, useState } from 'react'
 import { GlobalStoreContext } from '../store'
 
+import MUIRemoveSongModal from './MUIRemoveSongModal'
+import MUIEditSongModal from './MUIEditSongModal'
+
 function SongCard(props) {
     const { store } = useContext(GlobalStoreContext);
     const [ draggedTo, setDraggedTo ] = useState(0);
@@ -35,11 +38,16 @@ function SongCard(props) {
     }
     function handleRemoveSong(event) {
         console.log("handleRemoveSong");
+        console.log("index: " + index + " \nsong: " + JSON.stringify(song));
+        
         store.showRemoveSongModal(index, song);
     }
     function handleClick(event) {
         // DOUBLE CLICK IS FOR SONG EDITING
         if (event.detail === 2) {
+            console.log("handleDblClick: EDIT_SONG");
+            console.log("index: " + index + " \nsong: " + JSON.stringify(song));
+            
             store.showEditSongModal(index, song);
         }
     }
@@ -72,6 +80,9 @@ function SongCard(props) {
                 value={"\u2715"}
                 onClick={handleRemoveSong}
             />
+
+            <MUIRemoveSongModal/>
+            <MUIEditSongModal/>
         </div>
     );
 }

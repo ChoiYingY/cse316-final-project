@@ -64,7 +64,7 @@ function GlobalStoreContextProvider(props) {
 
     // SINCE WE'VE WRAPPED THE STORE IN THE AUTH CONTEXT WE CAN ACCESS THE USER HERE
     const { auth } = useContext(AuthContext);
-    console.log("auth: " + auth);
+    console.log("auth: " + JSON.stringify(auth));
 
     // HERE'S THE DATA STORE'S REDUCER, IT MUST
     // HANDLE EVERY TYPE OF STATE CHANGE
@@ -76,7 +76,7 @@ function GlobalStoreContextProvider(props) {
                 return setStore({
                     currentModal : CurrentModal.NONE,
                     idNamePairs: payload.idNamePairs,
-                    currentList: payload.playlist,
+                    currentList: null,
                     currentSongIndex: -1,
                     currentSong: null,
                     newListCounter: store.newListCounter,
@@ -184,6 +184,7 @@ function GlobalStoreContextProvider(props) {
                 });
             }
             case GlobalStoreActionType.REMOVE_SONG: {
+                console.log("REMOVE_SONG")
                 return setStore({
                     currentModal : CurrentModal.REMOVE_SONG,
                     idNamePairs: store.idNamePairs,
@@ -236,8 +237,7 @@ function GlobalStoreContextProvider(props) {
                                 storeReducer({
                                     type: GlobalStoreActionType.CHANGE_LIST_NAME,
                                     payload: {
-                                        idNamePairs: pairsArray,
-                                        playlist: playlist
+                                        idNamePairs: pairsArray
                                     }
                                 });
                             }
@@ -285,10 +285,12 @@ function GlobalStoreContextProvider(props) {
 
     // THIS FUNCTION LOADS ALL THE ID, NAME PAIRS SO WE CAN LIST ALL THE LISTS
     store.loadIdNamePairs = function () {
+        console.log("store.loadIdNamePairs")
         async function asyncLoadIdNamePairs() {
             const response = await api.getPlaylistPairs();
             if (response.data.success) {
                 let pairsArray = response.data.idNamePairs;
+                console.log(pairsArray);
                 storeReducer({
                     type: GlobalStoreActionType.LOAD_ID_NAME_PAIRS,
                     payload: pairsArray
@@ -330,11 +332,16 @@ function GlobalStoreContextProvider(props) {
     }
 
     store.deleteList = function (id) {
+        console.log("store.deleteList");
+        console.log("id: " + id);
         async function processDelete(id) {
             let response = await api.deletePlaylistById(id);
+            console.log(response);
+            console.log(response.data.success);
             if (response.data.success) {
                 console.log("successfully delete list")
                 store.loadIdNamePairs();
+                console.log(store);
                 history.push("/");
             }
         }
@@ -533,9 +540,12 @@ function GlobalStoreContextProvider(props) {
         });
     }
 
-    // store.clearTransactions = function () {
-    //     tps.clearAllTransactions();
-    // }
+    store.clearTransactions = function () {
+        if(tps){
+            console.log(tps);
+            tps.clearAllTransactions();
+        }
+    }
 
     return (
         <GlobalStoreContext.Provider value={{

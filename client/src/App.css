@@ -341,6 +341,27 @@ input {
   text-align: center;
 }
 
+.modal-north{
+  font-size: xx-large;
+  margin-bottom: 2.5%;
+}
+
+.modal-center-content{
+  margin-bottom: 5%;
+}
+
+.modal-button{
+  margin-right: 3%;
+}
+
+.modal-textfield{
+  margin-bottom: 3%;
+}
+
+#edit-song-modal-youTubeId-textfield{
+  margin-bottom: 7%;
+}
+
 /* ANIMATIONS
 –––––––––––––––––––––––––––––––––––––––––––––––––– */
 [data-animation] .modal-dialog {

@@ -64,7 +64,9 @@ deletePlaylist = async (req, res) => {
                 if (user._id == req.userId) {
                     console.log("correct user!");
                     Playlist.findOneAndDelete({ _id: req.params.id }, () => {
-                        return res.status(200).json({});
+                        return res.status(200).json({
+                            success: true
+                        });
                     }).catch(err => console.log(err))
                 }
                 else {
@@ -89,18 +91,20 @@ getPlaylistById = async (req, res) => {
 
         // DOES THIS LIST BELONG TO THIS USER?
         async function asyncFindUser(list) {
-            await User.findOne({ email: list.ownerEmail }, (err, user) => {
-                console.log("user._id: " + user._id);
-                console.log("req.userId: " + req.userId);
-                if (user._id == req.userId) {
-                    console.log("correct user!");
-                    return res.status(200).json({ success: true, playlist: list })
-                }
-                else {
-                    console.log("incorrect user!");
-                    return res.status(400).json({ success: false, description: "authentication error" });
-                }
-            });
+            if(list){
+                await User.findOne({ email: list.ownerEmail }, (err, user) => {
+                    console.log("user._id: " + user._id);
+                    console.log("req.userId: " + req.userId);
+                    if (user._id == req.userId) {
+                        console.log("correct user!");
+                        return res.status(200).json({ success: true, playlist: list })
+                    }
+                    else {
+                        console.log("incorrect user!");
+                        return res.status(400).json({ success: false, description: "authentication error" });
+                    }
+                });
+            }
         }
         asyncFindUser(list);
     }).catch(err => console.log(err))
@@ -182,7 +186,9 @@ updatePlaylist = async (req, res) => {
                 console.log("req.userId: " + req.userId);
                 if (user._id == req.userId) {
                     console.log("correct user!");
-                    console.log("req.body.name: " + req.body.name);
+                    
+                    if(req.body.name)
+                        console.log("req.body.name: " + req.body.name);
 
                     list.name = body.playlist.name;
                     list.songs = body.playlist.songs;

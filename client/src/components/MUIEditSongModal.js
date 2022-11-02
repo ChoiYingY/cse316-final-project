@@ -14,13 +14,15 @@ const style = {
     border: '2px solid #000',
     boxShadow: 24,
     p: 4,
+    height: 300
 };
 
 export default function MUIEditSongModal() {
     const { store } = useContext(GlobalStoreContext);
-    const [ title, setTitle ] = useState(store.currentSong.title);
-    const [ artist, setArtist ] = useState(store.currentSong.artist);
-    const [ youTubeId, setYouTubeId ] = useState(store.currentSong.youTubeId);
+
+    const [ title, setTitle ] = useState((store.currentSong && store.currentSong.title) ? store.currentSong.title : "");
+    const [ artist, setArtist ] = useState((store.currentSong && store.currentSong.artist) ? store.currentSong.artist : "");
+    const [ youTubeId, setYouTubeId ] = useState((store.currentSong && store.currentSong.youTubeId) ? store.currentSong.youTubeId : "");
 
     function handleConfirmEditSong() {
         let newSongData = {
@@ -49,7 +51,7 @@ export default function MUIEditSongModal() {
 
     return (
         <Modal
-            open={store.listMarkedForDeletion !== null}
+            open={store.currentModal === "EDIT_SONG" && store.currentSong !== null && store.currentSongIndex !== null}
         >
             <Box sx={style}>
             <div
@@ -79,7 +81,7 @@ export default function MUIEditSongModal() {
                         type="text" 
                         defaultValue={artist} 
                         onChange={handleUpdateArtist} />
-                    <div id="you-tube-id-prompt" className="modal-prompt">You Tube Id:</div>
+                    <div id="you-tube-id-prompt" className="modal-prompt">YouTube Id:</div>
                     <input 
                         id="edit-song-modal-youTubeId-textfield" 
                         className='modal-textfield' 

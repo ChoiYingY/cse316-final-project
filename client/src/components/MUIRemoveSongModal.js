@@ -14,6 +14,7 @@ const style = {
     border: '2px solid #000',
     boxShadow: 24,
     p: 4,
+    height: 150
 };
 
 export default function MUIRemoveSongModal() {
@@ -38,7 +39,7 @@ export default function MUIRemoveSongModal() {
 
     return (
         <Modal
-            open={store.listMarkedForDeletion !== null}
+            open={store.currentModal === "REMOVE_SONG" && store.currentSong !== null && store.currentSongIndex !== null}
         >
             <Box sx={style}>
             <div
@@ -47,11 +48,11 @@ export default function MUIRemoveSongModal() {
         data-animation="slideInOutLeft">
         <div className="modal-root" id='verify-remove-song-root'>
             <div className="modal-north">
-                Remove {songTitle}?
+                Remove <strong>{songTitle}</strong>?
             </div>
             <div className="modal-center">
                 <div className="modal-center-content">
-                    Are you sure you wish to permanently remove {songTitle} from the playlist?
+                    Are you sure you wish to permanently remove <i>{songTitle}</i> from the playlist?
                 </div>
             </div>
             <div className="modal-south">

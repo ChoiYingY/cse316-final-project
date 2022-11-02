@@ -29,6 +29,7 @@ export default function MUIDeleteModal() {
     function handleCloseModal(event) {
         console.log("close modal")
         store.unmarkListForDeletion();
+        store.hideModals();
     }
 
     return (
