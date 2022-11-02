@@ -134,7 +134,7 @@ function AuthContextProvider(props) {
                 type: AuthActionType.LOGOUT_USER,
                 payload: null
             })
-            store.clearTransactions();
+            // store.clearTransactions();
             history.push("/");
         }
     }
