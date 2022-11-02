@@ -37,10 +37,6 @@ export default function MUIDeleteModal() {
         errMsg = auth.errMsg;
     }
 
-//     function handleDeleteList(event) {
-//         store.deleteMarkedList();
-//     }
-
     function handleCloseModal(event) {
         auth.clearErrorMsg();
     }

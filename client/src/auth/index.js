@@ -2,6 +2,8 @@ import React, { createContext, useEffect, useState } from "react";
 import { useHistory } from 'react-router-dom'
 import api from './auth-request-api'
 
+import store from '../store'
+
 const AuthContext = createContext();
 console.log("create AuthContext: " + AuthContext);
 
@@ -44,7 +46,8 @@ function AuthContextProvider(props) {
             case AuthActionType.LOGOUT_USER: {
                 return setAuth({
                     user: null,
-                    loggedIn: false
+                    loggedIn: false,
+                    errMsg: null
                 })
             }
             case AuthActionType.REGISTER_USER: {
@@ -131,6 +134,7 @@ function AuthContextProvider(props) {
                 type: AuthActionType.LOGOUT_USER,
                 payload: null
             })
+            store.clearTransactions();
             history.push("/");
         }
     }
