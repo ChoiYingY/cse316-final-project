@@ -87,7 +87,7 @@ function AuthContextProvider(props) {
                         user: response.data.user
                     }
                 })
-                history.push("/login");
+                history.push("/");
             }
         }
         catch(err){
@@ -101,15 +101,26 @@ function AuthContextProvider(props) {
     }
 
     auth.loginUser = async function(email, password) {
-        const response = await api.loginUser(email, password);
-        if (response.status === 200) {
+        try{
+            console.log("auth.loginUser");
+            const response = await api.loginUser(email, password);
+            if (response.status === 200) {
+                authReducer({
+                    type: AuthActionType.LOGIN_USER,
+                    payload: {
+                        user: response.data.user
+                    }
+                })
+                history.push("/");
+            }
+        }
+        catch(err){
+            const errMsg = err.response.data.errorMessage;
+            console.log("Error: " + errMsg);
             authReducer({
-                type: AuthActionType.LOGIN_USER,
-                payload: {
-                    user: response.data.user
-                }
-            })
-            history.push("/");
+                type: AuthActionType.SET_ERROR_MSG,
+                payload: errMsg
+            });
         }
     }
 
