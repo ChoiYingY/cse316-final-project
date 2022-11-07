@@ -227,25 +227,33 @@ function GlobalStoreContextProvider(props) {
             if (response.data.success) {
                 let playlist = response.data.playlist;
                 playlist.name = newName;
-                async function updateList(playlist) {
-                    response = await api.updatePlaylistById(playlist._id, playlist);
-                    if (response.data.success) {
-                        async function getListPairs(playlist) {
-                            response = await api.getPlaylistPairs();
-                            if (response.data.success) {
-                                let pairsArray = response.data.idNamePairs;
-                                storeReducer({
-                                    type: GlobalStoreActionType.CHANGE_LIST_NAME,
-                                    payload: {
-                                        idNamePairs: pairsArray
-                                    }
-                                });
+
+                console.log(auth.user.email);
+                console.log(playlist.ownerEmail);
+
+                if(auth.user.email === playlist.ownerEmail){
+                    console.log("EMAIL MATCHED. YOU CAN NOW CHANGE LIST NAME");
+
+                    async function updateList(playlist) {
+                        response = await api.updatePlaylistById(playlist._id, playlist);
+                        if (response.data.success) {
+                            async function getListPairs(playlist) {
+                                response = await api.getPlaylistPairs();
+                                if (response.data.success) {
+                                    let pairsArray = response.data.idNamePairs;
+                                    storeReducer({
+                                        type: GlobalStoreActionType.CHANGE_LIST_NAME,
+                                        payload: {
+                                            idNamePairs: pairsArray
+                                        }
+                                    });
+                                }
                             }
+                            getListPairs(playlist);
                         }
-                        getListPairs(playlist);
                     }
+                    updateList(playlist);
                 }
-                updateList(playlist);
             }
         }
         asyncChangeListName(id);
@@ -270,14 +278,22 @@ function GlobalStoreContextProvider(props) {
         if (response.status === 201) {
             tps.clearAllTransactions();
             let newList = response.data.playlist;
-            storeReducer({
-                type: GlobalStoreActionType.CREATE_NEW_LIST,
-                payload: newList
-            }
-            );
 
-            // IF IT'S A VALID LIST THEN LET'S START EDITING IT
-            history.push("/playlist/" + newList._id);
+            console.log(auth.user.email);
+            console.log(newList);
+
+            if(newList.ownerEmail === auth.user.email){
+                console.log("EMAIL MATCHED. YOU CAN NOW CREATE NEW LIST");
+                
+                storeReducer({
+                    type: GlobalStoreActionType.CREATE_NEW_LIST,
+                    payload: newList
+                }
+                );
+    
+                // IF IT'S A VALID LIST THEN LET'S START EDITING IT
+                history.push("/playlist/" + newList._id);
+            }
         }
         else {
             console.log("API FAILED TO CREATE A NEW LIST");
@@ -313,10 +329,17 @@ function GlobalStoreContextProvider(props) {
             let response = await api.getPlaylistById(id);
             if (response.data.success) {
                 let playlist = response.data.playlist;
-                storeReducer({
-                    type: GlobalStoreActionType.MARK_LIST_FOR_DELETION,
-                    payload: {id: id, playlist: playlist}
-                });
+
+                console.log(playlist.ownerEmail);
+                if(playlist.ownerEmail === auth.user.email){
+                    console.log("EMAIL MATCHED. YOU CAN NOW MARK LIST FOR DELETION");
+                    
+                    storeReducer({
+                        type: GlobalStoreActionType.MARK_LIST_FOR_DELETION,
+                        payload: {id: id, playlist: playlist}
+                    });
+                }
+
             }
         }
         getListToDelete(id);
@@ -336,6 +359,7 @@ function GlobalStoreContextProvider(props) {
         console.log("store.deleteList");
         console.log("id: " + id);
         async function processDelete(id) {
+            console.log("now call deletePlaylistById");
             let response = await api.deletePlaylistById(id);
             console.log(response);
             console.log(response.data.success);
@@ -419,7 +443,7 @@ function GlobalStoreContextProvider(props) {
     }
     store.addNewSong = function() {
         let index = this.getPlaylistSize();
-        this.addCreateSongTransaction(index, "Untitled", "?", "dQw4w9WgXcQ");
+        this.addCreateSongTransaction(index, "Untitled", "Unknown", "dQw4w9WgXcQ");
     }
     // THIS FUNCTION CREATES A NEW SONG IN THE CURRENT LIST
     // USING THE PROVIDED DATA AND PUTS THIS SONG AT INDEX
