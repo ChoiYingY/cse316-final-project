@@ -30,7 +30,8 @@ export const GlobalStoreActionType = {
     SET_LIST_NAME_EDIT_ACTIVE: "SET_LIST_NAME_EDIT_ACTIVE",
     EDIT_SONG: "EDIT_SONG",
     REMOVE_SONG: "REMOVE_SONG",
-    HIDE_MODALS: "HIDE_MODALS"
+    HIDE_MODALS: "HIDE_MODALS",
+    CLEAR: "CLEAR"
 }
 
 // WE'LL NEED THIS TO PROCESS TRANSACTIONS
@@ -205,6 +206,19 @@ function GlobalStoreContextProvider(props) {
                     currentSongIndex: -1,
                     currentSong: null,
                     newListCounter: store.newListCounter,
+                    listNameActive: false,
+                    listIdMarkedForDeletion: null,
+                    listMarkedForDeletion: null
+                });
+            }
+            case GlobalStoreActionType.CLEAR: {
+                return setStore({
+                    currentModal : CurrentModal.NONE,
+                    idNamePairs: store.idNamePairs,
+                    currentList: null,
+                    currentSongIndex: -1,
+                    currentSong: null,
+                    newListCounter: 0,
                     listNameActive: false,
                     listIdMarkedForDeletion: null,
                     listMarkedForDeletion: null
@@ -411,8 +425,12 @@ function GlobalStoreContextProvider(props) {
         return (store.currentModal === CurrentModal.DELETE_LIST) || (store.currentModal === CurrentModal.EDIT_SONG) || (store.currentModal === CurrentModal.REMOVE_SONG);
     }
 
-    store.clearTransactions = function() {
+    store.clearInfo = function() {
         tps.clearAllTransactions();
+        storeReducer({
+            type: GlobalStoreActionType.CLEAR,
+            payload: {}
+        });
     }
 
     // THE FOLLOWING 8 FUNCTIONS ARE FOR COORDINATING THE UPDATING

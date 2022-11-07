@@ -31,7 +31,7 @@ export default function AppBanner() {
     const handleLogout = () => {
         handleMenuClose();
         auth.logoutUser();
-        store.clearTransactions();
+        store.clearInfo();
         console.log("NOW WE HAVE LOGGED OUT");
     }
 
@@ -94,7 +94,7 @@ export default function AppBanner() {
     }
 
     const userLoggedIn = auth.user !== null && auth.loggedIn !== false;
-    const shouldDisable = store.isModalOpen() || store.listNameActive || (!userLoggedIn && auth.errMsg !== null);
+    const shouldDisable = store.isModalOpen() || store.listNameActive || auth.errMsg !== null;
     console.log(!userLoggedIn && auth.errMsg !== null);
     let homeBtn = <Link style={{ textDecoration: 'none', color: 'white' }} to='/'>⌂</Link>;
     if(shouldDisable)

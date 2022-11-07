@@ -39,7 +39,8 @@ function AuthContextProvider(props) {
             case AuthActionType.LOGIN_USER: {
                 return setAuth({
                     user: payload.user,
-                    loggedIn: true
+                    loggedIn: true,
+                    errMsg: null
                 })
             }
             case AuthActionType.LOGOUT_USER: {
@@ -52,7 +53,8 @@ function AuthContextProvider(props) {
             case AuthActionType.REGISTER_USER: {
                 return setAuth({
                     user: payload.user,
-                    loggedIn: true
+                    loggedIn: true,
+                    errMsg: null
                 })
             }
             case AuthActionType.SET_ERROR_MSG: {
