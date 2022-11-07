@@ -50,7 +50,7 @@ const HomeScreen = () => {
                 aria-label="add"
                 id="add-list-button"
                 onClick={handleCreateNewList}
-                disabled={store.isModalOpen()}
+                disabled={store.isModalOpen() || store.listNameActive}
             >
                 <AddIcon />
             </Fab>

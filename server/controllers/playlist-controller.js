@@ -26,6 +26,10 @@ createPlaylist = (req, res) => {
 
     User.findOne({ _id: req.userId }, (err, user) => {
         console.log("user found: " + JSON.stringify(user));
+        if(body.ownerEmail !== user.email){
+            return res.status(400).json({ success: false, error: "Authentication error: cannot add playlist to unmatched user." })
+        }
+
         user.playlists.push(playlist._id);
         user
             .save()
@@ -45,6 +49,7 @@ createPlaylist = (req, res) => {
             });
     })
 }
+
 deletePlaylist = async (req, res) => {
     console.log("delete Playlist with id: " + JSON.stringify(req.params.id));
     console.log("delete " + req.params.id);
@@ -91,6 +96,7 @@ deletePlaylist = async (req, res) => {
         asyncFindUser(playlist);
     })
 }
+
 getPlaylistById = async (req, res) => {
     console.log("Find Playlist with id: " + JSON.stringify(req.params.id));
 
@@ -104,6 +110,7 @@ getPlaylistById = async (req, res) => {
         async function asyncFindUser(list) {
             if(list){
                 await User.findOne({ email: list.ownerEmail }, (err, user) => {
+                    
                     console.log("user._id: " + user._id);
                     console.log("req.userId: " + req.userId);
                     if (user._id == req.userId) {
@@ -120,6 +127,7 @@ getPlaylistById = async (req, res) => {
         asyncFindUser(list);
     }).catch(err => console.log(err))
 }
+
 getPlaylistPairs = async (req, res) => {
     console.log("getPlaylistPairs");
     await User.findOne({ _id: req.userId }, (err, user) => {
@@ -156,8 +164,12 @@ getPlaylistPairs = async (req, res) => {
         asyncFindList(user.email);
     }).catch(err => console.log(err))
 }
+
 getPlaylists = async (req, res) => {
-    await Playlist.find({}, (err, playlists) => {
+    let user = await asyncFindUserById(req.userId);
+    console.log(user.email);
+
+    await Playlist.find({ ownerEmail: user.email }, (err, playlists) => {
         if (err) {
             return res.status(400).json({ success: false, error: err })
         }
@@ -169,6 +181,7 @@ getPlaylists = async (req, res) => {
         return res.status(200).json({ success: true, data: playlists })
     }).catch(err => console.log(err))
 }
+
 updatePlaylist = async (req, res) => {
     const body = req.body
     console.log("updatePlaylist: " + JSON.stringify(body));
@@ -198,8 +211,10 @@ updatePlaylist = async (req, res) => {
                 if (user._id == req.userId) {
                     console.log("correct user!");
                     
-                    if(req.body.name)
-                        console.log("req.body.name: " + req.body.name);
+                    if(body.playlist.name)
+                        console.log("body.playlist.name: " + body.playlist.name);
+                    if(body.playlist.songs)
+                        console.log("body.playlist.songs: " + body.playlist.songs);
 
                     list.name = body.playlist.name;
                     list.songs = body.playlist.songs;
@@ -230,6 +245,21 @@ updatePlaylist = async (req, res) => {
         asyncFindUser(playlist);
     })
 }
+
+asyncFindUserById = async (id) => {
+    user = User.findById(id, (err, user) => {
+        if (err) {
+            return res.status(404).json({
+                err,
+                message: 'User not found!',
+            })
+        }
+        console.log("user found: " + JSON.stringify(user))
+        return user;
+    })
+    return user;
+}
+
 module.exports = {
     createPlaylist,
     deletePlaylist,

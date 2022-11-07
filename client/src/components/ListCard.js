@@ -86,7 +86,7 @@ function ListCard(props) {
         >
             <Box sx={{ p: 1, flexGrow: 1 }}>{idNamePair.name}</Box>
             <Box sx={{ p: 1 }}>
-                <IconButton onClick={handleToggleEdit} aria-label='edit' disabled={store.isModalOpen()}>
+                <IconButton onClick={handleToggleEdit} aria-label='edit' disabled={store.isModalOpen() || store.listNameActive}>
                     <EditIcon style={{fontSize:'48pt'}} />
                 </IconButton>
             </Box>
@@ -94,7 +94,7 @@ function ListCard(props) {
                 <IconButton onClick={(event) => {
                         handleDeleteList(event, idNamePair._id)
                     }} aria-label='delete'
-                    disabled={store.isModalOpen()}
+                    disabled={store.isModalOpen() || store.listNameActive}
                     >
                     <DeleteIcon style={{fontSize:'48pt'}} />
                 </IconButton>

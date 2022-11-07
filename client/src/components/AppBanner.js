@@ -93,7 +93,9 @@ export default function AppBanner() {
             return <AccountCircle />;
     }
 
-    const shouldDisable = store.isModalOpen() || store.listNameActive || (!auth.loggedIn && auth.errMsg !== null);
+    const userLoggedIn = auth.user !== null && auth.loggedIn !== false;
+    const shouldDisable = store.isModalOpen() || store.listNameActive || (!userLoggedIn && auth.errMsg !== null);
+    console.log(!userLoggedIn && auth.errMsg !== null);
     let homeBtn = <Link style={{ textDecoration: 'none', color: 'white' }} to='/'>⌂</Link>;
     if(shouldDisable)
         homeBtn = <Link style={{ textDecoration: 'none', color: 'gray' }} to='/'>⌂</Link>;
