@@ -341,6 +341,11 @@ input {
   text-align: center;
 }
 
+#songTitle{
+  font-weight: bold;
+  font-style: italic;
+}
+
 .modal-north{
   font-size: xx-large;
   margin-bottom: 2.5%;

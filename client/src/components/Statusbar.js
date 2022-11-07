@@ -14,7 +14,7 @@ function Statusbar() {
         text = store.currentList.name;
     return (
         <div id="playlister-statusbar">
-            <Typography variant="h4">{text}</Typography>
+            <Typography variant="h4" style={{margin:'2.5%'}}>{text}</Typography>
         </div>
     );
 }

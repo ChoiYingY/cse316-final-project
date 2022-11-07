@@ -31,28 +31,28 @@ function EditToolbar() {
     return (
         <div id="edit-toolbar">
             <Button
-                disabled={!store.canAddNewSong() || store.currentModal !== "NONE"}
+                disabled={!store.canAddNewSong() || store.isModalOpen()}
                 id='add-song-button'
                 onClick={handleAddNewSong}
                 variant="contained">
                 <AddIcon />
             </Button>
             <Button 
-                disabled={!store.canUndo() || store.currentModal !== "NONE"}
+                disabled={!store.canUndo() || store.isModalOpen()}
                 id='undo-button'
                 onClick={handleUndo}
                 variant="contained">
                     <UndoIcon />
             </Button>
             <Button 
-                disabled={!store.canRedo() || store.currentModal !== "NONE"}
+                disabled={!store.canRedo() || store.isModalOpen()}
                 id='redo-button'
                 onClick={handleRedo}
                 variant="contained">
                     <RedoIcon />
             </Button>
             <Button 
-                disabled={!store.canClose() || store.currentModal !== "NONE"}
+                disabled={!store.canClose() || store.isModalOpen()}
                 id='close-button'
                 onClick={handleClose}
                 variant="contained">

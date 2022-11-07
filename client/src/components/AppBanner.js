@@ -31,6 +31,8 @@ export default function AppBanner() {
     const handleLogout = () => {
         handleMenuClose();
         auth.logoutUser();
+        store.clearTransactions();
+        console.log("NOW WE HAVE LOGGED OUT");
     }
 
     const menuId = 'primary-search-account-menu';
@@ -91,6 +93,11 @@ export default function AppBanner() {
             return <AccountCircle />;
     }
 
+    const shouldDisable = store.isModalOpen() || store.listNameActive || (!auth.loggedIn && auth.errMsg !== null);
+    let homeBtn = <Link style={{ textDecoration: 'none', color: 'white' }} to='/'>⌂</Link>;
+    if(shouldDisable)
+        homeBtn = <Link style={{ textDecoration: 'none', color: 'gray' }} to='/'>⌂</Link>;
+
     return (
         <Box sx={{ flexGrow: 1 }}>
             <AppBar position="static">
@@ -99,9 +106,9 @@ export default function AppBanner() {
                         variant="h4"
                         noWrap
                         component="div"
-                        sx={{ display: { xs: 'none', sm: 'block' } }}                        
+                        sx={{ display: { xs: 'none', sm: 'block' } }}                       
                     >
-                        <Link style={{ textDecoration: 'none', color: 'white' }} to='/'>⌂</Link>
+                    {homeBtn}
                     </Typography>
                     <Box sx={{ flexGrow: 1 }}>{editToolbar}</Box>
                     <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
@@ -113,6 +120,7 @@ export default function AppBanner() {
                             aria-haspopup="true"
                             onClick={handleProfileMenuOpen}
                             color="inherit"
+                            disabled={shouldDisable}
                         >
                             { getAccountMenu(auth.loggedIn) }
                         </IconButton>

@@ -78,6 +78,7 @@ function SongCard(props) {
                 id={"remove-song-" + index}
                 className="list-card-button"
                 value={"\u2715"}
+                disabled={store.isModalOpen()}
                 onClick={handleRemoveSong}
             />
 

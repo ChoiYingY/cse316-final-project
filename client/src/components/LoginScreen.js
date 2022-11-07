@@ -94,6 +94,7 @@ export default function LoginScreen() {
                             fullWidth
                             variant="contained"
                             sx={{ mt: 3, mb: 2 }}
+                            disabled={auth.errMsg !== null}
                         >
                             Sign In
                         </Button>

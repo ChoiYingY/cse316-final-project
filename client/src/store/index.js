@@ -253,6 +253,7 @@ function GlobalStoreContextProvider(props) {
 
     // THIS FUNCTION PROCESSES CLOSING THE CURRENTLY LOADED LIST
     store.closeCurrentList = function () {
+        console.log("inside store.closeCurrentList()");
         storeReducer({
             type: GlobalStoreActionType.CLOSE_CURRENT_LIST,
             payload: {}
@@ -380,6 +381,14 @@ function GlobalStoreContextProvider(props) {
     }
     store.isRemoveSongModalOpen = () => {
         return store.currentModal === CurrentModal.REMOVE_SONG;
+    }
+
+    store.isModalOpen = () => {
+        return (store.currentModal === CurrentModal.DELETE_LIST) || (store.currentModal === CurrentModal.EDIT_SONG) || (store.currentModal === CurrentModal.REMOVE_SONG);
+    }
+
+    store.clearTransactions = function() {
+        tps.clearAllTransactions();
     }
 
     // THE FOLLOWING 8 FUNCTIONS ARE FOR COORDINATING THE UPDATING
@@ -538,13 +547,6 @@ function GlobalStoreContextProvider(props) {
             type: GlobalStoreActionType.SET_LIST_NAME_EDIT_ACTIVE,
             payload: null
         });
-    }
-
-    store.clearTransactions = function () {
-        if(tps){
-            console.log(tps);
-            tps.clearAllTransactions();
-        }
     }
 
     return (
