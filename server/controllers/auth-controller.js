@@ -103,6 +103,17 @@ registerUser = async (req, res) => {
                 .status(400)
                 .json({ errorMessage: "Please enter all required fields." });
         }
+
+        if(!String(email).includes('@') || String(email).includes('@.com') || (!String(email).includes('.com') && !String(email).includes('.edu'))){
+            console.log("Invalid email.")
+            return res
+                .status(400)
+                .json({
+                    errorMessage: "Please provide a valid email."
+                });
+        }
+        console.log("Valid email.")
+
         console.log("all fields provided");
         if (password.length < 8) {
             return res
