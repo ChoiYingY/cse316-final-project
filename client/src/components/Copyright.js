@@ -5,11 +5,8 @@ export default function Copyright(props) {
     return (
         <Typography variant="body2" color="text.secondary" align="center" {...props}>
             {'Copyright © '}
-            <Link color="inherit" href="/">
-                Playlister
-            </Link>{' '}
             {new Date().getFullYear()}
-            {'.'}
+            {' Choi Ying Yau | All right reserved'}
         </Typography>
     );
 }
