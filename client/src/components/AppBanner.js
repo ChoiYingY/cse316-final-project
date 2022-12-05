@@ -5,6 +5,7 @@ import { GlobalStoreContext } from '../store';
 
 import EditToolbar from './EditToolbar';
 
+import Avatar from '@mui/material/Avatar';
 import AccountCircle from '@mui/icons-material/AccountCircle';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
@@ -12,6 +13,7 @@ import IconButton from '@mui/material/IconButton';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import Toolbar from '@mui/material/Toolbar';
+
 import Typography from '@mui/material/Typography';
 
 export default function AppBanner() {
@@ -87,8 +89,8 @@ export default function AppBanner() {
     function getAccountMenu(loggedIn) {
         let userInitials = auth.getUserInitials();
         console.log("userInitials: " + userInitials);
-        if (loggedIn) 
-            return <div>{userInitials}</div>;
+        if (loggedIn)
+            return <div id="initialIcon"><Avatar sx={{ color:"white", backgroundColor:"#b91e1e", border: '3px solid #b91e1e', padding: "2px 2px 0px 1px" }}>{userInitials}</Avatar></div>;
         else
             return <AccountCircle />;
     }
@@ -103,7 +105,7 @@ export default function AppBanner() {
     return (
         <Box sx={{ flexGrow: 1 }}>
             <AppBar position="static">
-                <Toolbar sx={{backgroundColor: "#BABFEE"}}>
+                <Toolbar sx={{  backgroundColor: "#BABFEE"  }}>
                     <Link to="/">
                         <Box
                             component="img"
@@ -113,7 +115,7 @@ export default function AppBanner() {
                         />
                     </Link>
                     <Box sx={{ flexGrow: 1 }}>{editToolbar}</Box>
-                    <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
+                    <Box sx={{ display: { xs: 'none', md: 'flex'} }}>
                         <IconButton
                             size="large"
                             edge="end"

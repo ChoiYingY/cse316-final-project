@@ -67,6 +67,12 @@ body {
   vertical-align: center;
 }
 
+#container{
+  display: flex;
+  flex-direction: row;
+  gap: 10%;
+}
+
 #edit-toolbar {
   background-color: transparent;
   float: right;

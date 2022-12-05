@@ -3,9 +3,6 @@ import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 
 import Copyright from './Copyright';
-// import { GlobalStoreContext } from '../store/index.js'
-
-// import { useContext } from 'react';
 import { useHistory } from 'react-router-dom';
 
 const headingStyle = {
