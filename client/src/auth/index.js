@@ -53,7 +53,7 @@ function AuthContextProvider(props) {
             case AuthActionType.REGISTER_USER: {
                 return setAuth({
                     user: payload.user,
-                    loggedIn: true,
+                    loggedIn: false,
                     errMsg: null
                 })
             }
@@ -80,27 +80,32 @@ function AuthContextProvider(props) {
         }
     }
 
-    auth.registerUser = async function(firstName, lastName, email, password, passwordVerify) {
+    auth.registerUser = async function(userName, firstName, lastName, email, password, passwordVerify) {
         try{
             console.log("auth.registerUser");
-            const response = await api.registerUser(firstName, lastName, email, password, passwordVerify);
+            console.log("userName: " + userName);
+            const response = await api.registerUser(userName, firstName, lastName, email, password, passwordVerify);
             if (response.status === 200) {
+                console.log("success. User:");
+                console.log(response.data.user);
                 authReducer({
                     type: AuthActionType.REGISTER_USER,
                     payload: {
                         user: response.data.user
                     }
                 })
-                history.push("/");
+                history.push("/login/");
             }
         }
         catch(err){
-            const errMsg = err.response.data.errorMessage;
-            console.log("Error: " + errMsg);
-            authReducer({
-                type: AuthActionType.SET_ERROR_MSG,
-                payload: errMsg
-            });
+            if(err && err.response){
+                const errMsg = err.response.data.errorMessage;
+                console.log("Error: " + errMsg);
+                authReducer({
+                    type: AuthActionType.SET_ERROR_MSG,
+                    payload: errMsg
+                });
+            }
         }
     }
 

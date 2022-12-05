@@ -1,9 +1,9 @@
 import { useContext, useState } from 'react';
-import { Link } from 'react-router-dom'
+import { Link } from 'react-router-dom';
 import AuthContext from '../auth';
-import { GlobalStoreContext } from '../store'
+import { GlobalStoreContext } from '../store';
 
-import EditToolbar from './EditToolbar'
+import EditToolbar from './EditToolbar';
 
 import AccountCircle from '@mui/icons-material/AccountCircle';
 import AppBar from '@mui/material/AppBar';
@@ -52,8 +52,8 @@ export default function AppBanner() {
             open={isMenuOpen}
             onClose={handleMenuClose}
         >
-            <MenuItem onClick={handleMenuClose}><Link to='/login/'>Login</Link></MenuItem>
             <MenuItem onClick={handleMenuClose}><Link to='/register/'>Create New Account</Link></MenuItem>
+            <MenuItem onClick={handleMenuClose}><Link to='/login/'>Login</Link></MenuItem>
         </Menu>
     );
     const loggedInMenu = 
@@ -104,12 +104,14 @@ export default function AppBanner() {
         <Box sx={{ flexGrow: 1 }}>
             <AppBar position="static">
                 <Toolbar sx={{backgroundColor: "#BABFEE"}}>
-                    <Box
-                        component="img"
-                        alt="Playlister_logo"
-                        src="assets/playlister_logo.png"
-                        width={"15%"}
-                    />
+                    <Link to="/">
+                        <Box
+                            component="img"
+                            alt="Playlister_logo"
+                            src="/assets/playlister_logo.png"
+                            width={"25%"}
+                        />
+                    </Link>
                     <Box sx={{ flexGrow: 1 }}>{editToolbar}</Box>
                     <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
                         <IconButton

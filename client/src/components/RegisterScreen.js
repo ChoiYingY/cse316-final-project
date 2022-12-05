@@ -22,6 +22,7 @@ export default function RegisterScreen() {
         event.preventDefault();
         const formData = new FormData(event.currentTarget);
         auth.registerUser(
+            formData.get('userName'),
             formData.get('firstName'),
             formData.get('lastName'),
             formData.get('email'),
@@ -35,7 +36,7 @@ export default function RegisterScreen() {
                 <CssBaseline />
                 <Box
                     sx={{
-                        marginTop: 8,
+                        marginTop: 3,
                         display: 'flex',
                         flexDirection: 'column',
                         alignItems: 'center',
@@ -47,8 +48,19 @@ export default function RegisterScreen() {
                     <Typography component="h1" variant="h5">
                         Sign up
                     </Typography>
-                    <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 3 }}>
-                        <Grid container spacing={2}>
+                    <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 2 }}>
+                        <Grid container spacing={1.25}>
+                            <Grid item xs={12}>
+                                <TextField
+                                    autoComplete="userName"
+                                    name="userName"
+                                    required
+                                    fullWidth
+                                    id="userName"
+                                    label="User Name"
+                                    autoFocus
+                                />
+                            </Grid>
                             <Grid item xs={12} sm={6}>
                                 <TextField
                                     autoComplete="fname"
@@ -57,7 +69,6 @@ export default function RegisterScreen() {
                                     fullWidth
                                     id="firstName"
                                     label="First Name"
-                                    autoFocus
                                 />
                             </Grid>
                             <Grid item xs={12} sm={6}>

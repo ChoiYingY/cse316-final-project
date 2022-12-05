@@ -1,7 +1,12 @@
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
-import Copyright from './Copyright'
+
+import Copyright from './Copyright';
+// import { GlobalStoreContext } from '../store/index.js'
+
+// import { useContext } from 'react';
+import { useHistory } from 'react-router-dom';
 
 const headingStyle = {
     fontSize: "1.125em",
@@ -23,6 +28,8 @@ const btnHoverSx = {
 };
 
 export default function SplashScreen() {
+    const history = useHistory();
+
     return (
         <div id="splash-screen">
             <Typography                        
@@ -38,7 +45,7 @@ export default function SplashScreen() {
             <Box
                 component="img"
                 alt="Playlister_logo"
-                src="assets/playlister_logo.png"
+                src="/assets/playlister_logo.png"
                 width={"45%"}
             />
 
@@ -53,11 +60,22 @@ export default function SplashScreen() {
                 music playlist.
             </Typography>
 
-            <Button variant="outlined"  style={btnStyle} sx={btnHoverSx}>
+            <Button
+                variant="outlined"
+                style={btnStyle} sx={btnHoverSx}
+                onClick={
+                    () => history.push("/register/")
+                }
+            >
                 Create Account
             </Button>
 
-            <Button variant="outlined"  style={btnStyle} sx={btnHoverSx}>
+            <Button
+                variant="outlined"  style={btnStyle} sx={btnHoverSx}
+                onClick={
+                    () => history.push("/login/")
+                }
+            >
                 Login
             </Button>
 

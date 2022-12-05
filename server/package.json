@@ -12,6 +12,7 @@
     "express": "^4.16.4",
     "jsonwebtoken": "^8.5.1",
     "mongoose": "^5.7.5",
+    "mui-image": "^1.0.7",
     "nodemon": "^2.0.20"
   }
 }
