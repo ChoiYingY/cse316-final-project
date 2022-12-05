@@ -96,22 +96,20 @@ export default function AppBanner() {
     const userLoggedIn = auth.user !== null && auth.loggedIn !== false;
     const shouldDisable = store.isModalOpen() || store.listNameActive || auth.errMsg !== null;
     console.log(!userLoggedIn && auth.errMsg !== null);
-    let homeBtn = <Link style={{ textDecoration: 'none', color: 'white' }} to='/'>⌂</Link>;
-    if(shouldDisable)
-        homeBtn = <Link style={{ textDecoration: 'none', color: 'gray' }} to='/'>⌂</Link>;
+    // let homeBtn = <Link style={{ textDecoration: 'none', color: 'white' }} to='/'>⌂</Link>;
+    // if(shouldDisable)
+    //     homeBtn = <Link style={{ textDecoration: 'none', color: 'gray' }} to='/'>⌂</Link>;
 
     return (
         <Box sx={{ flexGrow: 1 }}>
             <AppBar position="static">
-                <Toolbar>
-                    <Typography                        
-                        variant="h4"
-                        noWrap
-                        component="div"
-                        sx={{ display: { xs: 'none', sm: 'block' } }}                       
-                    >
-                    {homeBtn}
-                    </Typography>
+                <Toolbar sx={{backgroundColor: "#BABFEE"}}>
+                    <Box
+                        component="img"
+                        alt="Playlister_logo"
+                        src="assets/playlister_logo.png"
+                        width={"15%"}
+                    />
                     <Box sx={{ flexGrow: 1 }}>{editToolbar}</Box>
                     <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
                         <IconButton

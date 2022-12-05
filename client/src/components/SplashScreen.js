@@ -10,10 +10,16 @@ const headingStyle = {
 
 const btnStyle = {
     color: "white",
-    border: '1px solid #ffffff',
+    border: '1.5px solid #ffffff',
     boxShadow: 24,
-    margin: "2.5%",
-    padding: "1%",
+    margin: "2%",
+    padding: "1.125%",
+};
+
+const btnHoverSx = {
+    '&.MuiButton-root:hover':{
+        backgroundColor: '#9baddb',
+    }
 };
 
 export default function SplashScreen() {
@@ -47,19 +53,19 @@ export default function SplashScreen() {
                 music playlist.
             </Typography>
 
-            <Button variant="outlined"  style={btnStyle}>
+            <Button variant="outlined"  style={btnStyle} sx={btnHoverSx}>
                 Create Account
             </Button>
 
-            <Button variant="outlined"  style={btnStyle}>
+            <Button variant="outlined"  style={btnStyle} sx={btnHoverSx}>
                 Login
             </Button>
 
-            <Button variant="outlined"  style={btnStyle}>
+            <Button variant="outlined"  style={btnStyle} sx={btnHoverSx}>
                 Continue as Guest
             </Button>
 
-            <Copyright sx={{ mt: 5 }} style={ { marginTop: "1%" }}/>
+            <Copyright sx={{ mt: 5 }} style={ { marginTop: "1%", color: "white" }}/>
         </div>
     )
 }
