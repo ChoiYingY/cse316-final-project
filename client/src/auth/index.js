@@ -11,6 +11,7 @@ export const AuthActionType = {
     LOGIN_USER: "LOGIN_USER",
     LOGOUT_USER: "LOGOUT_USER",
     REGISTER_USER: "REGISTER_USER",
+    GUEST_USER: "GUEST_USER",
     SET_ERROR_MSG: "SET_ERROR_MSG"
 }
 
@@ -18,7 +19,8 @@ function AuthContextProvider(props) {
     const [auth, setAuth] = useState({
         user: null,
         loggedIn: false,
-        errMsg: null
+        isGuest: false,
+        errMsg: null,
     });
     const history = useHistory();
 
@@ -33,6 +35,7 @@ function AuthContextProvider(props) {
                 return setAuth({
                     user: payload.user,
                     loggedIn: payload.loggedIn,
+                    isGuest: false,
                     errMsg: null
                 });
             }
@@ -40,6 +43,7 @@ function AuthContextProvider(props) {
                 return setAuth({
                     user: payload.user,
                     loggedIn: true,
+                    isGuest: false,
                     errMsg: null
                 })
             }
@@ -47,6 +51,7 @@ function AuthContextProvider(props) {
                 return setAuth({
                     user: null,
                     loggedIn: false,
+                    isGuest: false,
                     errMsg: null
                 })
             }
@@ -54,6 +59,15 @@ function AuthContextProvider(props) {
                 return setAuth({
                     user: payload.user,
                     loggedIn: false,
+                    isGuest: false,
+                    errMsg: null
+                })
+            }
+            case AuthActionType.GUEST_USER: {
+                return setAuth({
+                    user: null,
+                    loggedIn: false,
+                    isGuest: true,
                     errMsg: null
                 })
             }
@@ -157,6 +171,13 @@ function AuthContextProvider(props) {
     auth.clearErrorMsg = function(){
         authReducer( {
             type: AuthActionType.SET_ERROR_MSG,
+            payload: null
+        })
+    }
+
+    auth.continueAsGuest = function(){
+        authReducer( {
+            type: AuthActionType.GUEST_USER,
             payload: null
         })
     }

@@ -73,6 +73,8 @@ const HomeScreen = () => {
         switch(store.currentView){
             case "HOME":{
                 console.log("IN HOME VIEW");
+                console.log(store.idNamePairs);
+                
                 listCard = store.idNamePairs.map((pair) => (
                     <ListCard
                         key={pair._id}

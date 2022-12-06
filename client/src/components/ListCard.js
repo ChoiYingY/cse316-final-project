@@ -8,6 +8,7 @@ import ListItem from '@mui/material/ListItem';
 import TextField from '@mui/material/TextField';
 
 import Card from '@mui/material/Card';
+import Link from '@mui/material/Link';
 import Typography from '@mui/material/Typography';
 
 /*
@@ -26,6 +27,8 @@ function ListCard(props) {
 
     const { idNamePair, selected } = props;
 
+    console.log(idNamePair);
+
     // store.setCurrentList(idNamePair._id);
 
     // const playlist = store.findPlaylistById(idNamePair._id);
@@ -33,7 +36,21 @@ function ListCard(props) {
 
     return (
         <Card sx={{margin:"1%", width:"95%", height:"100px"}}>
-            <Typography fontFamily={"Lexend Exa"}>{idNamePair.name}</Typography>
+            <Typography
+                fontFamily={"Lexend Exa"}
+                variant="h5"
+                sx={{  fontWeight: 'bold', margin: "2% 5%" }}
+            >
+                {idNamePair.name}
+            </Typography>
+            <Typography
+                fontFamily={"Lexend Exa"}
+                variant="bod1"
+                sx={{  fontWeight: 'bold', margin: "2% 5%" }}
+            >
+                By:&nbsp;
+                <Link>{idNamePair.userName}</Link>
+            </Typography>
         </Card>
     );
 }

@@ -8,6 +8,7 @@ const Schema = mongoose.Schema
 */
 const playlistSchema = new Schema(
     {
+        userName: { type: String, required: true },
         name: { type: String, required: true },
         ownerEmail: { type: String, required: true },
         songs: { type: [{

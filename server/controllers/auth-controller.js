@@ -9,6 +9,7 @@ getLoggedIn = async (req, res) => {
     try {
         let userId = auth.verifyUser(req);
         if (!userId) {
+            console.log("userId does not exist");
             return res.status(200).json({
                 loggedIn: false,
                 user: null,
@@ -175,6 +176,8 @@ registerUser = async (req, res) => {
         });
         const savedUser = await newUser.save();
         console.log("new user saved: " + savedUser._id);
+        
+        console.log("new user saved: " + savedUser);
 
         // LOGIN THE USER
         const token = auth.signToken(savedUser._id);

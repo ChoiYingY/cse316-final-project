@@ -6,6 +6,7 @@ import Copyright from './Copyright';
 import { useHistory } from 'react-router-dom';
 
 import { GlobalStoreContext } from '../store';
+import AuthContext from '../auth'
 import { useContext } from 'react';
 
 const headingStyle = {
@@ -30,6 +31,7 @@ const btnHoverSx = {
 export default function SplashScreen() {
     const history = useHistory();
     const { store } = useContext(GlobalStoreContext);
+    const { auth } = useContext(AuthContext);
 
     return (
         <div id="splash-screen">
@@ -85,6 +87,7 @@ export default function SplashScreen() {
                 onClick={() => {
                         console.log("You're a guest");
                         store.setCurrentView("ALL_LISTS");
+                        auth.continueAsGuest();
                         history.push("/");
                     }
                 }

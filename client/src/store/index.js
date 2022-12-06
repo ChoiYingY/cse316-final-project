@@ -341,12 +341,15 @@ function GlobalStoreContextProvider(props) {
     // THIS FUNCTION CREATES A NEW LIST
     store.createNewList = async function () {
         let newListName = "Untitled" + store.newListCounter;
-        const response = await api.createPlaylist(newListName, [], auth.user.email);
+        console.log(auth.user);
+        console.log(auth.user.userName);
+        const response = await api.createPlaylist(auth.user.userName, newListName, [], auth.user.email);
         console.log("createNewList response: " + response);
         if (response.status === 201) {
             tps.clearAllTransactions();
             let newList = response.data.playlist;
 
+            console.log(auth.user.userName);
             console.log(auth.user.email);
             console.log(newList);
 
@@ -359,9 +362,6 @@ function GlobalStoreContextProvider(props) {
                     type: GlobalStoreActionType.CREATE_NEW_LIST,
                     payload: null
                 });
-    
-                // // // IF IT'S A VALID LIST THEN LET'S START EDITING IT
-                // history.push("/");
             }
         }
         else {
