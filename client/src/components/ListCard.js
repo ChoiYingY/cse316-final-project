@@ -76,13 +76,6 @@ function ListCard(props) {
 
     console.log(idNamePair);
 
-    // store.findPlaylistById(idNamePair._id);
-
-    // store.setCurrentList(idNamePair._id);
-
-    // const playlist = store.findPlaylistById(idNamePair._id);
-    // console.log(playlist);
-
     function handleAddSong(event){
         console.log("add song");
         let song = { title: "Untitled", artist: "Unknown", youTubeId: "dQw4w9WgXcQ" };
@@ -106,7 +99,16 @@ function ListCard(props) {
 
     function handleDoubleClick(event){
         console.log("Edit list");
-        if(event.detail == 2){
+        if(event.detail === 1){
+            console.log("You have single clicked");
+            event.stopPropagation();
+            store.findAndSavePlaylistById(idNamePair._id);
+
+            console.log("**************************************************************");
+            console.log(store.foundList);
+            console.log("**************************************************************");
+        }
+        if(event.detail === 2){
             console.log("You have double clicked");
             event.stopPropagation();
             toggleEdit();
@@ -142,16 +144,6 @@ function ListCard(props) {
     else{
         console.log("lol nvm");
     }
-        
-    // else if(store.currentList)
-    // cards = store.currentList.songs.map((song, index) => (
-    //     <SongCard
-    //         id={'playlist-song-' + (index)}
-    //         key={'playlist-song-' + (index)}
-    //         index={index}
-    //         song={song}
-    //     />
-    // ));
 
     let cardElement = <Card
             id={idNamePair._id}
@@ -230,16 +222,8 @@ function ListCard(props) {
                 <ExpandBtn
                     onClick={() => {
                         console.log("expand list");
-                        store.findPlaylistById(idNamePair._id);
+                        store.findAndSavePlaylistById(idNamePair._id);
                         console.log(store.foundList);
-                        // if(expand == true){
-                        //     console.log("Clear current list");
-                        //     store.closeCurrentList();
-                        // }
-                        // else{
-                        //     console.log("Set current list");
-                        //     store.setCurrentList(idNamePair._id);
-                        // }
                         setExpand(!expand);
                     }}
                     aria-label="Expand" aria-expanded={expand}

@@ -773,8 +773,8 @@ function GlobalStoreContextProvider(props) {
         });
     }
 
-    store.findPlaylistById = function (id) {
-        console.log("CALLING findPlaylistById")
+    store.findAndSavePlaylistById = function (id) {
+        console.log("CALLING findAndSavePlaylistById")
         let playlist = null;
         console.log(id);
         async function findList(id) {

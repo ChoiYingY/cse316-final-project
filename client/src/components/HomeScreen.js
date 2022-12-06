@@ -12,6 +12,9 @@ import Typography from '@mui/material/Typography';
 
 import AuthContext from '../auth';
 import Grid from '@mui/material/Grid';
+import Button from '@mui/material/Button';
+
+import PlaylisterYouTubePlayer from './PlaylisterYouTubePlayer.js';
 
 // const btnHoverSx = {
 //     cursor: 'pointer',
@@ -96,27 +99,25 @@ const HomeScreen = () => {
                 break;
             }
         }
-
-        // listCard = 
-            // <List sx={{ width: '90%', left: '5%', bgcolor: 'background.paper' }}>
-            // {
-                // store.idNamePairs.map((pair) => 
-                // {
-                //     console.log(pair);
-                //     store.findPlaylistById(pair._id);
-                //     // console.log(store.currentList);
-                //     return (
-                //         <ListCard
-                //             key={pair._id}
-                //             idNamePair={pair}
-                //             selected={false}
-                //         />
-                //     );
-                //     }
-                // )
-            // }
-            // </List>;
     }
+
+    let currPlayer = {
+        list: null,
+        name: null,
+        songQueue: null,
+        counter: 0,
+        song: null
+    }
+
+    if(store.foundList){
+        currPlayer.list = store.foundList;
+        currPlayer.listName = currPlayer.list.name;
+        currPlayer.songQueue = currPlayer.list.songs;
+        currPlayer.counter = 0;
+        if(currPlayer.songQueue.length > 0)
+            currPlayer.song = currPlayer.songQueue[0];
+    }
+    
     return (
         <div>
             <UserNavbar/>
@@ -140,7 +141,15 @@ const HomeScreen = () => {
                                 </Grid>
                             </Grid>
                             <Grid sx={{width:"40%", height: "100%" , backgroundColor:"blue"}}>
-                                hi
+                                <div sx={{width:"100%", display:"flex", flexDirection: "column", justifyContent:"flex-start"}}>
+                                    <Button outline="filled" sx={{background:"white"}}>Player</Button>
+                                    <Button outline="filled" sx={{background:"white"}}>Comment</Button>
+                                </div>
+                                
+                                <Grid sx={{width:"100%"}}>
+                                    <PlaylisterYouTubePlayer currPlayer={currPlayer}/>
+                                </Grid>
+                                
                             </Grid>
                         </div>
                         
