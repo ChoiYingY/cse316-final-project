@@ -815,7 +815,7 @@ function GlobalStoreContextProvider(props) {
 
 
     store.validatePlaylistName = function(name){
-        if(name.length == 0){
+        if(name.length === 0){
             storeReducer({
                 type: GlobalStoreActionType.SET_LIST_NAME_WARNING,
                 payload: "Should not rename list to the same name / empty string."

@@ -34,7 +34,7 @@ function SongCard(props) {
         setDraggedTo(false);
 
         // UPDATE THE LIST
-        store.addMoveSongTransaction(sourceIndex, targetIndex);
+        // store.addMoveSongTransaction(sourceIndex, targetIndex);
     }
     function handleRemoveSong(event) {
         console.log("handleRemoveSong");
@@ -46,9 +46,9 @@ function SongCard(props) {
         // DOUBLE CLICK IS FOR SONG EDITING
         if (event.detail === 2) {
             console.log("handleDblClick: EDIT_SONG");
-            console.log("index: " + index + " \nsong: " + JSON.stringify(song));
+            // console.log("index: " + index + " \nsong: " + JSON.stringify(song));
             
-            store.showEditSongModal(index, song);
+            // store.showEditSongModal(index, song);
         }
     }
 

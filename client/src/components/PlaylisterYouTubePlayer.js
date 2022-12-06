@@ -9,6 +9,7 @@ import FastRewindIcon from '@mui/icons-material/FastRewind';
 import StopIcon from '@mui/icons-material/Stop';
 
 import Grid from '@mui/material/Grid';
+import Box from '@mui/material/Box';
 
 export default function YouTubePlayerExample(props) {
     // THIS EXAMPLE DEMONSTRATES HOW TO DYNAMICALLY MAKE A
@@ -26,6 +27,7 @@ export default function YouTubePlayerExample(props) {
     const {currPlayer} = props;
     if(props){
         console.log(currPlayer);
+        playlist = currPlayer.song;
     }
 
     // THIS IS THE INDEX OF THE SONG CURRENTLY IN USE IN THE PLAYLIST
@@ -89,13 +91,70 @@ export default function YouTubePlayerExample(props) {
         }
     }
 
+    const typographySx = {
+        fontFamily: "Lexend Exa",
+        fontSize: "13.5px"
+    }
+
     let songInfo = <></>;
     if(currPlayer.listName && currPlayer.song.title && currPlayer.song.artist)
     songInfo = <>
-                    <Typography>Playlist: {currPlayer.listName}</Typography>
-                    <Typography>Title: {currPlayer.song.title}</Typography>
-                    <Typography>Artist: {currPlayer.song.artist}</Typography>
+                    <Typography sx={typographySx}>Playlist: {currPlayer.listName}</Typography>
+                    <Typography sx={typographySx}>Song #: {currentSong}</Typography>
+                    <Typography sx={typographySx}>Title: {currPlayer.song.title}</Typography>
+                    <Typography sx={typographySx}>Artist: {currPlayer.song.artist}</Typography>
                 </>
+
+    let playerController = <div>    
+        <FastRewindIcon
+            size="large" fontSize="large" edge="end" aria-haspopup="true"
+            sx={{  color: "black" , cursor: 'pointer'  }}
+            
+            aria-label="Prev Button"
+            onClick={ () => {
+                console.log("Prev songs");
+            } }
+        />
+        <StopIcon
+            size="large" fontSize="large" edge="end" aria-haspopup="true"
+            sx={{  color: "black" , cursor: 'pointer'  }}
+            
+            aria-label="Stop Button"
+            onClick={ () => {
+                console.log("Stop songs");
+            } }
+        />
+        <PlayArrowIcon
+            size="large" fontSize="large" edge="end" aria-haspopup="true"
+            sx={{  color: "black" , cursor: 'pointer'  }}
+            
+            aria-label="Play Button"
+            onClick={ () => {
+                console.log("Play songs");
+            } }
+        />
+        <FastForwardIcon
+            size="large" fontSize="large" edge="end" aria-haspopup="true"
+            sx={{  color: "black" , cursor: 'pointer'  }}
+            
+            aria-label="Next Button"
+            onClick={ () => {
+                console.log("Next songs");
+            } }
+        />
+    </div>;
+
+    if(!playlist)
+        return <Grid container sx={{ display:"flex", justifyContent: "center", alignItems: "center"}}>
+                <Grid item sx={{width: '100%', height: '250px', backgroundColor: "gray"}}>
+                </Grid>
+                <Grid item sx={{width: '100%', height: '110px', display:"flex", justifyContent: "center", alignItems: "center"}}>
+                    <Typography sx={{fontFamily: "Lexend Exa", fontSize: "15px", marginTop: "2%", marginLeft: "2%"}}>Choose a playlist to play</Typography>
+                </Grid>
+                <Grid item sx={{ bottom: "0%", backgroundColor:"white", display:"flex", flexDirection: "row", alignItems: "center", justifyContent: "center", width: "80%", margin: "2% 2.5% 2.5% 2.5%", borderRadius:"5%"}}>
+                    {playerController}
+                </Grid>
+            </Grid>;
 
     return(<div>
             <YouTube
@@ -106,51 +165,17 @@ export default function YouTubePlayerExample(props) {
             
             <Grid container sx={{ display:"flex", justifyContent: "center", alignItems: "center", backgroundColor: "yellow"}}>
                 <Grid item>
-                    <Typography>Now Playing</Typography>
+                    <Typography sx={{fontFamily: "Lexend Exa", fontSize: "15px", marginTop: "2%"}}>Now Playing</Typography>
                 </Grid>
 
-                <Grid item sx={{width: "100%", alignItems: "left"}}>
+                <Grid item sx={{width: "100%", alignItems: "left", margin:" 0% 3%" }}>
                     {songInfo}
                 </Grid>
                 
-                <Grid sx={{ backgroundColor:"white", display:"flex", flexDirection: "row", alignItems: "center", justifyContent: "center", width: "80%", margin: "2.5%"}}>    
-                    <FastRewindIcon
-                        size="large" fontSize="large" edge="end" aria-haspopup="true"
-                        sx={{  color: "black" , cursor: 'pointer'  }}
-                        
-                        aria-label="Play Button"
-                        onClick={ () => {
-                            console.log("Prev songs");
-                        } }
-                    />
-                    <StopIcon
-                        size="large" fontSize="large" edge="end" aria-haspopup="true"
-                        sx={{  color: "black" , cursor: 'pointer'  }}
-                        
-                        aria-label="Stop Button"
-                        onClick={ () => {
-                            console.log("Stop songs");
-                        } }
-                    />
-                    <PlayArrowIcon
-                        size="large" fontSize="large" edge="end" aria-haspopup="true"
-                        sx={{  color: "black" , cursor: 'pointer'  }}
-                        
-                        aria-label="Play Button"
-                        onClick={ () => {
-                            console.log("Play songs");
-                        } }
-                    />
-                    <FastForwardIcon
-                        size="large" fontSize="large" edge="end" aria-haspopup="true"
-                        sx={{  color: "black" , cursor: 'pointer'  }}
-                        
-                        aria-label="Play Button"
-                        onClick={ () => {
-                            console.log("Next songs");
-                        } }
-                    />
+                <Grid item sx={{ backgroundColor:"white", display:"flex", flexDirection: "row", alignItems: "center", justifyContent: "center", width: "80%", margin: "2% 2.5% 2.5% 2.5%", borderRadius:"5%"}}>
+                    {playerController}
                 </Grid>
+                
             </Grid>
         </div>);
         

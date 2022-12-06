@@ -66,7 +66,7 @@ const HomeScreen = () => {
                 >
                     <AddIcon />
                 </Fab>
-                <Typography variant="h2">Your Lists</Typography>
+                <Typography variant="h3" fontFamily="Lexend Exa" sx={{margin: "1% 0%"}}>Your Lists</Typography>
             </>;
     }
 
@@ -103,9 +103,8 @@ const HomeScreen = () => {
 
     let currPlayer = {
         list: null,
-        name: null,
+        listName: null,
         songQueue: null,
-        counter: 0,
         song: null
     }
 
@@ -113,9 +112,20 @@ const HomeScreen = () => {
         currPlayer.list = store.foundList;
         currPlayer.listName = currPlayer.list.name;
         currPlayer.songQueue = currPlayer.list.songs;
-        currPlayer.counter = 0;
         if(currPlayer.songQueue.length > 0)
             currPlayer.song = currPlayer.songQueue[0];
+    }
+
+    const playerBtnSx = {
+        background:"white",
+        fontFamily: "Lexend Exa",
+        borderRadius: "7.5% 7.5% 2% 2%",
+        marginTop: "1%",
+        padding: "1.5% 5%",
+        '&:hover':{
+            backgroundColor: "white",
+            color: '#b91e1e',
+        }
     }
     
     return (
@@ -142,8 +152,8 @@ const HomeScreen = () => {
                             </Grid>
                             <Grid sx={{width:"40%", height: "100%" , backgroundColor:"blue"}}>
                                 <div sx={{width:"100%", display:"flex", flexDirection: "column", justifyContent:"flex-start"}}>
-                                    <Button outline="filled" sx={{background:"white"}}>Player</Button>
-                                    <Button outline="filled" sx={{background:"white"}}>Comment</Button>
+                                    <Button outline="filled" sx={playerBtnSx}>Player</Button>
+                                    <Button outline="filled" sx={playerBtnSx}>Comment</Button>
                                 </div>
                                 
                                 <Grid sx={{width:"100%"}}>
