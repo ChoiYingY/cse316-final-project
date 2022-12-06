@@ -11,10 +11,29 @@ import SortIcon from '@mui/icons-material/Sort';
 import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
 
+import { GlobalStoreContext } from '../store'
 import { useHistory } from 'react-router-dom';
+import { useContext, useState } from 'react'
 
 export default function UserNavbar() {
     const history = useHistory();
+    const [input, setInput] = useState("");
+    const { store } = useContext(GlobalStoreContext);
+    
+
+    function handleKeyPress(event){
+        console.log("You have pressed on key");
+        if (event.code === "Enter") {
+            console.log("You have pressed enter.");
+            // store.changeListName(id, text);
+            // toggleEdit();
+        }
+    }
+
+    function handleUpdateText(event){
+        console.log(event.target.value);
+        setInput(event.target.value);
+    }
 
     return (
         <Box>
@@ -26,11 +45,11 @@ export default function UserNavbar() {
                         justifyContent="space-between"
                         alignItems="center"
                     >
-                        <div item id="container">
+                        <div className="container">
                             <Box
                                 aria-label="home" id="home-button"
                                 sx={{ cursor: 'pointer'}}
-                                onClick={ () => {   console.log("jump to home screen");  history.push("/"); } }
+
                             >
                                 <HomeOutlinedIcon
                                     size="large"
@@ -39,13 +58,22 @@ export default function UserNavbar() {
                                     aria-label="Home Button"
                                     aria-haspopup="true"
                                     sx={{  color: "black"   }}
+                                    onClick={() => {
+                                        console.log("jump to home screen");
+                                        store.setCurrentView("HOME");
+                                        history.push("/");
+                                    } }
                                 />
                             </Box>
 
                             <Box
                                 aria-label="all list" id="all-list-button"
                                 sx={{ cursor: 'pointer'}}
-                                onClick={ () => {   console.log("jump to all lists screen");  } }
+                                onClick={ () => {
+                                    console.log("jump to all lists screen");
+                                    store.setCurrentView("ALL_LISTS");
+                                    history.push("/");
+                                } }
                             >
                                 <GroupsOutlinedIcon
                                     size="large"
@@ -60,7 +88,11 @@ export default function UserNavbar() {
                             <Box
                                 aria-label="users" id="users-button"
                                 sx={{ cursor: 'pointer'}}
-                                onClick={ () => {   console.log("jump to users screen");  } }
+                                onClick={ () => {
+                                    console.log("jump to users screen");
+                                    store.setCurrentView("USERS");
+                                    history.push("/");
+                                } }
                             >
                                 <PersonOutlineOutlinedIcon
                                     size="large"
@@ -74,40 +106,33 @@ export default function UserNavbar() {
                         </div>
 
                         <TextField
-                            item
                             sx={{   backgroundColor:"white", width: "60%"}}
                             placeholder="Search"
                             inputProps={{
                                 style: {
                                 fontSize: 15,
                                 height: 45,
-                                width: 272,
+                                width: 275,
                                 padding: '0 14px'
                             }}}
+                            onKeyPress={handleKeyPress}
+                            onChange={handleUpdateText}
                         />
 
                         <Box
                             // sx={ btnHoverSx }
                             // onClick={ () => {   console.log("sort by");  } }
-                            item
                         >
-                            <Grid
-                                container
-                                justifyContent="space-between"
-                                alignItems="center"
-                            >
-                                <Grid item>
-                                    <Typography item color="black">SORT BY</Typography>
-                                </Grid>
+                            <div className='container' style={{"width": "150px", justifyContent:"flex-end"}}>
+                                <Typography color="black">SORT BY</Typography>
                                 
-                                <Grid item xs={3}>
+                                <div>
                                     <Box
                                         aria-label="sort" id="sort-button"
                                         sx={{ cursor: 'pointer'}}
                                         onClick={ () => {   console.log("Choose a sorting");  } }
                                     >
                                         <SortIcon
-                                            item
                                             size="large"
                                             fontSize="large"
                                             edge="end"
@@ -116,8 +141,8 @@ export default function UserNavbar() {
                                             sx={{  color: "black"}}
                                         />
                                     </Box>
-                                </Grid>
-                            </Grid>
+                                </div>
+                            </div>
                         </Box>
                     </Grid>
 

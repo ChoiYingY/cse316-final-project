@@ -5,6 +5,9 @@ import Typography from '@mui/material/Typography';
 import Copyright from './Copyright';
 import { useHistory } from 'react-router-dom';
 
+import { GlobalStoreContext } from '../store';
+import { useContext } from 'react';
+
 const headingStyle = {
     fontSize: "1.125em",
     marginTop: "1.5%",
@@ -26,6 +29,7 @@ const btnHoverSx = {
 
 export default function SplashScreen() {
     const history = useHistory();
+    const { store } = useContext(GlobalStoreContext);
 
     return (
         <div id="splash-screen">
@@ -76,7 +80,15 @@ export default function SplashScreen() {
                 Login
             </Button>
 
-            <Button variant="outlined"  style={btnStyle} sx={btnHoverSx}>
+            <Button variant="outlined"
+                style={btnStyle} sx={btnHoverSx}
+                onClick={() => {
+                        console.log("You're a guest");
+                        store.setCurrentView("ALL_LISTS");
+                        history.push("/");
+                    }
+                }
+            >
                 Continue as Guest
             </Button>
 

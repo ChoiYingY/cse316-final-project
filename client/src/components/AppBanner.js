@@ -14,11 +14,13 @@ import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import Toolbar from '@mui/material/Toolbar';
 
-import Typography from '@mui/material/Typography';
+import { useHistory } from 'react-router-dom';
 
 export default function AppBanner() {
     const { auth } = useContext(AuthContext);
     const { store } = useContext(GlobalStoreContext);
+    const history = useHistory();
+
     const [anchorEl, setAnchorEl] = useState(null);
     const isMenuOpen = Boolean(anchorEl);
 
@@ -90,7 +92,7 @@ export default function AppBanner() {
         let userInitials = auth.getUserInitials();
         console.log("userInitials: " + userInitials);
         if (loggedIn)
-            return <div id="initialIcon"><Avatar sx={{ color:"white", backgroundColor:"#b91e1e", border: '3px solid #b91e1e', padding: "2px 2px 0px 1px" }}>{userInitials}</Avatar></div>;
+            return <div id="initialIcon"><Avatar sx={{ color:"white", backgroundColor:"#b91e1e", border: '1.5px solid #b91e1e', padding: "2px 2px 0px 1px" }}>{userInitials}</Avatar></div>;
         else
             return <AccountCircle />;
     }
@@ -98,9 +100,6 @@ export default function AppBanner() {
     const userLoggedIn = auth.user !== null && auth.loggedIn !== false;
     const shouldDisable = store.isModalOpen() || store.listNameActive || auth.errMsg !== null;
     console.log(!userLoggedIn && auth.errMsg !== null);
-    // let homeBtn = <Link style={{ textDecoration: 'none', color: 'white' }} to='/'>⌂</Link>;
-    // if(shouldDisable)
-    //     homeBtn = <Link style={{ textDecoration: 'none', color: 'gray' }} to='/'>⌂</Link>;
 
     return (
         <Box sx={{ flexGrow: 1 }}>
@@ -111,7 +110,14 @@ export default function AppBanner() {
                             component="img"
                             alt="Playlister_logo"
                             src="/assets/playlister_logo.png"
-                            width={"25%"}
+                            width={"28.5%"}
+                            onClick={ () => {
+                                if(auth.loggedIn){
+                                    console.log("HOME");
+                                    store.setCurrentView("HOME");
+                                    history.push("/");
+                                }
+                            }}
                         />
                     </Link>
                     <Box sx={{ flexGrow: 1 }}>{editToolbar}</Box>
