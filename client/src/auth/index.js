@@ -138,12 +138,14 @@ function AuthContextProvider(props) {
             }
         }
         catch(err){
-            const errMsg = err.response.data.errorMessage;
-            console.log("Error: " + errMsg);
-            authReducer({
-                type: AuthActionType.SET_ERROR_MSG,
-                payload: errMsg
-            });
+            if(err){
+                const errMsg = err.response.data.errorMessage;
+                console.log("Error: " + errMsg);
+                authReducer({
+                    type: AuthActionType.SET_ERROR_MSG,
+                    payload: errMsg
+                });
+            }
         }
     }
 

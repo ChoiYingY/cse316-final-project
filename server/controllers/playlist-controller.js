@@ -183,9 +183,9 @@ getPlaylists = async (req, res) => {
     }).catch(err => console.log(err))
 }
 
-updatePlaylist = async (req, res) => {
+updatePlaylistById = async (req, res) => {
     const body = req.body
-    console.log("updatePlaylist: " + JSON.stringify(body));
+    console.log("updatePlaylistById: " + JSON.stringify(body));
     console.log("req.body.name: " + req.body.name);
 
     if (!body) {
@@ -225,6 +225,7 @@ updatePlaylist = async (req, res) => {
                             console.log("SUCCESS!!!");
                             return res.status(200).json({
                                 success: true,
+                                list: list,
                                 id: list._id,
                                 message: 'Playlist updated!',
                             })
@@ -261,11 +262,34 @@ asyncFindUserById = async (id) => {
     return user;
 }
 
+// async function asyncFindDuplicateName(name){
+//     console.log(name);
+
+//     async function asyncFindDupName(name) {
+//         const ans = await Playlist.findOne({ name: name }, (err, playlist) => {
+//             if (err) {
+//                 return res.status(404).json({
+//                     success: false,
+//                     message: 'User not found!'
+//                 });
+//             }
+//             console.log(playlist);
+//             return res.status(200).json({ success: true });
+//         })
+//         console.log(ans);
+//         return res.status(200).json({ success: true });
+//     }
+
+//     asyncFindDupName(name);
+// }
+
 module.exports = {
     createPlaylist,
     deletePlaylist,
     getPlaylistById,
     getPlaylistPairs,
     getPlaylists,
-    updatePlaylist
+    updatePlaylistById,
+    asyncFindUserById,
+    // asyncFindDuplicateName
 }

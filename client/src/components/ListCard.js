@@ -17,6 +17,10 @@ import Grid from '@mui/material/Grid';
 import Button from '@mui/material/Button';
 
 import KeyboardDoubleArrowDownOutlinedIcon from '@mui/icons-material/KeyboardDoubleArrowDownOutlined';
+import MUIDeleteModal from './MUIDeleteModal';
+import RenamePlaylistErrorModal from './RenamePlaylistErrorModal';
+// import MUIEditSongModal from './MUIEditSongModal';
+import SongCard from './SongCard.js';
 
 /*
 //     This is a card in our list of top 5 lists. It lets select
@@ -61,11 +65,6 @@ const ExpandBtn = styled((props) => {
     ),
 }));
 
-function handleAddSong(event){
-    console.log("add song");
-    store.addCreateSongTransaction();
-}
-
 function ListCard(props) {    
     console.log(props);
     const { store } = useContext(GlobalStoreContext);
@@ -77,16 +76,89 @@ function ListCard(props) {
 
     console.log(idNamePair);
 
-    store.findPlaylistById(idNamePair._id);
+    // store.findPlaylistById(idNamePair._id);
 
     // store.setCurrentList(idNamePair._id);
 
     // const playlist = store.findPlaylistById(idNamePair._id);
     // console.log(playlist);
-    
 
-    return (
-        <Card sx={{ margin:"1%", width:"95%", height:"10%", display:"flex", flexDirection:"column", justifyContent:"space-between" }}>
+    function handleAddSong(event){
+        console.log("add song");
+        let song = { title: "Untitled", artist: "Unknown", youTubeId: "dQw4w9WgXcQ" };
+        store.addSong(idNamePair._id, store.getPlaylistSize(), song);
+    }
+
+    function handleDeleteList(event) {
+        console.log("Delete list");
+        event.stopPropagation();
+        store.markListForDeletion(idNamePair._id);
+    }
+
+    function toggleEdit() {
+        console.log(editActive);
+        let newActive = !editActive;
+        if (newActive) {
+            store.setIsListNameEditActive();
+        }
+        setEditActive(newActive);
+    }
+
+    function handleDoubleClick(event){
+        console.log("Edit list");
+        if(event.detail == 2){
+            console.log("You have double clicked");
+            event.stopPropagation();
+            toggleEdit();
+        }
+    }
+
+    function handleUpdateText(event) {
+        setText(event.target.value);
+    }
+
+    function handleKeyPress(event) {
+        if (event.code === "Enter") {
+            console.log(text);
+            // store.validatePlaylistName(text);
+            // if(store.name)
+            store.changeListName(idNamePair._id, text);
+            toggleEdit();
+        }
+    }
+
+    let cards = <></>;
+    if(store.foundList){
+        cards = store.foundList.songs.map((song, index) => (
+            <SongCard
+                id={'playlist-song-' + (index)}
+                key={'playlist-song-' + (index)}
+                index={index}
+                song={song}
+            />
+        ));
+        console.log("mapping");
+    }
+    else{
+        console.log("lol nvm");
+    }
+        
+    // else if(store.currentList)
+    // cards = store.currentList.songs.map((song, index) => (
+    //     <SongCard
+    //         id={'playlist-song-' + (index)}
+    //         key={'playlist-song-' + (index)}
+    //         index={index}
+    //         song={song}
+    //     />
+    // ));
+
+    let cardElement = <Card
+            id={idNamePair._id}
+            key={idNamePair._id}
+            onClick={handleDoubleClick}
+            sx={{ margin:"1%", width:"95%", height:"10%", display:"flex", flexDirection:"column", justifyContent:"space-between" }}
+        >
             <Typography
                 fontFamily={"Lexend Exa"}
                 variant="h5"
@@ -105,7 +177,18 @@ function ListCard(props) {
 
             <Collapse in={expand} timeout="auto" unmountOnExit>
                 <Grid container  sx={{ display: "flex", alignItem: "center" }}>
+
+                    <Grid item sx={{ display: "flex", alignItem: "center" }}>
+                        <Box>
+                            {
+                                cards
+                            }
+                            {/* { modalJSX } */}
+                        </Box>
+                    </Grid>
+                    
                     <Button
+                        id="add-song-btn"
                         variant="contained" sx={addSongBtnSx}
                         onClick={handleAddSong}
                     >
@@ -113,13 +196,29 @@ function ListCard(props) {
                     </Button>
                     <Grid item sx={{ margin: "1%", display:"flex", justifyContent:"space-between", width:"95%"}}>
                         <div className="container" style={{gap: "2.5%"}}>
-                            <Button variant="contained" sx={btnSx}>Undo</Button>
-                            <Button variant="contained" sx={btnSx}>Redo</Button>
+                            <Button
+                                variant="contained" sx={btnSx}
+                                disabled={!store.undo()}
+                            >
+                                Undo    
+                            </Button>
+
+                            <Button
+                                variant="contained" sx={btnSx}
+                                disabled={!store.redo()}
+                            >
+                                Redo    
+                            </Button>
                         </div>
 
                         <div className="container" style={{gap: "2.5%"}}>
                             <Button variant="contained" sx={btnSx}>Publish</Button>
-                            <Button variant="contained" sx={btnSx}>Delete</Button>
+                            <Button
+                                variant="contained" sx={btnSx}
+                                onClick={handleDeleteList}
+                            >
+                                Delete
+                            </Button>
                             <Button variant="contained" sx={btnSx}>Duplicate</Button>
                         </div>
                     </Grid>
@@ -131,6 +230,16 @@ function ListCard(props) {
                 <ExpandBtn
                     onClick={() => {
                         console.log("expand list");
+                        store.findPlaylistById(idNamePair._id);
+                        console.log(store.foundList);
+                        // if(expand == true){
+                        //     console.log("Clear current list");
+                        //     store.closeCurrentList();
+                        // }
+                        // else{
+                        //     console.log("Set current list");
+                        //     store.setCurrentList(idNamePair._id);
+                        // }
                         setExpand(!expand);
                     }}
                     aria-label="Expand" aria-expanded={expand}
@@ -146,7 +255,34 @@ function ListCard(props) {
                     />
                 </ExpandBtn>
             </div>
+
+            <MUIDeleteModal />
+            <RenamePlaylistErrorModal/>
         </Card>
+
+    if (editActive) {
+        cardElement =
+            <TextField
+                margin="normal"
+                required
+                fullWidth
+                id={idNamePair._id}
+                label="Playlist Name"
+                name="name"
+                autoComplete="Playlist Name"
+                className='list-card'
+                onKeyPress={handleKeyPress}
+                onChange={handleUpdateText}
+                defaultValue={idNamePair.name}
+                inputProps={{style: {fontSize: 48}}}
+                InputLabelProps={{style: {fontSize: 24}}}
+                sx={{backgroundColor:"white"}}
+                autoFocus
+            />
+    }
+
+    return (
+        cardElement
     );
 }
 

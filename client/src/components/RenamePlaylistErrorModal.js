@@ -1,5 +1,4 @@
 import { useContext } from 'react';
-import AuthContext from '../auth';
 import * as React from 'react';
 import Box from '@mui/material/Box';
 import Modal from '@mui/material/Modal';
@@ -7,6 +6,8 @@ import Modal from '@mui/material/Modal';
 import Alert from '@mui/material/Alert';
 import AlertTitle from '@mui/material/AlertTitle';
 import Button from '@mui/material/Button';
+
+import { GlobalStoreContext } from '../store'
 
 const style = {
     position: 'absolute',
@@ -29,26 +30,27 @@ const closeBtnStyle = {
     p: 4,
 };
 
-export default function AccountErrorModal() {
-    const { auth } = useContext(AuthContext);
-    let errMsg = "";
+export default function RenamePlaylistErrorModal() {
+    const { store } = useContext(GlobalStoreContext);
+    let warningMsg = "";
 
-    if (auth.errMsg){
-        errMsg = auth.errMsg;
+    if (store.warningMsg){
+        console.log("has Err Msg");
+        warningMsg = store.warningMsg;
     }
 
     function handleCloseModal(event) {
-        auth.clearErrorMsg();
+        store.clearWarningMsg();
     }
 
     return (
         <Modal
-            open={auth.errMsg !== null}
+            open={store.warningMsg !== null}
         >
             <Box sx={style}>
                 <Alert severity="warning">
                     <AlertTitle><strong>Warning</strong></AlertTitle>
-                    {errMsg}<br/>
+                    {warningMsg}<br/>
                 </Alert>
                 
                 <Button

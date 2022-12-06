@@ -1,7 +1,6 @@
 import React, { useContext, useEffect } from 'react'
 import { GlobalStoreContext } from '../store'
 import ListCard from './ListCard.js'
-import MUIDeleteModal from './MUIDeleteModal'
 import UserNavbar from './UserNavbar'
 
 import List from '@mui/material/List';
@@ -77,6 +76,7 @@ const HomeScreen = () => {
                 
                 listCard = store.idNamePairs.map((pair) => (
                     <ListCard
+                        id={pair._id}
                         key={pair._id}
                         idNamePair={pair}
                         selected={false}
@@ -130,13 +130,12 @@ const HomeScreen = () => {
                         <div
                             id="playlist-selector"
                         >
-                            <Grid sx={{width:"60%", height: "100%" , backgroundColor:"red"}}>
+                            <Grid sx={{width:"60%", height: "100%" , backgroundColor:"red", overflowY: "scroll"}}>
                                 <Grid>
                                     <div id="list-selector-list">
                                         {
                                             listCard
                                         }
-                                        <MUIDeleteModal />
                                     </div>
                                 </Grid>
                             </Grid>

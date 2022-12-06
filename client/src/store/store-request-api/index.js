@@ -40,13 +40,17 @@ export const updatePlaylistById = (id, playlist) => {
         playlist : playlist
     })
 }
+// export const asyncFindDuplicateName = (name) => api.get(`/playlist/`, {
+//     // SPECIFY THE PAYLOAD
+//     name : name });
 
 const apis = {
     createPlaylist,
     deletePlaylistById,
     getPlaylistById,
     getPlaylistPairs,
-    updatePlaylistById
+    updatePlaylistById,
+    // asyncFindDuplicateName
 }
 
 export default apis
