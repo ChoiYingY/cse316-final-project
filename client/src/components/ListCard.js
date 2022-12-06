@@ -4,12 +4,19 @@ import Box from '@mui/material/Box';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
 import IconButton from '@mui/material/IconButton';
+import AddIcon from '@mui/icons-material/Add';
 import ListItem from '@mui/material/ListItem';
 import TextField from '@mui/material/TextField';
 
 import Card from '@mui/material/Card';
 import Link from '@mui/material/Link';
 import Typography from '@mui/material/Typography';
+import { styled } from '@mui/material/styles';
+import Collapse from '@mui/material/Collapse';
+import Grid from '@mui/material/Grid';
+import Button from '@mui/material/Button';
+
+import KeyboardDoubleArrowDownOutlinedIcon from '@mui/icons-material/KeyboardDoubleArrowDownOutlined';
 
 /*
 //     This is a card in our list of top 5 lists. It lets select
@@ -19,23 +26,67 @@ import Typography from '@mui/material/Typography';
 //     @author McKilla Gorilla
 // */
 
+const addSongBtnSx = {
+    backgroundColor: "#414397",
+    width:"95%",
+    margin: "2.5% auto",
+    padding: "2%",
+    '&:hover':{
+        backgroundColor: "#2d2e79"
+    }
+};
+
+const btnSx = {
+    cursor: 'pointer',
+    margin: "1.5% 0% ",
+    borderRadius: "10%",
+    padding: "2% 2%",
+    width: "50px",
+    fontSize: '10px',
+    backgroundColor: "#b91e1e",
+    '&:hover':{
+        backgroundColor: "#881313"
+    }
+};
+
+const ExpandBtn = styled((props) => {
+    const { expand, ...other } = props;
+        return <IconButton {...other} />;
+    })(({ theme, expand }) => ({
+        transform: !expand ? 'rotate(0deg)' : 'rotate(180deg)',
+        marginLeft: 'auto',
+        transition: theme.transitions.create('transform', {
+            duration: theme.transitions.duration.shortest,
+        }
+    ),
+}));
+
+function handleAddSong(event){
+    console.log("add song");
+    store.addCreateSongTransaction();
+}
+
 function ListCard(props) {    
     console.log(props);
     const { store } = useContext(GlobalStoreContext);
     const [editActive, setEditActive] = useState(false);
     const [text, setText] = useState("");
+    const [expand, setExpand] = useState(false);
 
     const { idNamePair, selected } = props;
 
     console.log(idNamePair);
 
+    store.findPlaylistById(idNamePair._id);
+
     // store.setCurrentList(idNamePair._id);
 
     // const playlist = store.findPlaylistById(idNamePair._id);
     // console.log(playlist);
+    
 
     return (
-        <Card sx={{margin:"1%", width:"95%", height:"100px"}}>
+        <Card sx={{ margin:"1%", width:"95%", height:"10%", display:"flex", flexDirection:"column", justifyContent:"space-between" }}>
             <Typography
                 fontFamily={"Lexend Exa"}
                 variant="h5"
@@ -51,6 +102,50 @@ function ListCard(props) {
                 By:&nbsp;
                 <Link>{idNamePair.userName}</Link>
             </Typography>
+
+            <Collapse in={expand} timeout="auto" unmountOnExit>
+                <Grid container  sx={{ display: "flex", alignItem: "center" }}>
+                    <Button
+                        variant="contained" sx={addSongBtnSx}
+                        onClick={handleAddSong}
+                    >
+                        <AddIcon></AddIcon>
+                    </Button>
+                    <Grid item sx={{ margin: "1%", display:"flex", justifyContent:"space-between", width:"95%"}}>
+                        <div className="container" style={{gap: "2.5%"}}>
+                            <Button variant="contained" sx={btnSx}>Undo</Button>
+                            <Button variant="contained" sx={btnSx}>Redo</Button>
+                        </div>
+
+                        <div className="container" style={{gap: "2.5%"}}>
+                            <Button variant="contained" sx={btnSx}>Publish</Button>
+                            <Button variant="contained" sx={btnSx}>Delete</Button>
+                            <Button variant="contained" sx={btnSx}>Duplicate</Button>
+                        </div>
+                    </Grid>
+                </Grid>
+                
+            </Collapse>
+            
+            <div style={{ display:"flex", justifyContent:"flex-end" }}>
+                <ExpandBtn
+                    onClick={() => {
+                        console.log("expand list");
+                        setExpand(!expand);
+                    }}
+                    aria-label="Expand" aria-expanded={expand}
+                    expand={expand}
+                >
+                    <KeyboardDoubleArrowDownOutlinedIcon
+                        size="large"
+                        fontSize="large"
+                        edge="end"
+                        aria-label="Expand Button"
+                        aria-haspopup="true"
+                        sx={{  color: "black"  }}
+                    />
+                </ExpandBtn>
+            </div>
         </Card>
     );
 }

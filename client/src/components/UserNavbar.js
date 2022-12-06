@@ -124,7 +124,7 @@ export default function UserNavbar() {
                             // onClick={ () => {   console.log("sort by");  } }
                         >
                             <div className='container' style={{"width": "150px", justifyContent:"flex-end"}}>
-                                <Typography color="black">SORT BY</Typography>
+                                <Typography color="black" fontFamily="Lexend Exa">SORT BY</Typography>
                                 
                                 <div>
                                     <Box

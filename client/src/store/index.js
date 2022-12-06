@@ -45,7 +45,6 @@ const CurrentModal = {
 }
 
 const CurrentView = {
-    NONE : "NONE",
     HOME : "HOME",
     ALL_LISTS : "ALL_LISTS",
     USERS : "USERS"
@@ -250,30 +249,15 @@ function GlobalStoreContextProvider(props) {
 
     store.setCurrentView = function(view){
         switch(view){
-            case (CurrentView.HOME): {
-                console.log("HOME");
+            case (CurrentView.HOME):
+            case (CurrentView.ALL_LISTS):
+            case (CurrentView.USERS):
+            {
+                console.log(view);
 
                 storeReducer({
                     type: GlobalStoreActionType.SET_CURRENT_VIEW,
-                    payload: CurrentView.HOME
-                });
-                break;
-            }
-            case (CurrentView.ALL_LISTS): {
-                console.log("ALL_LISTS");
-
-                storeReducer({
-                    type: GlobalStoreActionType.SET_CURRENT_VIEW,
-                    payload: CurrentView.ALL_LISTS
-                });
-                break;
-            }
-            case (CurrentView.USERS): {
-                console.log("USERS");
-
-                storeReducer({
-                    type: GlobalStoreActionType.SET_CURRENT_VIEW,
-                    payload: CurrentView.USERS
+                    payload: view
                 });
                 break;
             }
@@ -484,23 +468,6 @@ function GlobalStoreContextProvider(props) {
         tps.clearAllTransactions();
     }
 
-    store.findPlaylistById = function (id) {
-        let playlist = null;
-        console.log(id);
-        async function findList(id) {
-            let response = await api.getPlaylistById(id);
-            if (response.data.success) {
-                playlist = response.data.playlist;
-                console.log(playlist);
-                // storeReducer({
-                //     type: GlobalStoreActionType.SELECT_LIST,
-                //     payload: playlist
-                // });
-            }
-        }
-        findList(id);
-    }
-
     // THE FOLLOWING 8 FUNCTIONS ARE FOR COORDINATING THE UPDATING
     // OF A LIST, WHICH INCLUDES DEALING WITH THE TRANSACTION STACK. THE
     // FUNCTIONS ARE setCurrentList, addMoveItemTransaction, addUpdateItemTransaction,
@@ -527,10 +494,10 @@ function GlobalStoreContextProvider(props) {
     store.getPlaylistSize = function() {
         return store.currentList.songs.length;
     }
-    store.addNewSong = function() {
-        let index = this.getPlaylistSize();
-        this.addCreateSongTransaction(index, "Untitled", "Unknown", "dQw4w9WgXcQ");
-    }
+    // store.addNewSong = function() {
+    //     let index = this.getPlaylistSize();
+    //     this.addCreateSongTransaction(index, "Untitled", "Unknown", "dQw4w9WgXcQ");
+    // }
     // THIS FUNCTION CREATES A NEW SONG IN THE CURRENT LIST
     // USING THE PROVIDED DATA AND PUTS THIS SONG AT INDEX
     store.createSong = function(index, song) {
@@ -657,6 +624,19 @@ function GlobalStoreContextProvider(props) {
             type: GlobalStoreActionType.SET_LIST_NAME_EDIT_ACTIVE,
             payload: null
         });
+    }
+
+    store.findPlaylistById = function (id) {
+        let playlist = null;
+        console.log(id);
+        async function findList(id) {
+            let response = await api.getPlaylistById(id);
+            if (response.data.success) {
+                playlist = response.data.playlist;
+                console.log(playlist);
+            }
+        }
+        findList(id);
     }
 
     return (
