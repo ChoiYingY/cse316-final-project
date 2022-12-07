@@ -35,7 +35,8 @@ export const GlobalStoreActionType = {
     SET_CURRENT_VIEW: "SET_CURRENT_VIEW",
     SET_FOUND_LIST: "SET_FOUND_LIST",
     UPDATE_LIST: "UPDATE_LIST",
-    CLEAR_SELECTED: "CLEAR_SELECTED"
+    CLEAR_SELECTED: "CLEAR_SELECTED",
+    PUBLISH_LIST: "PUBLISH_LIST"
 }
 
 // WE'LL NEED THIS TO PROCESS TRANSACTIONS
@@ -643,52 +644,6 @@ function GlobalStoreContextProvider(props) {
         tps.clearAllTransactions();
     }
 
-    // // THE FOLLOWING 8 FUNCTIONS ARE FOR COORDINATING THE UPDATING
-    // // OF A LIST, WHICH INCLUDES DEALING WITH THE TRANSACTION STACK. THE
-    // // FUNCTIONS ARE setCurrentList, addMoveItemTransaction, addUpdateItemTransaction,
-    // // moveItem, updateItem, updateCurrentList, undo, and redo
-    // store.setCurrentList = function (id) {
-    //     console.log(id);
-    //     async function asyncSetCurrentList(id) {
-    //         let response = await api.getPlaylistById(id);
-    //         if (response.data.success) {
-    //             let playlist = response.data.playlist;
-    //             console.log(playlist);
-    //             response = await api.updatePlaylistById(playlist._id, playlist);
-    //             if (response.data.success) {
-    //                 console.log(response.data);
-    //                 response = await api.getPlaylistById(response.data.id);
-    //                 if (response.data.success) {
-    //                     console.log(response.data);
-    //                 }
-    //                 // storeReducer({
-    //                 //     type: GlobalStoreActionType.SET_CURRENT_LIST,
-    //                 //     payload: playlist
-    //                 // });
-    //             }
-    //         }
-    //     }
-    //     asyncSetCurrentList(id);
-    // }
-
-    // store.updateList = async function(playlist){
-    //     async function asyncUpdateList(playlist){
-    //         let response = await api.updatePlaylistById(playlist._id, playlist);
-    //         if (response.data.success) {
-    //             console.log(response.data.id);
-    //             console.log(response.data.list);
-
-    //             storeReducer({
-    //                 type: GlobalStoreActionType.SET_FOUND_LIST,
-    //                 payload: response.data.list
-    //             });
-
-    //             history.push("/");
-    //         }
-    //     }
-    //     asyncUpdateList(playlist); 
-    // }
-
     store.getPlaylistSize = function() {
         // if(store.currentList)
         //     return store.currentList.songs.length;
@@ -697,19 +652,6 @@ function GlobalStoreContextProvider(props) {
         return 0;
     }
 
-
-    // // THIS FUNCTION CREATES A NEW SONG IN THE CURRENT LIST
-    // // USING THE PROVIDED DATA AND PUTS THIS SONG AT INDEX
-    // store.createSong = function(index, song) {
-    //     let list = store.currentList;
-    //     if(!list)
-    //         return;
-
-    //     list.songs.splice(index, 0, song);
-    //     console.log(list.songs);
-    //     // NOW MAKE IT OFFICIAL
-    //     store.updateCurrentList();
-    // }
     // THIS FUNCTION MOVES A SONG IN THE CURRENT LIST FROM
     // start TO end AND ADJUSTS ALL OTHER ITEMS ACCORDINGLY
     store.moveSong = function(start, end) {
@@ -884,54 +826,6 @@ function GlobalStoreContextProvider(props) {
         tps.addTransaction(transaction);
     }
 
-    // store.addUpdateSongTransaction = function (index, newSongData) {
-    //     console.log(store.currentList);
-    //     console.log(newSongData);
-    //     console.log(index);
-    //     if(index < 0 || !store.currentList || !store.currentList.songs)
-    //         return;
-
-    //     let song = store.currentList.songs[index];
-    //     let oldSongData = {
-    //         title: song.title,
-    //         artist: song.artist,
-    //         youTubeId: song.youTubeId
-    //     };
-
-    //     console.log("&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&")
-    //     console.log(song)
-    //     console.log("_____________________________")
-    //     console.log(song)
-    //     console.log("_____________________________")
-    //     console.log(oldSongData)
-    //     console.log("&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&")
-
-    //     store.updateSong()
-
-        // let transaction = new UpdateSong_Transaction(this, index, oldSongData, newSongData);        
-        // tps.addTransaction(transaction);
-    // }
-
-    // store.updateCurrentList = function() {
-    //     console.log("updateCurrentList")
-        
-    //     if(!store.currentList || !store.currentList._id)
-    //         return ;
-
-    //     console.log(store.currentList)
-
-    //     // async function asyncUpdateCurrentList() {
-    //     //     const response = await api.updatePlaylistById(store.currentList._id, store.currentList);
-    //     //     if (response.data.success) {
-    //     //         storeReducer({
-    //     //             type: GlobalStoreActionType.SET_CURRENT_LIST,
-    //     //             payload: store.currentList
-    //     //         });
-    //     //     }
-    //     // }
-    //     // asyncUpdateCurrentList();
-    // }
-
     store.addSong = function(id, index, song){
         console.log("Add song now");
         console.log(id);
@@ -1060,6 +954,46 @@ function GlobalStoreContextProvider(props) {
         }
     }
 
+    store.publishPlaylist = function(id){
+        console.log("publishPlaylist");
+
+        async function asyncpublishPlaylist(id){
+            console.log("publishPlaylist");
+            let response = await api.publishPlaylist(id);
+            if(response.data.success){
+                let playlist = response.data.playlist;
+                console.log("playlist found");
+
+            }
+
+        //     //     // console.log(playlist + "\n");
+        //     //     // console.log("");
+        //     //     // playlist.isPublished = true;
+        //     //     // console.log(playlist + "\n");
+        //     //     // playlist.songs.splice(index, 0, song);
+                
+        //     //     // console.log(playlist);
+
+        //     //     // async function asyncUpdateList(playlist){
+        //     //     //     response = await api.updatePlaylistById(playlist._id, playlist);
+        //     //     //     if (response.data.success) {
+        //     //     //         console.log(response.data.id);
+        //     //     //         console.log(response.data.list);
+        
+        //     //     //         storeReducer({
+        //     //     //             type: GlobalStoreActionType.SET_FOUND_LIST,
+        //     //     //             payload: response.data.list
+        //     //     //         });
+        
+        //     //     //         history.push("/");
+        //     //     //     }
+        //     //     // }
+        //     //     // asyncUpdateList(playlist); 
+        //     // }
+        }
+        asyncpublishPlaylist(id);
+    }
+
     store.validatePlaylistName = function(name){
         if(name.length === 0){
             storeReducer({
@@ -1092,6 +1026,7 @@ function GlobalStoreContextProvider(props) {
         </GlobalStoreContext.Provider>
     );
 }
+
 
 export default GlobalStoreContext;
 export { GlobalStoreContextProvider };

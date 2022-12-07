@@ -10,12 +10,14 @@ const router = express.Router()
 const auth = require('../auth')
 
 router.post('/playlist', auth.verify, PlaylistController.createPlaylist)
-router.post('/playlist', auth.verify, PlaylistController.duplicatePlaylist)
 router.delete('/playlist/:id', auth.verify, PlaylistController.deletePlaylist)
 router.get('/playlist/:id', auth.verify, PlaylistController.getPlaylistById)
 router.get('/playlistpairs', auth.verify, PlaylistController.getPlaylistPairs)
 router.get('/playlists', auth.verify, PlaylistController.getPlaylists)
 router.put('/playlist/:id', auth.verify, PlaylistController.updatePlaylistById)
+
+router.post('/playlist', auth.verify, PlaylistController.duplicatePlaylist)
+router.put('/playlistPublish/:id', auth.verify, PlaylistController.publishPlaylist)
 // router.get('/playlist', auth.verify, PlaylistController.asyncFindDuplicateName)
 
 module.exports = router

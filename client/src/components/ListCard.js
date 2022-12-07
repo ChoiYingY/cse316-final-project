@@ -192,7 +192,7 @@ function ListCard(props) {
 
     function handlePublish(event){
         event.stopPropagation();
-        store.publishList(idNamePair._id);
+        store.publishPlaylist(idNamePair._id);
     }
 
     let cardElement = <Card

@@ -60,6 +60,10 @@ export const updatePlaylistById = (id, playlist) => {
     })
 }
 
+export const publishPlaylist = (id) => {
+    return api.put(`/playlistPublish/${id}`);
+}
+
 
 // export const asyncFindDuplicateName = (name) => api.get(`/playlist/`, {
 //     // SPECIFY THE PAYLOAD
@@ -67,11 +71,12 @@ export const updatePlaylistById = (id, playlist) => {
 
 const apis = {
     createPlaylist,
-    duplicatePlaylist,
     deletePlaylistById,
     getPlaylistById,
     getPlaylistPairs,
     updatePlaylistById,
+    duplicatePlaylist,
+    publishPlaylist
     // asyncFindDuplicateName
 }
 
