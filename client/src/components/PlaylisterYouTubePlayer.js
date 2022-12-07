@@ -10,7 +10,7 @@ import FastRewindIcon from '@mui/icons-material/FastRewind';
 import StopIcon from '@mui/icons-material/Stop';
 
 import Grid from '@mui/material/Grid';
-import Box from '@mui/material/Box';
+import Button from '@mui/material/Button';
 
 export default function PlaylisterYouTubePlayer(props) {
 
@@ -156,56 +156,73 @@ export default function PlaylisterYouTubePlayer(props) {
                     {songInfo}
                 </>)
 
-    let playerController = <div>    
-        <FastRewindIcon
-            size="large" fontSize="large" edge="end" aria-haspopup="true"
-            sx={{  color: "black" , cursor: 'pointer'  }}
-            
-            aria-label="Prev Button"
-            onClick={ (event) => {
-                event.stopPropagation();
-                console.log("Prev songs");
-                if(index > 0){
-                    setIndex(index-1);
+    let playerController = <div>
+        <Button disabled={!store.foundList}>
+            <FastRewindIcon
+                size="large" fontSize="large" edge="end" aria-haspopup="true"
+                sx={{  color: "black" , cursor: 'pointer'  }}
+                
+                aria-label="Prev Button"
+                onClick={ (event) => {
+                    event.stopPropagation();
+                    if(store.foundList){
+                        console.log("Prev songs");
+                        if(index > 0){
+                            setIndex(index-1);
+                            loadAndPlayCurrentSong(player.player);
+                        }
+                    }
+                } }
+            />
+        </Button>
+
+        <Button disabled={!store.foundList}>
+            <StopIcon
+                size="large" fontSize="large" edge="end" aria-haspopup="true"
+                sx={{  color: "black" , cursor: 'pointer'  }}
+                
+                aria-label="Stop Button"
+                onClick={ (event) => {
+                    event.stopPropagation();
+                    if(store.foundList){
+                        console.log("Stop songs");
+                        if(player && player.player)
+                            player.player.pauseVideo();
+                    }
+                } }
+            />
+        </Button>
+        
+        <Button disabled={!store.foundList}>
+            <PlayArrowIcon
+                size="large" fontSize="large" edge="end" aria-haspopup="true"
+                sx={{  color: "black" , cursor: 'pointer'  }}
+                
+                aria-label="Play Button"
+                onClick={ (event) => {
+                    event.stopPropagation();
+                    if(store.foundList){
+                        console.log("Play songs");
+                        if(player)
+                            player.player.playVideo();
+                    }
+                } }
+            />
+        </Button>
+        
+        <Button disabled={!store.foundList}>
+            <FastForwardIcon
+                size="large" fontSize="large" edge="end" aria-haspopup="true"
+                sx={{  color: "black" , cursor: 'pointer'  }}
+                
+                aria-label="Next Button"
+                onClick={ (event) => {
+                    event.stopPropagation();
+                    incSong();
                     loadAndPlayCurrentSong(player.player);
-                }
-            } }
-        />
-        <StopIcon
-            size="large" fontSize="large" edge="end" aria-haspopup="true"
-            sx={{  color: "black" , cursor: 'pointer'  }}
-            
-            aria-label="Stop Button"
-            onClick={ (event) => {
-                event.stopPropagation();
-                console.log("Stop songs");
-                if(player && player.player)
-                    player.player.pauseVideo();
-            } }
-        />
-        <PlayArrowIcon
-            size="large" fontSize="large" edge="end" aria-haspopup="true"
-            sx={{  color: "black" , cursor: 'pointer'  }}
-            
-            aria-label="Play Button"
-            onClick={ (event) => {
-                event.stopPropagation();
-                console.log("Play songs");
-                if(player)
-                    player.player.playVideo();
-            } }
-        />
-        <FastForwardIcon
-            size="large" fontSize="large" edge="end" aria-haspopup="true"
-            sx={{  color: "black" , cursor: 'pointer'  }}
-            
-            aria-label="Next Button"
-            onClick={ (event) => {
-                event.stopPropagation();
-                incSong();
-                loadAndPlayCurrentSong(player.player);
-            } }
-        />
+                } }
+            />
+        </Button>
     </div>;
 
     if(!store.foundList || !currPlayer.list || !currPlayer.listName || !currPlayer.songQueue || !currPlayer.song)

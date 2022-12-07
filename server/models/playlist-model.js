@@ -22,9 +22,9 @@ const playlistSchema = new Schema(
         listens: { type: Number, required: true },
         datePublished:{ type: Date },
         comments: { type: [{
-            body: String,
-            commenter: String
-        }] },
+            commenter: String,
+            text: String
+        }] }
     },
     { timestamps: true },
 )

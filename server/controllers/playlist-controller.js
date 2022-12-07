@@ -350,10 +350,12 @@ updatePublishPlaylist = async (req, res) => {
                     console.log(body.playlist.listens);
                     console.log(body.playlist.likes);
                     console.log(body.playlist.dislikes);
+                    console.log(body.playlist.comments);
 
                     list.listens=body.playlist.listens;
                     list.likes=body.playlist.likes;
                     list.dislikes=body.playlist.dislikes;
+                    list.comments=body.playlist.comments;
 
                     console.log("list: " + JSON.stringify(list) + "\n");
                     console.log("list is now updated");

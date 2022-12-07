@@ -1,7 +1,9 @@
-import React, { useContext, useEffect } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { GlobalStoreContext } from '../store'
 import ListCard from './ListCard.js'
 import UserNavbar from './UserNavbar'
+
+import { useHistory } from 'react-router-dom'
 
 import List from '@mui/material/List';
 import Box from '@mui/material/Box';
@@ -15,6 +17,9 @@ import Grid from '@mui/material/Grid';
 import Button from '@mui/material/Button';
 
 import PlaylisterYouTubePlayer from './PlaylisterYouTubePlayer.js';
+import TextField from '@mui/material/TextField';
+
+import CommentCard from './CommentCard.js';
 
 // const btnHoverSx = {
 //     cursor: 'pointer',
@@ -44,6 +49,10 @@ const fabBtnSx = {
 const HomeScreen = () => {
     const { store } = useContext(GlobalStoreContext);
     const { auth } = useContext(AuthContext);
+
+    const history = useHistory();
+    const [text, setText] = useState("");
+    // const [input, setInput] = useState("");
 
     console.log("HomeScreen auth.loggedIn: " + auth.loggedIn);
     console.log(store);
@@ -151,6 +160,59 @@ const HomeScreen = () => {
         }
     }
 
+    function handleUpdateText(event) {
+        event.stopPropagation();
+        setText(event.target.value);
+    }
+
+    function handleKeyPress(event) {
+        if (event.code === "Enter") {
+            event.stopPropagation();
+
+            console.log()
+            store.postComment(auth.user.userName, text);
+            setText("");
+        }
+    }
+
+    let tab = "";
+    let comments = "";
+
+    if(store.playerCommView === "PLAYER"){
+        tab = <Grid sx={{width:"100%"}}>
+            <PlaylisterYouTubePlayer currPlayer={currPlayer}/>
+        </Grid>;
+    }
+    else if(store.playerCommView === "COMMENTS"){
+        tab = <Grid sx={{width:"100%", backgroundColor: "yellow", display:"flex", justifyContent:"flex-start" , flexDirection:"column", alignItems:"center" }}>
+            <Grid
+                sx ={{ width:"100%", height:"325px", backgroundColor: "purple", overflowY: "scroll" , display:"flex", justifyContent:"space-between" , flexDirection:"column", alignItems:"center"}}
+            >
+                {
+                    comments = store.commentList.map((comment) => (
+                        <CommentCard
+                            id={comment._id}
+                            key={comment._id}
+                            commenter={comment.commenter}
+                            text={comment.text}
+                        />
+                    ))
+                }
+            </Grid>
+            <Grid  sx={{width: "100%", display:"flex", justifyContent:"flex-start" , flexDirection:"column", alignItems:"center" }}>
+                <TextField
+                    margin="normal"
+                    name="name"
+                    onKeyPress={handleKeyPress}
+                    onChange={handleUpdateText}
+                    placeholder="Add Comment"
+                    value = {text}
+                    sx={{backgroundColor:"white", width: "95%"}}
+                />
+            </Grid>
+        </Grid>;
+    }
+
     console.log(store.foundList);
     
     return (
@@ -177,13 +239,32 @@ const HomeScreen = () => {
                             </Grid>
                             <Grid sx={{width:"40%", height: "450px" , backgroundColor:"blue"}}>
                                 <div sx={{width:"100%", display:"flex", flexDirection: "column", justifyContent:"flex-start"}}>
-                                    <Button outline="filled" sx={playerBtnSx}>Player</Button>
-                                    <Button outline="filled" sx={playerBtnSx}>Comment</Button>
+                                    <Button
+                                        outline="filled" sx={playerBtnSx}
+                                        onClick={(event) => {
+                                            console.log("jump to PLAYER tab");
+                                            event.stopPropagation();
+                                            store.setPlayerCommentView("PLAYER");
+                                            history.push("/");
+                                        }}
+                                    >
+                                        Player
+                                    </Button>
+
+                                    <Button
+                                        outline="filled" sx={playerBtnSx}
+                                        onClick={(event) => {
+                                            console.log("jump to COMMENTS tab");
+                                            event.stopPropagation();
+                                            store.setPlayerCommentView("COMMENTS");
+                                            history.push("/");
+                                        }}
+                                    >
+                                        Comments
+                                    </Button>
                                 </div>
                                 
-                                <Grid sx={{width:"100%"}}>
-                                    <PlaylisterYouTubePlayer currPlayer={currPlayer}/>
-                                </Grid>
+                                {tab}
                                 
                             </Grid>
                         </div>

@@ -1,5 +1,6 @@
 import { useContext, useState } from 'react'
 import { GlobalStoreContext } from '../store'
+import AuthContext from '../auth';
 import Box from '@mui/material/Box';
 import IconButton from '@mui/material/IconButton';
 import AddIcon from '@mui/icons-material/Add';
@@ -75,6 +76,8 @@ function ListCard(props) {
     console.log(`list: ${list}`);
 
     const { store } = useContext(GlobalStoreContext);
+    const { auth } = useContext(AuthContext);
+
     const [editActive, setEditActive] = useState(false);
     const [text, setText] = useState("");
     const [expand, setExpand] = useState(false);
@@ -102,7 +105,6 @@ function ListCard(props) {
             return;
         let newActive = !editActive;
         if (newActive) {
-            console.log("HIHIHIHIHIHIHIHIIH");
             console.log(list);
             store.setIsListNameEditActive();
             console.log(list);
@@ -315,6 +317,7 @@ function ListCard(props) {
                             aria-label="Disike Button"
                             aria-haspopup="true"
                             sx={{  color: "black"   }}
+                            disabled = {auth.isGuest}
                         />
                     </Button>
                     <Typography
@@ -334,6 +337,7 @@ function ListCard(props) {
                             aria-label="Disike Button"
                             aria-haspopup="true"
                             sx={{  color: "black"  }}
+                            disabled = {auth.isGuest}
                         />
                     </Button>
                         <Typography
