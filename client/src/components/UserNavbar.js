@@ -1,4 +1,5 @@
 import Box from '@mui/material/Box';
+import Button from '@mui/material/Button';
 import AppBar from '@mui/material/AppBar';
 import Toolbar from '@mui/material/Toolbar';
 
@@ -12,21 +13,29 @@ import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
 
 import { GlobalStoreContext } from '../store'
+import AuthContext from '../auth'
+
 import { useHistory } from 'react-router-dom';
 import { useContext, useState } from 'react'
+
+import { makeStyles } from '@material-ui/core/styles';
+
 
 export default function UserNavbar() {
     const history = useHistory();
     const [input, setInput] = useState("");
     const { store } = useContext(GlobalStoreContext);
-    
+    const { auth } = useContext(AuthContext);
+
+    const classes = makeStyles(iconStyles)();
+
+
+    console.log("Is user a guest? " + auth.isGuest);
 
     function handleKeyPress(event){
         console.log("You have pressed on key");
         if (event.code === "Enter") {
             console.log("You have pressed enter.");
-            // store.changeListName(id, text);
-            // toggleEdit();
         }
     }
 
@@ -34,6 +43,42 @@ export default function UserNavbar() {
         console.log(event.target.value);
         setInput(event.target.value);
     }
+
+    function iconStyles() {
+        return {
+          enabledIcon: {
+            color: 'black',
+          },
+          disabledIcon: {
+            color: 'gray',
+          },
+        }
+      }
+
+      const homeBtn = (!auth.isGuest)
+      ? <HomeOutlinedIcon
+        size="large" fontSize="large" edge="end" aria-label="Home Button" aria-haspopup="true"
+        className={classes.enabledIcon}
+        onClick={(event) => {
+            console.log("jump to home screen");
+            event.stopPropagation();
+            store.setCurrentView("HOME");
+            history.push("/");
+        } } />
+        : <HomeOutlinedIcon
+            size="large" fontSize="large" edge="end" aria-label="Home Button" aria-haspopup="true"
+            className={classes.disabledIcon}
+            onClick={(event) => {
+                console.log("jump to home screen");
+                event.stopPropagation();
+                store.setCurrentView("HOME");
+                history.push("/");
+            } } />;
+
+
+
+      
+
 
     return (
         <Box>
@@ -46,12 +91,15 @@ export default function UserNavbar() {
                         alignItems="center"
                     >
                         <div className="container">
-                            <Box
+                            <Button
                                 aria-label="home" id="home-button"
-                                sx={{ cursor: 'pointer'}}
-
+                                sx={{
+                                    cursor: 'pointer',
+                                }}
+                                disabled = {auth.isGuest}
                             >
-                                <HomeOutlinedIcon
+                                {homeBtn}
+                                {/* <HomeOutlinedIcon
                                     size="large"
                                     fontSize="large"
                                     edge="end"
@@ -63,9 +111,9 @@ export default function UserNavbar() {
                                         event.stopPropagation();
                                         store.setCurrentView("HOME");
                                         history.push("/");
-                                    } }
-                                />
-                            </Box>
+                                    } } */}
+                                {/* /> */}
+                            </Button>
 
                             <Box
                                 aria-label="all list" id="all-list-button"

@@ -3,12 +3,12 @@ import { Link } from 'react-router-dom';
 import AuthContext from '../auth';
 import { GlobalStoreContext } from '../store';
 
-// import EditToolbar from './EditToolbar';
 
 import Avatar from '@mui/material/Avatar';
 import AccountCircle from '@mui/icons-material/AccountCircle';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
+import Button from '@mui/material/Button';
 import IconButton from '@mui/material/IconButton';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
@@ -109,12 +109,16 @@ export default function AppBanner() {
                 <Toolbar sx={{  backgroundColor: "#BABFEE"  }}>
                     <Grid container sx={{ display:"flex", justifyContent:"space-between", alignItems:"center"}}>
                         <Grid item>
-                            <Link to="/">
+                            <Button
+                                onClick={()=> history.push("/")}
+                                disabled={auth.isGuest}
+                                sx={{ width:"100px", height:"60px"}}
+                            >
                                 <Box
                                     component="img"
                                     alt="Playlister_logo"
                                     src="/assets/playlister_logo.png"
-                                    width={"28.5%"}
+                                    sx={{ width:"auto", height:"90%"}}
                                     onClick={ () => {
                                         if(auth.loggedIn){
                                             console.log("HOME");
@@ -123,7 +127,7 @@ export default function AppBanner() {
                                         }
                                     }}
                                 />
-                            </Link>
+                            </Button>
                         </Grid>
                         
                         <Grid item>
