@@ -3,11 +3,12 @@ import { GlobalStoreContext } from '../store'
 
 import MUIRemoveSongModal from './MUIRemoveSongModal'
 import MUIEditSongModal from './MUIEditSongModal'
+import { Typography } from '@mui/material';
 
 function SongCard(props) {
     const { store } = useContext(GlobalStoreContext);
     const [ draggedTo, setDraggedTo ] = useState(0);
-    const { song, index } = props;
+    const { song, index , listPublished} = props;
 
     function handleDragStart(event) {
         console.log("drag has started");
@@ -64,15 +65,67 @@ function SongCard(props) {
         }
     }
 
+    let songText = <Typography 
+            sx={{color: "yellow", margin: "2%", padding:"1.5% 4%"}}
+            fontFamily={"Lexend Exa"}
+            variant="h6"
+        >
+            {index + 1}.&nbsp;{song.title} by {song.artist}
+        </Typography>;
+
+    console.log("song: " + JSON.stringify(song) + "\nsong.youTubeId: " + song.youTubeId);
+    console.log(store.currentSong);
+    
+    if(store && store.currentSong && song.youTubeId === store.currentSong.youTubeId && index === store.currentSongIndex){
+        console.log("it matched!");
+        songText = <Typography 
+            sx={{color: "orange", margin: "2%", padding:"1.5% 4%"}}
+            fontFamily={"Lexend Exa"}
+            variant="h6"
+        >
+            {index + 1}.&nbsp;{song.title} by {song.artist}
+        </Typography>;
+    }
+    
+
     let modalJSX = "";
-    if (store.isEditSongModalOpen()) {
+    if (!listPublished && store.isEditSongModalOpen()) {
         modalJSX = <MUIEditSongModal />;
     }
-    else if (store.isRemoveSongModalOpen()) {
+    else if (!listPublished && store.isRemoveSongModalOpen()) {
         modalJSX = <MUIRemoveSongModal />;
     }
 
+    let removeBtn = "";
+    if (!listPublished) {
+        removeBtn = <input
+            type="button"
+            id={"remove-song-" + index}
+            className="list-card-button"
+            value={"\u2715"}
+            disabled={store.isModalOpen()}
+            onClick={handleRemoveSong}
+            style={{fontSize: "20px", margin: "0% 2%"}}
+        />
+    }
+
     let cardClass = "list-card unselected-list-card";
+
+    if(listPublished) {
+        return (
+            <div key={index} >
+                {songText}
+            </div>
+        );
+    }
+
+    if(store && store.currentSong && song.youTubeId === store.currentSong.youTubeId && index === store.currentSongIndex){
+        cardClass = "selectedSong";
+    }
+    else{
+        cardClass = "list-card unselected-list-card";
+    }
+
     return (
         <div
             key={index}
@@ -86,22 +139,14 @@ function SongCard(props) {
             draggable="true"
             onClick={handleClick}
         >
-            {index + 1}.
+            {index + 1}.&nbsp;
             <a
                 id={'song-' + index + '-link'}
                 className="song-link"
                 href={"https://www.youtube.com/watch?v=" + song.youTubeId}>
                 {song.title} by {song.artist}
             </a>
-            <input
-                type="button"
-                id={"remove-song-" + index}
-                className="list-card-button"
-                value={"\u2715"}
-                disabled={store.isModalOpen()}
-                onClick={handleRemoveSong}
-                style={{fontSize: "20px", margin: "0% 2%"}}
-            />
+            {removeBtn}
 
             { modalJSX }
         </div>

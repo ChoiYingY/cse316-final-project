@@ -68,6 +68,7 @@ duplicatePlaylist = (req, res) => {
     }
 
     const playlist = new Playlist(body);
+    playlist.isPublished = false;
     console.log("playlist: " + playlist.toString());
     if (!playlist) {
         return res.status(400).json({ success: false, samePlaylist: false , error: err })

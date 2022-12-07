@@ -23,8 +23,6 @@ export default function PlaylisterYouTubePlayer(props) {
     const [ title, setTitle ] = useState((""));
     const [ artist, setArtist ] = useState("");
 
-    const [ playable, setPlayable ] = useState(false);
-
     // THIS HAS THE YOUTUBE IDS FOR THE SONGS IN OUR PLAYLIST
     let playlist = [];
 
@@ -64,6 +62,7 @@ export default function PlaylisterYouTubePlayer(props) {
         console.log(player);
 
         let song = playlist[index];
+        updateSongInfo();
         player.loadVideoById(song);
         player.playVideo();
     }
@@ -77,17 +76,16 @@ export default function PlaylisterYouTubePlayer(props) {
     }
 
     function updateSongInfo() {
-        let currSongId = playlist[index];
+        console.log("updateSongInfo");
+        let song = currPlayer.list.songs[index];
+        if(song){
+            console.log("Found song " + JSON.stringify(song) + "@ index" + index);
+            store.setCurrentSong(song, index);
 
-        if(currSongId){
-            let filter = currPlayer.songQueue.filter(song => (song.youTubeId === currSongId));
-            currPlayer.song = filter[0];
-            console.log(currPlayer.song);
+            currPlayer.song = song;
 
-            if(currPlayer.song){
-                setTitle(currPlayer.song.title);
-                setArtist(currPlayer.song.artist);
-            }
+            setTitle(song.title);
+            setArtist(song.artist);
         }
     }
 

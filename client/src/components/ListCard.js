@@ -149,9 +149,9 @@ function ListCard(props) {
                 key={'playlist-song-' + (index)}
                 index={index}
                 song={song}
+                listPublished={(store.foundList && store.foundList.isPublished)}
             />
         ));
-        console.log("mapping");
     }
     else{
         console.log("lol nvm");
@@ -195,6 +195,64 @@ function ListCard(props) {
         store.publishPlaylist(idNamePair._id);
     }
 
+    let publishedBtn = "";
+    let undoBtn = "";
+    let redoBtn = "";
+    let addSongBtn = "";
+    let cardWrapper = "";
+
+    if(store.foundList){
+        if(!store.foundList.isPublished){
+            publishedBtn = (<Button
+                variant="contained" sx={btnSx}
+                onClick={handlePublish}
+                disabled={(store.foundList && store.foundList.isPublished)}
+            >
+                Publish
+            </Button>);
+            
+            undoBtn = (<Button
+                    variant="contained" sx={btnSx}
+                    disabled={!store.canUndo()}
+                    onClick = { handleUndo  }
+                >
+                    Undo
+                </Button>);
+
+            redoBtn = (<Button
+                variant="contained" sx={btnSx}
+                disabled={!store.canRedo()}
+                onClick = { handleRedo  }
+            >
+                Redo
+            </Button>);
+
+            addSongBtn = (<Button
+                id="add-song-btn"
+                variant="contained" sx={addSongBtnSx}
+                onClick={handleAddSong}
+            >
+                <AddIcon></AddIcon>
+            </Button>);
+
+            cardWrapper = <Box sx={{ width: "100%" }}>
+            {
+                cards
+            }
+            </Box>
+        }
+        else{
+            cardWrapper = <Box sx={{ width: "95%" , marginLeft: "2.5%"}}>
+                <Grid sx={{backgroundColor: "purple"}}>
+                {
+                    cards
+                }
+                </Grid>
+            </Box>
+        }
+    }
+    
+
     let cardElement = <Card
             id={idNamePair._id}
             key={idNamePair._id}
@@ -221,47 +279,19 @@ function ListCard(props) {
                 <Grid container  sx={{ display: "flex", alignItem: "center" }}>
 
                     <Grid item sx={{ display: "flex", alignItem: "center", width: "100%"}}>
-                        <Box sx={{ width: "100%" }}>
-                            {
-                                cards
-                            }
-                            {/* { modalJSX } */}
-                        </Box>
+                        { cardWrapper }
                     </Grid>
                     
-                    <Button
-                        id="add-song-btn"
-                        variant="contained" sx={addSongBtnSx}
-                        onClick={handleAddSong}
-                    >
-                        <AddIcon></AddIcon>
-                    </Button>
+                    {addSongBtn}
+
                     <Grid item sx={{ margin: "1%", display:"flex", justifyContent:"space-between", width:"95%"}}>
                         <div className="container" style={{gap: "2.5%"}}>
-                            <Button
-                                variant="contained" sx={btnSx}
-                                disabled={!store.canUndo()}
-                                onClick = { handleUndo  }
-                            >
-                                Undo
-                            </Button>
-
-                            <Button
-                                variant="contained" sx={btnSx}
-                                disabled={!store.canRedo()}
-                                onClick = { handleRedo  }
-                            >
-                                Redo
-                            </Button>
+                           {undoBtn}
+                           {redoBtn} 
                         </div>
 
                         <div className="container" style={{gap: "2.5%"}}>
-                            <Button
-                                variant="contained" sx={btnSx}
-                                onClick={handlePublish}
-                            >
-                                Publish
-                            </Button>
+                            {publishedBtn}
                             <Button
                                 variant="contained" sx={btnSx}
                                 onClick={handleDeleteList}
@@ -338,124 +368,5 @@ function ListCard(props) {
         cardElement
     );
 }
-
-// /*
-//     This is a card in our list of top 5 lists. It lets select
-//     a list for editing and it has controls for changing its 
-//     name or deleting it.
-    
-//     @author McKilla Gorilla
-// */
-// function ListCard(props) {
-//     const { store } = useContext(GlobalStoreContext);
-//     const [editActive, setEditActive] = useState(false);
-//     const [text, setText] = useState("");
-//     const { idNamePair, selected } = props;
-
-//     function handleLoadList(event, id) {
-//         console.log("handleLoadList for " + id);
-//         if (!event.target.disabled) {
-//             let _id = event.target.id;
-//             if (_id.indexOf('list-card-text-') >= 0)
-//                 _id = ("" + _id).substring("list-card-text-".length);
-
-//             console.log("load " + event.target.id);
-
-//             // CHANGE THE CURRENT LIST
-//             store.setCurrentList(id);
-//         }
-//     }
-
-//     function handleToggleEdit(event) {
-//         event.stopPropagation();
-//         toggleEdit();
-//     }
-
-//     function toggleEdit() {
-//         let newActive = !editActive;
-//         if (newActive) {
-//             store.setIsListNameEditActive();
-//         }
-//         setEditActive(newActive);
-//     }
-
-//     async function handleDeleteList(event, id) {
-//         event.stopPropagation();
-//         let _id = event.target.id;
-//         _id = ("" + _id).substring("delete-list-".length);
-//         store.markListForDeletion(id);
-//     }
-
-//     function handleKeyPress(event) {
-//         if (event.code === "Enter") {
-//             let id = event.target.id.substring("list-".length);
-//             store.changeListName(id, text);
-//             toggleEdit();
-//         }
-//     }
-//     function handleUpdateText(event) {
-//         setText(event.target.value);
-//     }
-
-//     let selectClass = "unselected-list-card";
-//     if (selected) {
-//         selectClass = "selected-list-card";
-//     }
-//     let cardStatus = false;
-//     if (store.isListNameEditActive) {
-//         cardStatus = true;
-//     }
-//     let cardElement =
-//         <ListItem
-//             id={idNamePair._id}
-//             key={idNamePair._id}
-//             sx={{ marginTop: '15px', display: 'flex', p: 1 }}
-//             style={{ width: '100%', fontSize: '48pt' }}
-//             button
-//             onClick={(event) => {
-//                 handleLoadList(event, idNamePair._id)
-//             }}
-//         >
-//             <Box sx={{ p: 1, flexGrow: 1 }}>{idNamePair.name}</Box>
-//             <Box sx={{ p: 1 }}>
-//                 <IconButton onClick={handleToggleEdit} aria-label='edit' disabled={store.isModalOpen() || store.listNameActive}>
-//                     <EditIcon style={{fontSize:'48pt'}} />
-//                 </IconButton>
-//             </Box>
-//             <Box sx={{ p: 1 }}>
-//                 <IconButton onClick={(event) => {
-//                         handleDeleteList(event, idNamePair._id)
-//                     }} aria-label='delete'
-//                     disabled={store.isModalOpen() || store.listNameActive}
-//                     >
-//                     <DeleteIcon style={{fontSize:'48pt'}} />
-//                 </IconButton>
-//             </Box>
-//         </ListItem>
-
-//     if (editActive) {
-//         cardElement =
-//             <TextField
-//                 margin="normal"
-//                 required
-//                 fullWidth
-//                 id={"list-" + idNamePair._id}
-//                 label="Playlist Name"
-//                 name="name"
-//                 autoComplete="Playlist Name"
-//                 className='list-card'
-//                 onKeyPress={handleKeyPress}
-//                 onChange={handleUpdateText}
-//                 defaultValue={idNamePair.name}
-//                 inputProps={{style: {fontSize: 48}}}
-//                 InputLabelProps={{style: {fontSize: 24}}}
-//                 autoFocus
-//             />
-//     }
-//     return (
-//         cardElement
-        
-//     );
-// }
 
 export default ListCard;
