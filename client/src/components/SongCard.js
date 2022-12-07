@@ -51,8 +51,8 @@ function SongCard(props) {
         // DOUBLE CLICK IS FOR SONG EDITING
         if (event.detail === 2) {
             event.stopPropagation();
-            console.log("handleDblClick: EDIT_SONG");
-            console.log("index: " + index + " \nsong: " + JSON.stringify(song));
+            console.log("");
+            console.log("handleDblClick: EDIT_SONG\nindex: " + index + " \nsong: " + JSON.stringify(song));
 
             console.log(store.currentModal);
             console.log(store.currentSong);

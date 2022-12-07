@@ -12,7 +12,7 @@ import StopIcon from '@mui/icons-material/Stop';
 import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
 
-export default function YouTubePlayerExample(props) {
+export default function PlaylisterYouTubePlayer(props) {
 
     const { store } = useContext(GlobalStoreContext);
 

@@ -32,8 +32,8 @@ export default function MUIEditSongModal() {
     const [ youTubeId, setYouTubeId ] = useState(songYouTubeId);
 
     console.log(store);
-    console.log(song);
-    console.log(index);
+    console.log("Current song" + JSON.stringify(song));
+    console.log("Current index" + JSON.stringify(index));
 
     console.log(songTitle);
     console.log(songArtist);

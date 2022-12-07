@@ -132,8 +132,8 @@ function ListCard(props) {
 
     function handleKeyPress(event) {
         if (event.code === "Enter") {
-            console.log(text);
             event.stopPropagation();
+            console.log(text);
             // store.validatePlaylistName(text);
             // if(store.name)
             store.changeListName(idNamePair._id, text);

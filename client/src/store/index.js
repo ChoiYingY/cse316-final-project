@@ -795,6 +795,8 @@ function GlobalStoreContextProvider(props) {
 
     store.addUpdateSongTransaction = function(currListId, index, oldSong, newSong){
         console.log("addUpdateSongTransaction");
+        console.log(store.currentList);
+        console.log(index);
         let transaction = new UpdateSong_Transaction(store, currListId, index, oldSong, newSong);
         tps.addTransaction(transaction);
     }
