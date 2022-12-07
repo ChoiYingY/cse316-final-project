@@ -19,7 +19,6 @@ import Button from '@mui/material/Button';
 import KeyboardDoubleArrowDownOutlinedIcon from '@mui/icons-material/KeyboardDoubleArrowDownOutlined';
 import MUIDeleteModal from './MUIDeleteModal';
 import RenamePlaylistErrorModal from './RenamePlaylistErrorModal';
-// import MUIEditSongModal from './MUIEditSongModal';
 import SongCard from './SongCard.js';
 
 /*
@@ -91,9 +90,13 @@ function ListCard(props) {
 
     function toggleEdit() {
         console.log(editActive);
+        console.log(store.foundList);
         let newActive = !editActive;
         if (newActive) {
+            console.log("HIHIHIHIHIHIHIHIIH");
+            console.log(store.foundList);
             store.setIsListNameEditActive();
+            console.log(store.foundList);
         }
         setEditActive(newActive);
     }
@@ -227,9 +230,12 @@ function ListCard(props) {
                         console.log("expand list");
                         store.findAndSavePlaylistById(idNamePair._id);
                         console.log(store.foundList);
-                        if(expand === true){
+                        if(!expand){
                             console.log("unexpand list. Clear transactions");
                             store.clearTransactions();
+                            store.clearFoundList();
+
+                            console.log(store.foundList);
                         }
                         setExpand(!expand);
                     }}

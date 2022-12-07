@@ -75,15 +75,7 @@ export default function MUIEditSongModal() {
             youTubeId: song.youTubeId
         };
 
-        console.log("&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&")
-        console.log(song)
-        console.log("_____________________________")
-        console.log(oldSongData)
-        console.log("&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&")
-
         if(!store.currentList)  return;
-
-        // store.editSong(index, newSongData);
 
         store.addUpdateSongTransaction(store.currentList._id, index, oldSongData, newSongData);      
     

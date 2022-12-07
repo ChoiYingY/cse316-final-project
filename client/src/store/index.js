@@ -198,7 +198,7 @@ function GlobalStoreContextProvider(props) {
                 return setStore({
                     currentModal : CurrentModal.NONE,
                     idNamePairs: store.idNamePairs,
-                    currentList: payload,
+                    currentList: store.foundList,
                     currentSongIndex: -1,
                     currentSong: null,
                     newListCounter: store.newListCounter,
@@ -207,7 +207,7 @@ function GlobalStoreContextProvider(props) {
                     listMarkedForDeletion: null,
                     currentView: store.currentView,
                     warningMsg: null,
-                    foundList: store.foundList
+                    foundList: payload
                 });
             }
             case GlobalStoreActionType.SET_LIST_NAME_WARNING: {
@@ -863,9 +863,11 @@ function GlobalStoreContextProvider(props) {
 
     // THIS FUNCTION ENABLES THE PROCESS OF EDITING A LIST NAME
     store.setIsListNameEditActive = function () {
+        console.log(store.foundList);
+
         storeReducer({
             type: GlobalStoreActionType.SET_LIST_NAME_EDIT_ACTIVE,
-            payload: null
+            payload: store.foundList
         });
     }
 
@@ -886,6 +888,13 @@ function GlobalStoreContextProvider(props) {
             }
         }
         findList(id);
+    }
+
+    store.clearFoundList = function(){
+        storeReducer({
+            type: GlobalStoreActionType.SET_FOUND_LIST,
+            payload: null
+        });
     }
 
 
