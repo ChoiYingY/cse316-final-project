@@ -93,11 +93,15 @@ export default function PlaylisterYouTubePlayer(props) {
         if(!store.foundList || !currPlayer.list || !currPlayer.listName || !currPlayer.songQueue || !currPlayer.song)
             return;
 
-        console.log("onPlayerReady & isPublished " + store.foundList._id);
+        console.log("onPlayerReady " + store.foundList._id);
         setPlayer({ player: event.target });
+
         
         loadAndPlayCurrentSong(event.target);
         event.target.playVideo();
+
+        if(store.foundList.isPublished)
+            store.updatePublishedData(store.foundList._id, true, false, false);
 
         updateSongInfo();
     }

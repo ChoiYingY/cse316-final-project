@@ -203,6 +203,18 @@ function ListCard(props) {
         setPublished(true);
     }
 
+    function handleLike(event){
+        event.stopPropagation();
+        if(list.isPublished)
+            store.updatePublishedData(list._id, false, true, false);
+    }
+
+    function handleDislike(event){
+        event.stopPropagation();
+        if(list.isPublished)
+            store.updatePublishedData(list._id, false, false, true);
+    }
+
     let publishedBtn = "";
     let undoBtn = "";
     let redoBtn = "";
@@ -291,11 +303,11 @@ function ListCard(props) {
                     variant="body2"
                     sx={{  fontWeight: 'bold', color: "green" , fontSize:"11px" }}
                 >
-                    {(list && list.published && list.datePublished) ? list.listens : 0}
+                    {(list && published) ? list.listens : 0}
                 </Typography>
             </>
-            likeAndDislike= <> <Grid sx={{ display:"flex", justifyContent:"space-between" , flexDirection:"row", alignItems:"center", width: "100%",  gap: "3%"}}>
-                    <div>
+            likeAndDislike= <> <Grid sx={{ display:"flex", justifyContent:"space-between" , flexDirection:"row", alignItems:"center", width: "100%"}}>
+                    <Button onClick={   handleLike  }>
                         <ThumbUpOutlinedIcon
                             size="large"
                             fontSize="large"
@@ -304,34 +316,32 @@ function ListCard(props) {
                             aria-haspopup="true"
                             sx={{  color: "black"   }}
                         />
-                    </div>
-                    <div style ={{marginLeft: "15px"}}>
-                        <Typography
-                            fontFamily={"Lexend Exa"}
-                            variant="body1"
-                        >
-                            {(published) ?   list.likes : ""   }
-                        </Typography>
-                    </div>
+                    </Button>
+                    <Typography
+                        fontFamily={"Lexend Exa"}
+                        variant="body1"
+                    >
+                        {(published) ?   list.likes : ""   }
+                    </Typography>
                 </Grid>
                 
                 <Grid sx={{ display:"flex", justifyContent:"flex-start" , flexDirection:"row", alignItems:"center"}}>
-                    <ThumbDownOutlinedIcon
-                        size="large"
-                        fontSize="large"
-                        edge="end"
-                        aria-label="Disike Button"
-                        aria-haspopup="true"
-                        sx={{  color: "black"  }}
-                    />
-                    <div style ={{marginLeft: "15px"}}>
+                    <Button onClick={   handleDislike  }>
+                        <ThumbDownOutlinedIcon
+                            size="large"
+                            fontSize="large"
+                            edge="end"
+                            aria-label="Disike Button"
+                            aria-haspopup="true"
+                            sx={{  color: "black"  }}
+                        />
+                    </Button>
                         <Typography
                             fontFamily={"Lexend Exa"}
                             variant="body1"
                         >
-                            {(published) ?   list.likes : ""   }
+                            {(published) ?   list.dislikes : ""   }
                         </Typography>
-                    </div>
                 </Grid>
             </>
         }
