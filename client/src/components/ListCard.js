@@ -149,7 +149,7 @@ function ListCard(props) {
                 key={'playlist-song-' + (index)}
                 index={index}
                 song={song}
-                listPublished={(store.foundList && store.foundList.isPublished)}
+                listPublished={(store.foundList && store.foundList._id === idNamePair._id && store.foundList.isPublished)}
             />
         ));
     }
@@ -202,13 +202,14 @@ function ListCard(props) {
     let addSongBtn = "";
     let cardWrapper = "";
     let publishedDate = "";
+    let listens = "";
 
     if(store.foundList){
         if(!store.foundList.isPublished){
             publishedBtn = (<Button
                 variant="contained" sx={btnSx}
                 onClick={handlePublish}
-                disabled={(store.foundList && store.foundList.isPublished)}
+                disabled={((store.foundList && store.foundList._id === idNamePair._id && store.foundList.isPublished))}
             >
                 Publish
             </Button>);
@@ -265,111 +266,152 @@ function ListCard(props) {
                     variant="body2"
                     sx={{  fontWeight: 'bold', color: "green" , fontSize:"11px" }}
                 >
-                    {(store.foundList && store.foundList.datePublished) ? new Date(store.foundList.datePublished).toLocaleDateString('en-us', { month:"short", day:"numeric", year:"numeric"}) : ""}
+                    {(store.foundList && store.foundList._id === idNamePair._id && store.foundList.isPublished && store.foundList.datePublished) ? new Date(store.foundList.datePublished).toLocaleDateString('en-us', { month:"short", day:"numeric", year:"numeric"}) : ""}
+                </Typography>
+            </>
+            listens = <>
+                <Typography
+                    fontFamily={"Lexend Exa"}
+                    variant="body2"
+                    sx={{fontSize:"11px"}}
+                >
+                    Listens
+                </Typography>
+                <Typography
+                    fontFamily={"Lexend Exa"}
+                    variant="body2"
+                    sx={{  fontWeight: 'bold', color: "green" , fontSize:"11px" }}
+                >
+                    {(store.foundList && store.foundList.datePublished) ? store.foundList.listens : 0}
                 </Typography>
             </>
         }
     }
+
+    let cardContent = <>
+        <Grid>
+            <Typography
+                fontFamily={"Lexend Exa"}
+                variant="h5"
+                sx={{  fontWeight: 'bold', margin: "2% 5%" }}
+            >
+                {idNamePair.name}
+            </Typography>
+            <Typography
+                fontFamily={"Lexend Exa"}
+                variant="bod1"
+                sx={{  fontWeight: 'bold', margin: "2% 5%" }}
+            >
+                By:&nbsp;
+                <Link>{idNamePair.userName}</Link>
+            </Typography>
+        </Grid>
+
+        <Collapse in={expand} timeout="auto" unmountOnExit>
+            <Grid container  sx={{ display: "flex", alignItem: "center" }}>
+
+                <Grid item sx={{ display: "flex", alignItem: "center", width: "100%"}}>
+                    { cardWrapper }
+                </Grid>
+                
+                {addSongBtn}
+
+                <Grid item sx={{ margin: "1%", display:"flex", justifyContent:"space-between", width:"95%"}}>
+                    <div className="container" style={{gap: "2.5%"}}>
+                        {undoBtn}
+                        {redoBtn} 
+                    </div>
+
+                    <div className="container" style={{gap: "2.5%"}}>
+                        {publishedBtn}
+                        <Button
+                            variant="contained" sx={btnSx}
+                            onClick={handleDeleteList}
+                        >
+                            Delete
+                        </Button>
+                        <Button
+                            variant="contained" sx={btnSx}
+                            onClick={handleDuplicate}
+                        >
+                            Duplicate
+                        </Button>
+                    </div>
+                </Grid>
+            </Grid>
+            
+        </Collapse>
+            
+        <Grid style={{ display:"flex", justifyContent:"space-between" , flexDirection:"row", alignItems:"center"}}>
+            <Grid style={{ display:"flex", justifyContent:"space-between" , flexDirection:"row", alignItems:"center",  marginLeft:"1%", width: "26%"}}>
+                {publishedDate}
+            </Grid>
+            <Grid sx={{ display:"flex", justifyContent:"flex-end" , flexDirection:"row", alignItems:"center",width:"fit-content"}}>
+                <Grid sx={{ display:"flex", justifyContent:"flex-start" , flexDirection:"row", alignItems:"center", marginRight:"70%", gap:"30px", width: "5%"}}>
+                    {listens}
+                </Grid>
+                
+                <ExpandBtn
+                    onClick={() => {
+                        console.log("expand list");
+                        store.findAndSavePlaylistById(idNamePair._id);
+                        console.log(store.foundList);
+                        if(!expand){
+                            console.log("unexpand list. Clear transactions");
+                            store.clearTransactions();
+                            store.clearSelected();
+
+                            console.log(store.foundList);
+                        }
+                        setExpand(!expand);
+                    }}
+                    aria-label="Expand" aria-expanded={expand}
+                    expand={expand}
+                >
+                    <KeyboardDoubleArrowDownOutlinedIcon
+                        size="large"
+                        fontSize="large"
+                        edge="end"
+                        aria-label="Expand Button"
+                        aria-haspopup="true"
+                        sx={{  color: "black"  }}
+                    />
+                </ExpandBtn>
+            </Grid>
+        </Grid>
+
+        <MUIDeleteModal />
+        <RenamePlaylistErrorModal/>
+    </>
     
 
     let cardElement = <Card
             id={idNamePair._id}
             key={idNamePair._id}
             onClick={handleClick}
-            sx={{ margin:"1%", width:"95%", height:"10%", display:"flex", flexDirection:"column", justifyContent:"space-between" }}
+            sx={{
+                margin:"1%", width:"95%", height:"10%",
+                display:"flex", flexDirection:"column", justifyContent:"space-between",
+            }}
         >
-            <Grid>
-                <Typography
-                    fontFamily={"Lexend Exa"}
-                    variant="h5"
-                    sx={{  fontWeight: 'bold', margin: "2% 5%" }}
-                >
-                    {idNamePair.name}
-                </Typography>
-                <Typography
-                    fontFamily={"Lexend Exa"}
-                    variant="bod1"
-                    sx={{  fontWeight: 'bold', margin: "2% 5%" }}
-                >
-                    By:&nbsp;
-                    <Link>{idNamePair.userName}</Link>
-                </Typography>
-            </Grid>
-
-            <Collapse in={expand} timeout="auto" unmountOnExit>
-                <Grid container  sx={{ display: "flex", alignItem: "center" }}>
-
-                    <Grid item sx={{ display: "flex", alignItem: "center", width: "100%"}}>
-                        { cardWrapper }
-                    </Grid>
-                    
-                    {addSongBtn}
-
-                    <Grid item sx={{ margin: "1%", display:"flex", justifyContent:"space-between", width:"95%"}}>
-                        <div className="container" style={{gap: "2.5%"}}>
-                           {undoBtn}
-                           {redoBtn} 
-                        </div>
-
-                        <div className="container" style={{gap: "2.5%"}}>
-                            {publishedBtn}
-                            <Button
-                                variant="contained" sx={btnSx}
-                                onClick={handleDeleteList}
-                            >
-                                Delete
-                            </Button>
-                            <Button
-                                variant="contained" sx={btnSx}
-                                onClick={handleDuplicate}
-                            >
-                                Duplicate
-                            </Button>
-                        </div>
-                    </Grid>
-                </Grid>
-                
-            </Collapse>
-            
-            <Grid style={{ display:"flex", justifyContent:"space-between" , flexDirection:"row", alignItems:"center"}}>
-                <Grid style={{ display:"flex", justifyContent:"space-between" , flexDirection:"row", alignItems:"center", width: "26.5%", marginLeft:"1%"}}>
-                    {publishedDate}
-                </Grid>
-                <Grid style={{ display:"flex", justifyContent:"flex-end" , flexDirection:"column", alignItems:"center",width:"fit-content"}}>
-                    <ExpandBtn
-                        onClick={() => {
-                            console.log("expand list");
-                            store.findAndSavePlaylistById(idNamePair._id);
-                            console.log(store.foundList);
-                            if(!expand){
-                                console.log("unexpand list. Clear transactions");
-                                store.clearTransactions();
-                                store.clearSelected();
-
-                                console.log(store.foundList);
-                            }
-                            setExpand(!expand);
-                        }}
-                        aria-label="Expand" aria-expanded={expand}
-                        expand={expand}
-                    >
-                        <KeyboardDoubleArrowDownOutlinedIcon
-                            size="large"
-                            fontSize="large"
-                            edge="end"
-                            aria-label="Expand Button"
-                            aria-haspopup="true"
-                            sx={{  color: "black"  }}
-                        />
-                    </ExpandBtn>
-                </Grid>
-            </Grid>
-
-            <MUIDeleteModal />
-            <RenamePlaylistErrorModal/>
+            {cardContent}
         </Card>
 
-    if (editActive) {
+    if(store.foundList && store.foundList._id === idNamePair._id && store.foundList.isPublished){
+        cardElement = <Card
+            id={idNamePair._id}
+            key={idNamePair._id}
+            onClick={handleClick}
+            sx={{
+                margin:"1%", width:"95%", height:"10%",
+                display:"flex", flexDirection:"column", justifyContent:"space-between",
+                backgroundColor: "#fdc43c"
+            }}
+        >
+            {cardContent}
+        </Card>
+    }
+    else if (editActive) {
         cardElement =
             <TextField
                 margin="normal"
@@ -389,6 +431,7 @@ function ListCard(props) {
                 autoFocus
             />
     }
+
 
     return (
         cardElement

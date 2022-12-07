@@ -63,17 +63,17 @@ const HomeScreen = () => {
 
     let addList = "";
     if(store.currentView == "HOME"){
-            addList = <>
-                <Fab
-                    aria-label="add"
-                    id="add-list-button"
-                    onClick={handleCreateNewList}
-                    sx={fabBtnSx}
-                >
-                    <AddIcon />
-                </Fab>
-                <Typography variant="h3" fontFamily="Lexend Exa">Your Lists</Typography>
-            </>;
+        addList = <>
+            <Fab
+                aria-label="add"
+                id="add-list-button"
+                onClick={handleCreateNewList}
+                sx={fabBtnSx}
+            >
+                <AddIcon />
+            </Fab>
+            <Typography variant="h3" fontFamily="Lexend Exa">Your Lists</Typography>
+        </>;
     }
 
     let listCard = "";
