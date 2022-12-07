@@ -36,7 +36,7 @@ export const GlobalStoreActionType = {
     SET_FOUND_LIST: "SET_FOUND_LIST",
     UPDATE_LIST: "UPDATE_LIST",
     CLEAR_SELECTED: "CLEAR_SELECTED",
-    PUBLISH_LIST: "PUBLISH_LIST",
+    UPDATE_PUBLISH_LIST: "UPDATE_PUBLISH_LIST",
     SET_CURRENT_SONG: "SET_CURRENT_SONG"
 }
 
@@ -349,14 +349,9 @@ function GlobalStoreContextProvider(props) {
                     publishedPlaylist: store.publishedPlaylist
                 });
             }
-            case GlobalStoreActionType.PUBLISH_LIST :{
-                console.log("PUBLISH_LIST")
+            case GlobalStoreActionType.UPDATE_PUBLISH_LIST :{
+                console.log("UPDATE_PUBLISH_LIST")
                 console.log(payload)
-
-                let list = store.publishedPlaylist;
-                list.push(payload)
-
-                console.log(list)
 
                 return setStore({
                     currentModal : CurrentModal.NONE,
@@ -370,8 +365,8 @@ function GlobalStoreContextProvider(props) {
                     listMarkedForDeletion: null,
                     currentView: store.currentView,
                     warningMsg: null,
-                    foundList: payload,
-                    publishedPlaylist: list
+                    foundList: payload.playlist,
+                    publishedPlaylist: payload.publishedPlaylist
                 });
             }
             case GlobalStoreActionType.SET_CURRENT_SONG: {
@@ -654,6 +649,28 @@ function GlobalStoreContextProvider(props) {
         processDelete(id);
     }
     store.deleteMarkedList = function() {
+        if(store.foundList && store.listIdMarkedForDeletion === store.foundList._id){
+            console.log("OMG YEA" + JSON.stringify(store.foundList));
+
+            let playlist = store.foundList;
+            if(playlist.isPublished && store.publishedPlaylist){
+                console.log("publishedPlaylist: " + JSON.stringify(store.publishedPlaylist) + "\nlength:"+store.publishedPlaylist);
+                const index = store.publishedPlaylist.findIndex(playlist => {
+                    return playlist._id === store.listIdMarkedForDeletion;
+                  });
+                console.log("@ index" +  index + " in publishedPlaylist");
+
+                let list = store.publishedPlaylist.splice(index, 1);
+
+                storeReducer({
+                    type: GlobalStoreActionType.UPDATE_PUBLISH_LIST,
+                    payload: {
+                        playlist : playlist,
+                        publishedPlaylist : list,
+                    }
+                });
+            }
+        }
         store.deleteList(store.listIdMarkedForDeletion);
         store.hideModals();
     }
@@ -1016,15 +1033,27 @@ function GlobalStoreContextProvider(props) {
         console.log("publishPlaylist");
 
         async function asyncpublishPlaylist(id){
-            console.log("publishPlaylist");
+            console.log("publishPlaylist: " + JSON.stringify(store.publishedPlaylist));
             let response = await api.publishPlaylist(id);
             if(response.data.success){
                 let playlist = response.data.list;
                 console.log("playlist found");
 
+                let list = [];
+                if(store.publishedPlaylist && store.publishedPlaylist !== undefined){
+                    list = store.publishedPlaylist;
+                }
+
+                list.push(playlist);
+                console.log("Updated publish list: " + JSON.stringify(list));
+                console.log("Published list now has length of " + list.length);
+
                 storeReducer({
-                    type: GlobalStoreActionType.PUBLISH_LIST,
-                    payload: playlist
+                    type: GlobalStoreActionType.UPDATE_PUBLISH_LIST,
+                    payload: {
+                        publishedPlaylist : list,
+                        playlist : playlist
+                    }
                 });
 
             }

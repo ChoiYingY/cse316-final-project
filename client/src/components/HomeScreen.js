@@ -48,6 +48,9 @@ const HomeScreen = () => {
     console.log("HomeScreen auth.loggedIn: " + auth.loggedIn);
     console.log(store);
 
+    if(store.publishedPlaylist)
+        console.log("store.publishedPlaylist: " + JSON.stringify(store.publishedPlaylist) + "\nIt has length of " + store.publishedPlaylist.length);
+
 
     useEffect(() => {
         store.loadIdNamePairs();
