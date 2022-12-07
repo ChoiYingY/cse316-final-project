@@ -88,7 +88,8 @@ const HomeScreen = () => {
                         key={pair._id}
                         idNamePair={pair}
                         selected={false}
-                        isPublished={ (store.publishedPlaylist.findIndex(playlist => {    return playlist._id === pair._id;   })) >= 0 }
+                        isPublished={pair.isPublished}
+                        list={ pair.list }
                     />
                 ))
                 break;
@@ -97,13 +98,19 @@ const HomeScreen = () => {
                 console.log("IN ALL_LISTS VIEW");
                 console.log(store.publishedPlaylist);
 
+
+                bottomBar = <>
+                    <Typography variant="h3" fontFamily="Lexend Exa">Playlists</Typography>
+                </>;
+
                 listCard = store.publishedPlaylist.map((pair) => (
                     <ListCard
                         id={pair._id}
                         key={pair._id}
                         idNamePair={pair}
                         selected={false}
-                        isPublished={ true }
+                        isPublished={pair.isPublished}
+                        list={ pair.list }
                     />
                 ))
                 break;
@@ -126,8 +133,8 @@ const HomeScreen = () => {
 
     if(store.foundList){
         currPlayer.list = store.foundList;
-        currPlayer.listName = currPlayer.list.name;
-        currPlayer.songQueue = currPlayer.list.songs;
+        currPlayer.listName = store.foundList.name;
+        currPlayer.songQueue = store.foundList.songs;
         if(currPlayer.songQueue.length > 0)
             currPlayer.song = currPlayer.songQueue[0];
     }
@@ -159,7 +166,7 @@ const HomeScreen = () => {
                         <div
                             id="playlist-selector"
                         >
-                            <Grid sx={{width:"60%", height: "490px" , backgroundColor:"red", overflowY: "scroll"}}>
+                            <Grid sx={{width:"60%", height: "450px" , backgroundColor:"red", overflowY: "scroll"}}>
                                 <Grid>
                                     <div id="list-selector-list">
                                         {
@@ -168,7 +175,7 @@ const HomeScreen = () => {
                                     </div>
                                 </Grid>
                             </Grid>
-                            <Grid sx={{width:"40%", height: "490px" , backgroundColor:"blue"}}>
+                            <Grid sx={{width:"40%", height: "450px" , backgroundColor:"blue"}}>
                                 <div sx={{width:"100%", display:"flex", flexDirection: "column", justifyContent:"flex-start"}}>
                                     <Button outline="filled" sx={playerBtnSx}>Player</Button>
                                     <Button outline="filled" sx={playerBtnSx}>Comment</Button>

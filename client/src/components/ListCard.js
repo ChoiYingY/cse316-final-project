@@ -66,18 +66,22 @@ const ExpandBtn = styled((props) => {
 
 function ListCard(props) {    
     console.log(props);
+
+    const { idNamePair, selected, isPublished, list} = props;
+
+    console.log(`selected: ${selected}`);
+    console.log(`idNamePair: ${JSON.stringify(idNamePair)}`);
+    console.log(`isPublished: ${isPublished}`);
+    console.log(`list: ${list}`);
+
     const { store } = useContext(GlobalStoreContext);
     const [editActive, setEditActive] = useState(false);
     const [text, setText] = useState("");
     const [expand, setExpand] = useState(false);
+    const [published, setPublished] = useState((isPublished) ? true : false);
 
     console.log(store);
 
-    const { idNamePair, selected, isPublished} = props;
-
-    console.log(`selected: ${selected}`);
-    console.log(idNamePair);
-    console.log(`isPublished: ${isPublished}`);
 
     function handleAddSong(event){
         console.log("add song");
@@ -94,13 +98,14 @@ function ListCard(props) {
 
     function toggleEdit() {
         console.log(editActive);
-        console.log(store.foundList);
+        if(!list)
+            return;
         let newActive = !editActive;
         if (newActive) {
             console.log("HIHIHIHIHIHIHIHIIH");
-            console.log(store.foundList);
+            console.log(list);
             store.setIsListNameEditActive();
-            console.log(store.foundList);
+            console.log(list);
         }
         setEditActive(newActive);
     }
@@ -111,11 +116,12 @@ function ListCard(props) {
             console.log("You have single clicked");
             event.stopPropagation();
 
-            if(store.foundList && store.foundList._id !== idNamePair._id)
+            if(list && ((!store.foundList) || store.foundList._id !== idNamePair._id))
                 store.findAndSavePlaylistById(idNamePair._id);
 
             console.log("**************************************************************");
-            console.log(store.foundList);
+            if(store.foundList)
+                console.log(store.foundList);
             console.log("**************************************************************");
         }
         if(event.detail === 2){
@@ -149,7 +155,7 @@ function ListCard(props) {
                 key={'playlist-song-' + (index)}
                 index={index}
                 song={song}
-                listPublished={isPublished}
+                listPublished={published}
             />
         ));
     }
@@ -194,6 +200,7 @@ function ListCard(props) {
     function handlePublish(event){
         event.stopPropagation();
         store.publishPlaylist(idNamePair._id);
+        setPublished(true);
     }
 
     let publishedBtn = "";
@@ -206,12 +213,12 @@ function ListCard(props) {
 
     let likeAndDislike="";
 
-    if(store.foundList){
-        if(!isPublished){
+    if(list){
+        if(!published){
             publishedBtn = (<Button
                 variant="contained" sx={btnSx}
                 onClick={handlePublish}
-                disabled={isPublished}
+                disabled={published}
             >
                 Publish
             </Button>);
@@ -240,14 +247,14 @@ function ListCard(props) {
                 <AddIcon></AddIcon>
             </Button>);
 
-            cardWrapper = <Box sx={{ width: "100%" }}>
+            cardWrapper = <Box sx={{ width: "100%", maxHeight: "250px" , overflowY: "scroll"}}>
             {
                 cards
             }
             </Box>
         }
         else{
-            cardWrapper = <Box sx={{ width: "95%" , marginLeft: "2.5%"}}>
+            cardWrapper = <Box sx={{ width: "95%" , marginLeft: "2.5%", maxHeight: "250px" , overflowY: "scroll"}}>
                 <Grid sx={{backgroundColor: "purple"}}>
                 {
                     cards
@@ -268,7 +275,7 @@ function ListCard(props) {
                     variant="body2"
                     sx={{  fontWeight: 'bold', color: "green" , fontSize:"11px" }}
                 >
-                    {(store.foundList && store.foundList._id === idNamePair._id && store.foundList.isPublished && store.foundList.datePublished) ? new Date(store.foundList.datePublished).toLocaleDateString('en-us', { month:"short", day:"numeric", year:"numeric"}) : ""}
+                    {(list && list.datePublished) ? new Date(list.datePublished).toLocaleDateString('en-us', { month:"short", day:"numeric", year:"numeric"}) : ""}
                 </Typography>
             </>
             listens = <>
@@ -284,7 +291,7 @@ function ListCard(props) {
                     variant="body2"
                     sx={{  fontWeight: 'bold', color: "green" , fontSize:"11px" }}
                 >
-                    {(store.foundList && store.foundList.datePublished) ? store.foundList.listens : 0}
+                    {(list && list.published && list.datePublished) ? list.listens : 0}
                 </Typography>
             </>
             likeAndDislike= <> <Grid sx={{ display:"flex", justifyContent:"space-between" , flexDirection:"row", alignItems:"center", width: "100%",  gap: "3%"}}>
@@ -303,7 +310,7 @@ function ListCard(props) {
                             fontFamily={"Lexend Exa"}
                             variant="body1"
                         >
-                            {(isPublished) ?   store.foundList.likes : ""   }
+                            {(published) ?   list.likes : ""   }
                         </Typography>
                     </div>
                 </Grid>
@@ -322,7 +329,7 @@ function ListCard(props) {
                             fontFamily={"Lexend Exa"}
                             variant="body1"
                         >
-                            {(isPublished) ?   store.foundList.likes : ""   }
+                            {(published) ?   list.likes : ""   }
                         </Typography>
                     </div>
                 </Grid>
@@ -403,13 +410,17 @@ function ListCard(props) {
                     onClick={() => {
                         console.log("expand list");
                         store.findAndSavePlaylistById(idNamePair._id);
-                        console.log(store.foundList);
+
+                        if(list)
+                                console.log(list);
+
                         if(!expand){
                             console.log("unexpand list. Clear transactions");
                             store.clearTransactions();
                             store.clearSelected();
 
-                            console.log(store.foundList);
+                            if(list)
+                                console.log(list);
                         }
                         setExpand(!expand);
                     }}
@@ -445,7 +456,7 @@ function ListCard(props) {
             {cardContent}
         </Card>
 
-    if(isPublished){
+    if(published){
         cardElement = <Card
             id={idNamePair._id}
             key={idNamePair._id}

@@ -562,7 +562,6 @@ function GlobalStoreContextProvider(props) {
         async function asyncLoadIdNamePairs() {
             const response = await api.getPlaylistPairs();
             if (response.data.success) {
-                console.log("fsdhoiioshfiuhsdsdhiuisfhuioufsiou");
                 let pairsArray = response.data.idNamePairs;
                 console.log(pairsArray);
                 storeReducer({
@@ -766,6 +765,12 @@ function GlobalStoreContextProvider(props) {
     store.removeSong = function(index) {
         console.log(store);
         async function asyncRemoveSong(id){
+            if(id === null) 
+                id = store.foundList._id;
+            
+            if(id === null) 
+                return null;
+                
             let response = await api.getPlaylistById(id);
             if(response.data.success){
                 let playlist = response.data.playlist;
