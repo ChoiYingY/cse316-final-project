@@ -190,6 +190,10 @@ function ListCard(props) {
         store.duplicateList(idNamePair);
     }
 
+    function handlePublish(event){
+        event.stopPropagation();
+    }
+
     let cardElement = <Card
             id={idNamePair._id}
             key={idNamePair._id}
@@ -251,7 +255,12 @@ function ListCard(props) {
                         </div>
 
                         <div className="container" style={{gap: "2.5%"}}>
-                            <Button variant="contained" sx={btnSx}>Publish</Button>
+                            <Button
+                                variant="contained" sx={btnSx}
+                                onClick={handlePublish}
+                            >
+                                Publish
+                            </Button>
                             <Button
                                 variant="contained" sx={btnSx}
                                 onClick={handleDeleteList}

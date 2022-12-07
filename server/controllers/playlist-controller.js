@@ -31,6 +31,54 @@ createPlaylist = (req, res) => {
             return res.status(400).json({ success: false, samePlaylist: false , error: "Authentication error: cannot add playlist to unmatched user." })
         }
 
+        user.playlists.push(playlist._id);
+        user
+            .save()
+            .then(() => {
+                playlist
+                    .save()
+                    .then(() => {
+                        return res.status(201).json({
+                            playlist: playlist,
+                            samePlaylist: false 
+                        })
+                    })
+                    .catch(error => {
+                        return res.status(400).json({
+                            success: false,
+                            samePlaylist: false, 
+                            errorMessage: 'Playlist Not Created!'
+                        })
+                    })
+            });
+    })
+}
+
+
+duplicatePlaylist = (req, res) => {
+    const body = req.body;
+    console.log("duplicatePlaylist body: " + JSON.stringify(body));
+
+    if (!body) {
+        return res.status(400).json({
+            success: false,
+            samePlaylist: false , 
+            error: 'You must provide a Playlist',
+        })
+    }
+
+    const playlist = new Playlist(body);
+    console.log("playlist: " + playlist.toString());
+    if (!playlist) {
+        return res.status(400).json({ success: false, samePlaylist: false , error: err })
+    }
+
+    User.findOne({ _id: req.userId }, (err, user) => {
+        console.log("user found: " + JSON.stringify(user));
+        if(body.ownerEmail !== user.email){
+            return res.status(400).json({ success: false, samePlaylist: false , error: "Authentication error: cannot add playlist to unmatched user." })
+        }
+
         Playlist.findOne({ name: body.name }, (err, playlist) => {
             if(playlist){
                 console.log("playlist found: " + JSON.stringify(playlist));
@@ -373,6 +421,7 @@ asyncFindUserById = async (id) => {
 
 module.exports = {
     createPlaylist,
+    duplicatePlaylist,
     deletePlaylist,
     getPlaylistById,
     getPlaylistPairs,

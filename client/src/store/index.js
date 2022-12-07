@@ -486,12 +486,12 @@ function GlobalStoreContextProvider(props) {
                 songs = playlist.songs;
                 newListName = playlist.name + "_0";
 
-                response = await api.createPlaylist(auth.user.userName, newListName, songs, auth.user.email);
+                response = await api.duplicatePlaylist(auth.user.userName, newListName, songs, auth.user.email);
                 console.log("createNewList response: " + response);
                 
                 while (response.status === 400 && response.data.samePlaylist === true) {
                     newListName = newListName + "_0";
-                    response = await api.createPlaylist(auth.user.userName, newListName, songs, auth.user.email);
+                    response = await api.duplicatePlaylist(auth.user.userName, newListName, songs, auth.user.email);
                 }
 
                 if (response.status === 201) {
