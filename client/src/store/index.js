@@ -638,7 +638,7 @@ function GlobalStoreContextProvider(props) {
                 console.log("publishedPlaylist: " + JSON.stringify(store.publishedPlaylist) + "\nlength:"+store.publishedPlaylist);
                 const index = store.publishedPlaylist.findIndex(playlist => {
                     return playlist._id === store.listIdMarkedForDeletion;
-                  });
+                });
                 console.log("@ index" +  index + " in publishedPlaylist");
 
                 let list = store.publishedPlaylist.splice(index, 1);

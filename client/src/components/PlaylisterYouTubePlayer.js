@@ -90,10 +90,10 @@ export default function PlaylisterYouTubePlayer(props) {
     }
 
     function onPlayerReady(event) {
-        if(!currPlayer.list || !currPlayer.listName || !currPlayer.songQueue || !currPlayer.song)
+        if(!store.foundList || !currPlayer.list || !currPlayer.listName || !currPlayer.songQueue || !currPlayer.song)
             return;
 
-        console.log("onPlayerReady");
+        console.log("onPlayerReady & isPublished " + store.foundList._id);
         setPlayer({ player: event.target });
         
         loadAndPlayCurrentSong(event.target);

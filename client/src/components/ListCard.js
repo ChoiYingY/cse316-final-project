@@ -1,11 +1,8 @@
 import { useContext, useState } from 'react'
 import { GlobalStoreContext } from '../store'
 import Box from '@mui/material/Box';
-import DeleteIcon from '@mui/icons-material/Delete';
-import EditIcon from '@mui/icons-material/Edit';
 import IconButton from '@mui/material/IconButton';
 import AddIcon from '@mui/icons-material/Add';
-import ListItem from '@mui/material/ListItem';
 import TextField from '@mui/material/TextField';
 
 import Card from '@mui/material/Card';
@@ -16,10 +13,13 @@ import Collapse from '@mui/material/Collapse';
 import Grid from '@mui/material/Grid';
 import Button from '@mui/material/Button';
 
-import KeyboardDoubleArrowDownOutlinedIcon from '@mui/icons-material/KeyboardDoubleArrowDownOutlined';
 import MUIDeleteModal from './MUIDeleteModal';
 import RenamePlaylistErrorModal from './RenamePlaylistErrorModal';
 import SongCard from './SongCard.js';
+
+import KeyboardDoubleArrowDownOutlinedIcon from '@mui/icons-material/KeyboardDoubleArrowDownOutlined';
+import ThumbDownOutlinedIcon from '@mui/icons-material/ThumbDownOutlined';
+import ThumbUpOutlinedIcon from '@mui/icons-material/ThumbUpOutlined';
 
 /*
 //     This is a card in our list of top 5 lists. It lets select
@@ -73,11 +73,11 @@ function ListCard(props) {
 
     console.log(store);
 
-    const { idNamePair, selected } = props;
+    const { idNamePair, selected, isPublished} = props;
 
     console.log(`selected: ${selected}`);
-
     console.log(idNamePair);
+    console.log(`isPublished: ${isPublished}`);
 
     function handleAddSong(event){
         console.log("add song");
@@ -149,7 +149,7 @@ function ListCard(props) {
                 key={'playlist-song-' + (index)}
                 index={index}
                 song={song}
-                listPublished={(store.foundList && store.foundList._id === idNamePair._id && store.foundList.isPublished)}
+                listPublished={isPublished}
             />
         ));
     }
@@ -204,12 +204,14 @@ function ListCard(props) {
     let publishedDate = "";
     let listens = "";
 
+    let likeAndDislike="";
+
     if(store.foundList){
-        if(!store.foundList.isPublished){
+        if(!isPublished){
             publishedBtn = (<Button
                 variant="contained" sx={btnSx}
                 onClick={handlePublish}
-                disabled={((store.foundList && store.foundList._id === idNamePair._id && store.foundList.isPublished))}
+                disabled={isPublished}
             >
                 Publish
             </Button>);
@@ -285,26 +287,72 @@ function ListCard(props) {
                     {(store.foundList && store.foundList.datePublished) ? store.foundList.listens : 0}
                 </Typography>
             </>
+            likeAndDislike= <> <Grid sx={{ display:"flex", justifyContent:"space-between" , flexDirection:"row", alignItems:"center", width: "100%",  gap: "3%"}}>
+                    <div>
+                        <ThumbUpOutlinedIcon
+                            size="large"
+                            fontSize="large"
+                            edge="end"
+                            aria-label="Disike Button"
+                            aria-haspopup="true"
+                            sx={{  color: "black"   }}
+                        />
+                    </div>
+                    <div style ={{marginLeft: "15px"}}>
+                        <Typography
+                            fontFamily={"Lexend Exa"}
+                            variant="body1"
+                        >
+                            {(isPublished) ?   store.foundList.likes : ""   }
+                        </Typography>
+                    </div>
+                </Grid>
+                
+                <Grid sx={{ display:"flex", justifyContent:"flex-start" , flexDirection:"row", alignItems:"center"}}>
+                    <ThumbDownOutlinedIcon
+                        size="large"
+                        fontSize="large"
+                        edge="end"
+                        aria-label="Disike Button"
+                        aria-haspopup="true"
+                        sx={{  color: "black"  }}
+                    />
+                    <div style ={{marginLeft: "15px"}}>
+                        <Typography
+                            fontFamily={"Lexend Exa"}
+                            variant="body1"
+                        >
+                            {(isPublished) ?   store.foundList.likes : ""   }
+                        </Typography>
+                    </div>
+                </Grid>
+            </>
         }
     }
 
     let cardContent = <>
-        <Grid>
-            <Typography
-                fontFamily={"Lexend Exa"}
-                variant="h5"
-                sx={{  fontWeight: 'bold', margin: "2% 5%" }}
-            >
-                {idNamePair.name}
-            </Typography>
-            <Typography
-                fontFamily={"Lexend Exa"}
-                variant="bod1"
-                sx={{  fontWeight: 'bold', margin: "2% 5%" }}
-            >
-                By:&nbsp;
-                <Link>{idNamePair.userName}</Link>
-            </Typography>
+        <Grid container sx={{ display:"flex", justifyContent:"space-between" , flexDirection:"row", alignItems:"center", gap:"10%"}}>
+            <Grid item sx={{ margin: "2% 5%"}} >
+                <Typography
+                    fontFamily={"Lexend Exa"}
+                    variant="h6"
+                    sx={{  fontWeight: 'bold'}}
+                >
+                    {idNamePair.name}
+                </Typography>
+                <Typography
+                    fontFamily={"Lexend Exa"}
+                    variant="body1"
+                    sx={{  fontWeight: 'bold' }}
+                >
+                    By:&nbsp;
+                    <Link>{idNamePair.userName}</Link>
+                </Typography>
+            </Grid>
+
+            <Grid item sx={{ display:"flex", justifyContent:"flex-start" , flexDirection:"row", alignItems:"center", marginRight:"12.5%", gap: "30%"}}>
+                {likeAndDislike}
+            </Grid>
         </Grid>
 
         <Collapse in={expand} timeout="auto" unmountOnExit>
@@ -397,7 +445,7 @@ function ListCard(props) {
             {cardContent}
         </Card>
 
-    if(store.foundList && store.foundList._id === idNamePair._id && store.foundList.isPublished){
+    if(isPublished){
         cardElement = <Card
             id={idNamePair._id}
             key={idNamePair._id}

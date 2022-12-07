@@ -61,27 +61,26 @@ const HomeScreen = () => {
         store.createNewList();
     }
 
-    let addList = "";
-    if(store.currentView == "HOME"){
-        addList = <>
-            <Fab
-                aria-label="add"
-                id="add-list-button"
-                onClick={handleCreateNewList}
-                sx={fabBtnSx}
-            >
-                <AddIcon />
-            </Fab>
-            <Typography variant="h3" fontFamily="Lexend Exa">Your Lists</Typography>
-        </>;
-    }
-
+    let bottomBar = "";
     let listCard = "";
+
     if (store && store.currentView) {
         switch(store.currentView){
             case "HOME":{
                 console.log("IN HOME VIEW");
                 console.log(store.idNamePairs);
+
+                bottomBar = <>
+                    <Fab
+                        aria-label="add"
+                        id="add-list-button"
+                        onClick={handleCreateNewList}
+                        sx={fabBtnSx}
+                    >
+                        <AddIcon />
+                    </Fab>
+                    <Typography variant="h3" fontFamily="Lexend Exa">Your Lists</Typography>
+                </>;
                 
                 listCard = store.idNamePairs.map((pair) => (
                     <ListCard
@@ -89,6 +88,7 @@ const HomeScreen = () => {
                         key={pair._id}
                         idNamePair={pair}
                         selected={false}
+                        isPublished={ (store.publishedPlaylist.findIndex(playlist => {    return playlist._id === pair._id;   })) >= 0 }
                     />
                 ))
                 break;
@@ -103,6 +103,7 @@ const HomeScreen = () => {
                         key={pair._id}
                         idNamePair={pair}
                         selected={false}
+                        isPublished={ true }
                     />
                 ))
                 break;
@@ -184,7 +185,7 @@ const HomeScreen = () => {
                 
 
                 <Grid id="add-list" item  sx={{bottom:"0%", position:"absolute"}}>
-                    {addList}
+                    {bottomBar}
                 </Grid>
 
             </Grid>
