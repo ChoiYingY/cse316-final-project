@@ -72,7 +72,7 @@ const HomeScreen = () => {
                 >
                     <AddIcon />
                 </Fab>
-                <Typography variant="h3" fontFamily="Lexend Exa" sx={{margin: "1% 0%"}}>Your Lists</Typography>
+                <Typography variant="h3" fontFamily="Lexend Exa">Your Lists</Typography>
             </>;
     }
 
@@ -95,7 +95,16 @@ const HomeScreen = () => {
             }
             case "ALL_LISTS":{
                 console.log("IN ALL_LISTS VIEW");
-                // console.log(arrList);
+                console.log(store.publishedPlaylist);
+
+                listCard = store.publishedPlaylist.map((pair) => (
+                    <ListCard
+                        id={pair._id}
+                        key={pair._id}
+                        idNamePair={pair}
+                        selected={false}
+                    />
+                ))
                 break;
             }
             case "USERS":{
@@ -149,7 +158,7 @@ const HomeScreen = () => {
                         <div
                             id="playlist-selector"
                         >
-                            <Grid sx={{width:"60%", height: "100%" , backgroundColor:"red", overflowY: "scroll"}}>
+                            <Grid sx={{width:"60%", height: "490px" , backgroundColor:"red", overflowY: "scroll"}}>
                                 <Grid>
                                     <div id="list-selector-list">
                                         {
@@ -158,7 +167,7 @@ const HomeScreen = () => {
                                     </div>
                                 </Grid>
                             </Grid>
-                            <Grid sx={{width:"40%", height: "100%" , backgroundColor:"blue"}}>
+                            <Grid sx={{width:"40%", height: "490px" , backgroundColor:"blue"}}>
                                 <div sx={{width:"100%", display:"flex", flexDirection: "column", justifyContent:"flex-start"}}>
                                     <Button outline="filled" sx={playerBtnSx}>Player</Button>
                                     <Button outline="filled" sx={playerBtnSx}>Comment</Button>
@@ -174,7 +183,7 @@ const HomeScreen = () => {
                     </Grid>
                 
 
-                <Grid id="add-list" item>
+                <Grid id="add-list" item  sx={{bottom:"0%", position:"absolute"}}>
                     {addList}
                 </Grid>
 

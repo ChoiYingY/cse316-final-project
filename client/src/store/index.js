@@ -412,26 +412,6 @@ function GlobalStoreContextProvider(props) {
         }
     }
 
-    store.setCurrentView = function(view){
-        switch(view){
-            case (CurrentView.HOME):
-            case (CurrentView.ALL_LISTS):
-            case (CurrentView.USERS):
-            {
-                console.log(view);
-
-                storeReducer({
-                    type: GlobalStoreActionType.SET_CURRENT_VIEW,
-                    payload: view
-                });
-                break;
-            }
-            default:
-                console.log("invalid view");
-                break;
-        }
-    }
-
     // THESE ARE THE FUNCTIONS THAT WILL UPDATE OUR STORE AND
     // DRIVE THE STATE OF THE APPLICATION. WE'LL CALL THESE IN 
     // RESPONSE TO EVENTS INSIDE OUR COMPONENTS.
@@ -492,6 +472,7 @@ function GlobalStoreContextProvider(props) {
         let newListName = "Untitled" + store.newListCounter;
         console.log(auth.user);
         console.log(auth.user.userName);
+
         const response = await api.createPlaylist(auth.user.userName, newListName, [], auth.user.email);
         console.log("createNewList response: " + response);
         if (response.status === 201) {

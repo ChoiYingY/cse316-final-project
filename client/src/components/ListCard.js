@@ -188,6 +188,7 @@ function ListCard(props) {
     function handleDuplicate(event){
         event.stopPropagation();
         store.duplicateList(idNamePair);
+        store.setCurrentView("HOME");
     }
 
     function handlePublish(event){
@@ -200,6 +201,7 @@ function ListCard(props) {
     let redoBtn = "";
     let addSongBtn = "";
     let cardWrapper = "";
+    let publishedDate = "";
 
     if(store.foundList){
         if(!store.foundList.isPublished){
@@ -249,6 +251,23 @@ function ListCard(props) {
                 }
                 </Grid>
             </Box>
+
+            publishedDate = <>
+                <Typography
+                    fontFamily={"Lexend Exa"}
+                    variant="body2"
+                    sx={{  fontWeight: 'bold', margin: "0% 5%" , fontSize:"11px" }}
+                >
+                    Published
+                </Typography>
+                <Typography
+                    fontFamily={"Lexend Exa"}
+                    variant="body2"
+                    sx={{  fontWeight: 'bold', color: "green" , fontSize:"11px" }}
+                >
+                    {(store.foundList && store.foundList.datePublished) ? new Date(store.foundList.datePublished).toLocaleDateString('en-us', { month:"short", day:"numeric", year:"numeric"}) : ""}
+                </Typography>
+            </>
         }
     }
     
@@ -259,21 +278,23 @@ function ListCard(props) {
             onClick={handleClick}
             sx={{ margin:"1%", width:"95%", height:"10%", display:"flex", flexDirection:"column", justifyContent:"space-between" }}
         >
-            <Typography
-                fontFamily={"Lexend Exa"}
-                variant="h5"
-                sx={{  fontWeight: 'bold', margin: "2% 5%" }}
-            >
-                {idNamePair.name}
-            </Typography>
-            <Typography
-                fontFamily={"Lexend Exa"}
-                variant="bod1"
-                sx={{  fontWeight: 'bold', margin: "2% 5%" }}
-            >
-                By:&nbsp;
-                <Link>{idNamePair.userName}</Link>
-            </Typography>
+            <Grid>
+                <Typography
+                    fontFamily={"Lexend Exa"}
+                    variant="h5"
+                    sx={{  fontWeight: 'bold', margin: "2% 5%" }}
+                >
+                    {idNamePair.name}
+                </Typography>
+                <Typography
+                    fontFamily={"Lexend Exa"}
+                    variant="bod1"
+                    sx={{  fontWeight: 'bold', margin: "2% 5%" }}
+                >
+                    By:&nbsp;
+                    <Link>{idNamePair.userName}</Link>
+                </Typography>
+            </Grid>
 
             <Collapse in={expand} timeout="auto" unmountOnExit>
                 <Grid container  sx={{ display: "flex", alignItem: "center" }}>
@@ -310,34 +331,39 @@ function ListCard(props) {
                 
             </Collapse>
             
-            <div style={{ display:"flex", justifyContent:"flex-end" }}>
-                <ExpandBtn
-                    onClick={() => {
-                        console.log("expand list");
-                        store.findAndSavePlaylistById(idNamePair._id);
-                        console.log(store.foundList);
-                        if(!expand){
-                            console.log("unexpand list. Clear transactions");
-                            store.clearTransactions();
-                            store.clearSelected();
-
+            <Grid style={{ display:"flex", justifyContent:"space-between" , flexDirection:"row", alignItems:"center"}}>
+                <Grid style={{ display:"flex", justifyContent:"space-between" , flexDirection:"row", alignItems:"center", width: "26.5%", marginLeft:"1%"}}>
+                    {publishedDate}
+                </Grid>
+                <Grid style={{ display:"flex", justifyContent:"flex-end" , flexDirection:"column", alignItems:"center",width:"fit-content"}}>
+                    <ExpandBtn
+                        onClick={() => {
+                            console.log("expand list");
+                            store.findAndSavePlaylistById(idNamePair._id);
                             console.log(store.foundList);
-                        }
-                        setExpand(!expand);
-                    }}
-                    aria-label="Expand" aria-expanded={expand}
-                    expand={expand}
-                >
-                    <KeyboardDoubleArrowDownOutlinedIcon
-                        size="large"
-                        fontSize="large"
-                        edge="end"
-                        aria-label="Expand Button"
-                        aria-haspopup="true"
-                        sx={{  color: "black"  }}
-                    />
-                </ExpandBtn>
-            </div>
+                            if(!expand){
+                                console.log("unexpand list. Clear transactions");
+                                store.clearTransactions();
+                                store.clearSelected();
+
+                                console.log(store.foundList);
+                            }
+                            setExpand(!expand);
+                        }}
+                        aria-label="Expand" aria-expanded={expand}
+                        expand={expand}
+                    >
+                        <KeyboardDoubleArrowDownOutlinedIcon
+                            size="large"
+                            fontSize="large"
+                            edge="end"
+                            aria-label="Expand Button"
+                            aria-haspopup="true"
+                            sx={{  color: "black"  }}
+                        />
+                    </ExpandBtn>
+                </Grid>
+            </Grid>
 
             <MUIDeleteModal />
             <RenamePlaylistErrorModal/>

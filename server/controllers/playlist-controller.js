@@ -280,6 +280,7 @@ publishPlaylist = async (req, res) => {
                     console.log(list)
 
                     list.isPublished = true;
+                    list.datePublished = new Date();
 
                     console.log("list: " + JSON.stringify(list) + "\n");
                     console.log("list is now updated");

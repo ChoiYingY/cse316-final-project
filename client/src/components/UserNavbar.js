@@ -1,8 +1,9 @@
 import Box from '@mui/material/Box';
-import Button from '@mui/material/Button';
 import AppBar from '@mui/material/AppBar';
 import Toolbar from '@mui/material/Toolbar';
 
+import ToggleButton from '@mui/material/ToggleButton';
+import ToggleButtonGroup from '@mui/material/ToggleButtonGroup';
 import HomeOutlinedIcon from '@mui/icons-material/HomeOutlined';
 import GroupsOutlinedIcon from '@mui/icons-material/GroupsOutlined';
 import PersonOutlineOutlinedIcon from '@mui/icons-material/PersonOutlineOutlined';
@@ -76,9 +77,18 @@ export default function UserNavbar() {
             } } />;
 
 
-
-      
-
+    const btnSx = {
+        minWidth: "45px",
+        padding: "5%",
+        borderStyle: "none",
+        borderRadius: "5%",
+        '&:disabled':{
+            borderStyle: "none",
+        },
+        '&:selected':{
+            backgroundColor: "black",
+        }
+    }
 
     return (
         <Box>
@@ -90,34 +100,29 @@ export default function UserNavbar() {
                         justifyContent="space-between"
                         alignItems="center"
                     >
-                        <div className="container">
-                            <Button
-                                aria-label="home" id="home-button"
-                                sx={{
-                                    cursor: 'pointer',
-                                }}
+                        <ToggleButtonGroup
+                            className="container"
+                            sx={{
+                                cursor: 'pointer',
+                                display: "flex",
+                                justifyContent:"space-between",
+                                alignItems:"center"
+                            }}
+                            exclusive
+                        >
+                            <ToggleButton
+                                aria-label="home" id="home-button" value="HOME"
+                                sx={btnSx}
                                 disabled = {auth.isGuest}
+                                selected = { !auth.isGuest && store.currentView === "HOME"}
                             >
                                 {homeBtn}
-                                {/* <HomeOutlinedIcon
-                                    size="large"
-                                    fontSize="large"
-                                    edge="end"
-                                    aria-label="Home Button"
-                                    aria-haspopup="true"
-                                    sx={{  color: "black"   }}
-                                    onClick={(event) => {
-                                        console.log("jump to home screen");
-                                        event.stopPropagation();
-                                        store.setCurrentView("HOME");
-                                        history.push("/");
-                                    } } */}
-                                {/* /> */}
-                            </Button>
+                            </ToggleButton>
 
-                            <Box
-                                aria-label="all list" id="all-list-button"
-                                sx={{ cursor: 'pointer'}}
+                            <ToggleButton
+                                aria-label="all list" id="all-list-button" value="ALL_LISTS"
+                                sx={btnSx}
+                                selected = { store.currentView === "ALL_LISTS"}
                                 onClick={ (event) => {
                                     console.log("jump to all lists screen");
                                     event.stopPropagation();
@@ -133,11 +138,12 @@ export default function UserNavbar() {
                                     aria-haspopup="true"
                                     sx={{  color: "black"   }}
                                 />
-                            </Box>
+                            </ToggleButton>
 
-                            <Box
-                                aria-label="users" id="users-button"
-                                sx={{ cursor: 'pointer'}}
+                            <ToggleButton
+                                aria-label="users" id="users-button" value="USERS"
+                                sx={btnSx}
+                                selected = { store.currentView === "USERS"}
                                 onClick={ (event) => {
                                     console.log("jump to users screen");
                                     event.stopPropagation();
@@ -153,8 +159,8 @@ export default function UserNavbar() {
                                     aria-haspopup="true"
                                     sx={{  color: "black"   }}
                                 />
-                            </Box>
-                        </div>
+                            </ToggleButton>
+                        </ToggleButtonGroup>
 
                         <TextField
                             sx={{   backgroundColor:"white", width: "60%"}}
