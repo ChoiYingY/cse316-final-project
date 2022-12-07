@@ -40,6 +40,7 @@ export default function RenamePlaylistErrorModal() {
     }
 
     function handleCloseModal(event) {
+        event.stopPropagation();
         store.clearWarningMsg();
     }
 

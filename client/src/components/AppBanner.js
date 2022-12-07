@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import AuthContext from '../auth';
 import { GlobalStoreContext } from '../store';
 
-import EditToolbar from './EditToolbar';
+// import EditToolbar from './EditToolbar';
 
 import Avatar from '@mui/material/Avatar';
 import AccountCircle from '@mui/icons-material/AccountCircle';
@@ -79,7 +79,7 @@ export default function AppBanner() {
             <MenuItem onClick={handleLogout}>Logout</MenuItem>
         </Menu>        
 
-    let editToolbar = "";
+    // let editToolbar = "";
     let menu = loggedOutMenu;
     if (auth.loggedIn) {
         menu = loggedInMenu;
@@ -120,7 +120,7 @@ export default function AppBanner() {
                             }}
                         />
                     </Link>
-                    <Box sx={{ flexGrow: 1 }}>{editToolbar}</Box>
+                    {/* <Box sx={{ flexGrow: 1 }}>{editToolbar}</Box> */}
                     <Box sx={{ display: { xs: 'none', md: 'flex'} }}>
                         <IconButton
                             size="large"

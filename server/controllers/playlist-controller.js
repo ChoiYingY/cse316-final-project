@@ -185,8 +185,6 @@ getPlaylists = async (req, res) => {
 
 updatePlaylistById = async (req, res) => {
     const body = req.body
-    console.log("updatePlaylistById: " + JSON.stringify(body));
-    console.log("req.body.name: " + req.body.name);
 
     if (!body) {
         return res.status(400).json({
@@ -195,14 +193,16 @@ updatePlaylistById = async (req, res) => {
         })
     }
 
+    console.log("updatePlaylistById: " + JSON.stringify(body));
+
     Playlist.findOne({ _id: req.params.id }, (err, playlist) => {
-        console.log("playlist found: " + JSON.stringify(playlist));
         if (err) {
             return res.status(404).json({
                 err,
                 message: 'Playlist not found!',
             })
         }
+        console.log("playlist found: " + JSON.stringify(playlist));
 
         // DOES THIS LIST BELONG TO THIS USER?
         async function asyncFindUser(list) {
@@ -215,10 +215,15 @@ updatePlaylistById = async (req, res) => {
                     if(body.playlist.name)
                         console.log("body.playlist.name: " + body.playlist.name);
                     if(body.playlist.songs)
-                        console.log("body.playlist.songs: " + body.playlist.songs);
+                        console.log("body.playlist.songs: " +  JSON.stringify(body.playlist.songs));
 
                     list.name = body.playlist.name;
                     list.songs = body.playlist.songs;
+
+                    console.log("list: ");
+                    console.log(list);
+                    console.log("list is now updated");
+
                     list
                         .save()
                         .then(() => {

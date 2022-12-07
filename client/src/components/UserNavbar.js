@@ -58,8 +58,9 @@ export default function UserNavbar() {
                                     aria-label="Home Button"
                                     aria-haspopup="true"
                                     sx={{  color: "black"   }}
-                                    onClick={() => {
+                                    onClick={(event) => {
                                         console.log("jump to home screen");
+                                        event.stopPropagation();
                                         store.setCurrentView("HOME");
                                         history.push("/");
                                     } }
@@ -69,8 +70,9 @@ export default function UserNavbar() {
                             <Box
                                 aria-label="all list" id="all-list-button"
                                 sx={{ cursor: 'pointer'}}
-                                onClick={ () => {
+                                onClick={ (event) => {
                                     console.log("jump to all lists screen");
+                                    event.stopPropagation();
                                     store.setCurrentView("ALL_LISTS");
                                     history.push("/");
                                 } }
@@ -88,8 +90,9 @@ export default function UserNavbar() {
                             <Box
                                 aria-label="users" id="users-button"
                                 sx={{ cursor: 'pointer'}}
-                                onClick={ () => {
+                                onClick={ (event) => {
                                     console.log("jump to users screen");
+                                    event.stopPropagation();
                                     store.setCurrentView("USERS");
                                     history.push("/");
                                 } }
@@ -130,7 +133,11 @@ export default function UserNavbar() {
                                     <Box
                                         aria-label="sort" id="sort-button"
                                         sx={{ cursor: 'pointer'}}
-                                        onClick={ () => {   console.log("Choose a sorting");  } }
+                                        onClick={
+                                            (event) => {
+                                                console.log("Choose a sorting");
+                                                event.stopPropagation();
+                                            } }
                                     >
                                         <SortIcon
                                             size="large"

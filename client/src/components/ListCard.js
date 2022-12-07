@@ -78,6 +78,7 @@ function ListCard(props) {
 
     function handleAddSong(event){
         console.log("add song");
+        event.stopPropagation();
         let song = { title: "Untitled", artist: "Unknown", youTubeId: "dQw4w9WgXcQ" };
         store.addSong(idNamePair._id, store.getPlaylistSize(), song);
     }
@@ -97,7 +98,7 @@ function ListCard(props) {
         setEditActive(newActive);
     }
 
-    function handleDoubleClick(event){
+    function handleClick(event){
         console.log("Edit list");
         if(event.detail === 1){
             console.log("You have single clicked");
@@ -116,12 +117,14 @@ function ListCard(props) {
     }
 
     function handleUpdateText(event) {
+        event.stopPropagation();
         setText(event.target.value);
     }
 
     function handleKeyPress(event) {
         if (event.code === "Enter") {
             console.log(text);
+            event.stopPropagation();
             // store.validatePlaylistName(text);
             // if(store.name)
             store.changeListName(idNamePair._id, text);
@@ -148,7 +151,7 @@ function ListCard(props) {
     let cardElement = <Card
             id={idNamePair._id}
             key={idNamePair._id}
-            onClick={handleDoubleClick}
+            onClick={handleClick}
             sx={{ margin:"1%", width:"95%", height:"10%", display:"flex", flexDirection:"column", justifyContent:"space-between" }}
         >
             <Typography
@@ -190,16 +193,16 @@ function ListCard(props) {
                         <div className="container" style={{gap: "2.5%"}}>
                             <Button
                                 variant="contained" sx={btnSx}
-                                disabled={!store.undo()}
+                                disabled={!store.canUndo()}
                             >
-                                Undo    
+                                Undo
                             </Button>
 
                             <Button
                                 variant="contained" sx={btnSx}
-                                disabled={!store.redo()}
+                                disabled={!store.canRedo()}
                             >
-                                Redo    
+                                Redo
                             </Button>
                         </div>
 
@@ -224,6 +227,10 @@ function ListCard(props) {
                         console.log("expand list");
                         store.findAndSavePlaylistById(idNamePair._id);
                         console.log(store.foundList);
+                        if(expand === true){
+                            console.log("unexpand list. Clear transactions");
+                            store.clearTransactions();
+                        }
                         setExpand(!expand);
                     }}
                     aria-label="Expand" aria-expanded={expand}

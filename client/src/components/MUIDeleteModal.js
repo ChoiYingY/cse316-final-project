@@ -24,10 +24,12 @@ export default function MUIDeleteModal() {
     }
     function handleDeleteList(event) {
         console.log("close list")
+        event.stopPropagation();
         store.deleteMarkedList(store.listIdMarkedForDeletion);
     }
     function handleCloseModal(event) {
         console.log("close modal")
+        event.stopPropagation();
         store.unmarkListForDeletion();
         store.hideModals();
     }

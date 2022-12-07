@@ -51,7 +51,8 @@ const HomeScreen = () => {
         store.loadIdNamePairs();
     }, []);
 
-    function handleCreateNewList() {
+    function handleCreateNewList(event) {
+        event.stopPropagation();
         store.createNewList();
     }
 

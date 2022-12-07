@@ -96,14 +96,20 @@ export default function YouTubePlayerExample(props) {
         fontSize: "13.5px"
     }
 
+    let songDisplayInfo = <></>;
     let songInfo = <></>;
-    if(currPlayer.listName && currPlayer.song.title && currPlayer.song.artist)
-    songInfo = <>
+    if(currPlayer && currPlayer.song && currPlayer.song.title && currPlayer.song.artist)
+        songInfo = (<>
+            <Typography sx={typographySx}>Song #: {currentSong + 1}</Typography>
+            <Typography sx={typographySx}>Title: {currPlayer.song.title}</Typography>
+            <Typography sx={typographySx}>Artist: {currPlayer.song.artist}</Typography>
+        </>)
+
+    if(currPlayer && currPlayer.listName)
+        songDisplayInfo = (<>
                     <Typography sx={typographySx}>Playlist: {currPlayer.listName}</Typography>
-                    <Typography sx={typographySx}>Song #: {currentSong}</Typography>
-                    <Typography sx={typographySx}>Title: {currPlayer.song.title}</Typography>
-                    <Typography sx={typographySx}>Artist: {currPlayer.song.artist}</Typography>
-                </>
+                    {songInfo}
+                </>)
 
     let playerController = <div>    
         <FastRewindIcon
@@ -148,8 +154,8 @@ export default function YouTubePlayerExample(props) {
         return <Grid container sx={{ display:"flex", justifyContent: "center", alignItems: "center"}}>
                 <Grid item sx={{width: '100%', height: '250px', backgroundColor: "gray"}}>
                 </Grid>
-                <Grid item sx={{width: '100%', height: '110px', display:"flex", justifyContent: "center", alignItems: "center"}}>
-                    <Typography sx={{fontFamily: "Lexend Exa", fontSize: "15px", marginTop: "2%", marginLeft: "2%"}}>Choose a playlist to play</Typography>
+                <Grid item sx={{width: '100%', height: '110px', display:"flex", justifyContent: "center"}}>
+                    <Typography sx={{fontFamily: "Lexend Exa", fontSize: "15px", marginTop: "2%"}}>Now Playing</Typography>
                 </Grid>
                 <Grid item sx={{ bottom: "0%", backgroundColor:"white", display:"flex", flexDirection: "row", alignItems: "center", justifyContent: "center", width: "80%", margin: "2% 2.5% 2.5% 2.5%", borderRadius:"5%"}}>
                     {playerController}
@@ -169,7 +175,7 @@ export default function YouTubePlayerExample(props) {
                 </Grid>
 
                 <Grid item sx={{width: "100%", alignItems: "left", margin:" 0% 3%" }}>
-                    {songInfo}
+                    {songDisplayInfo}
                 </Grid>
                 
                 <Grid item sx={{ backgroundColor:"white", display:"flex", flexDirection: "row", alignItems: "center", justifyContent: "center", width: "80%", margin: "2% 2.5% 2.5% 2.5%", borderRadius:"5%"}}>

@@ -38,6 +38,7 @@ export default function AccountErrorModal() {
     }
 
     function handleCloseModal(event) {
+        event.stopPropagation();
         auth.clearErrorMsg();
     }
 

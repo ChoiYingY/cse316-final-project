@@ -132,6 +132,15 @@ export default class jsTPS {
      * @param {jsTPS_Transaction} transaction Transaction to add to the stack and do.
      */
     addTransaction(transaction) {
+        if(!transaction)
+            return;
+
+        console.log("lets start add transaction. given transaction:")
+        console.log(transaction)
+
+        console.log("this transaction:")
+        console.log(this)
+
         // ARE WE BRANCHING?
         if ((this.mostRecentTransaction < 0) 
             || (this.mostRecentTransaction < (this.transactions.length - 1))) {
@@ -147,8 +156,13 @@ export default class jsTPS {
         // ADD THE TRANSACTION
         this.transactions[this.mostRecentTransaction+1] = transaction;
 
-        // AND EXECUTE IT
+        console.log(transaction);
+
+        console.log(this)
+
+        // // AND EXECUTE IT
         this.doTransaction();
+        console.log("finished doing transaction!");
     }
 
     /**
@@ -162,6 +176,10 @@ export default class jsTPS {
         if (this.hasTransactionToRedo()) {
             this.performingDo = true;
             let transaction = this.transactions[this.mostRecentTransaction+1];
+            if(!transaction)
+                return;
+
+            console.log("doTransaction");
             transaction.doTransaction();
             this.mostRecentTransaction++;
             this.performingDo = false;

@@ -18,13 +18,16 @@ function EditToolbar() {
     function handleAddNewSong() {
         store.addNewSong();
     }
-    function handleUndo() {
+    function handleUndo(event) {
+        event.stopPropagation();
         store.undo();
     }
-    function handleRedo() {
+    function handleRedo(event) {
+        event.stopPropagation();
         store.redo();
     }
-    function handleClose() {
+    function handleClose(event) {
+        event.stopPropagation();
         store.closeCurrentList();
     }
 

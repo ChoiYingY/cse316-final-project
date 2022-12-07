@@ -45,10 +45,11 @@ function SongCard(props) {
     function handleClick(event) {
         // DOUBLE CLICK IS FOR SONG EDITING
         if (event.detail === 2) {
+            event.stopPropagation();
             console.log("handleDblClick: EDIT_SONG");
-            // console.log("index: " + index + " \nsong: " + JSON.stringify(song));
+            console.log("index: " + index + " \nsong: " + JSON.stringify(song));
             
-            // store.showEditSongModal(index, song);
+            store.showEditSongModal(index, song);
         }
     }
 
