@@ -16,6 +16,8 @@ export default function YouTubePlayerExample(props) {
 
     const { store } = useContext(GlobalStoreContext);
 
+    console.log(store);
+
     const [ player, setPlayer ] = useState({});
     const [ index, setIndex ] = useState(0);
     const [ title, setTitle ] = useState((""));
@@ -139,14 +141,14 @@ export default function YouTubePlayerExample(props) {
 
     let songDisplayInfo = <></>;
     let songInfo = <></>;
-    if(currPlayer && currPlayer.song && currPlayer.song.title && currPlayer.song.artist)
+    if(store.expanded && currPlayer && currPlayer.song && currPlayer.song.title && currPlayer.song.artist)
         songInfo = (<>
             <Typography sx={typographySx}>Song #: { index + 1}</Typography>
             <Typography sx={typographySx}>Title: { title }</Typography>
             <Typography sx={typographySx}>Artist: { artist }</Typography>
         </>)
 
-    if(currPlayer && currPlayer.listName)
+    if(store.expanded && currPlayer && currPlayer.listName)
         songDisplayInfo = (<>
                     <Typography sx={typographySx}>Playlist: {currPlayer.listName}</Typography>
                     {songInfo}
@@ -204,7 +206,7 @@ export default function YouTubePlayerExample(props) {
         />
     </div>;
 
-    if(!store.foundList || !currPlayer.list || !currPlayer.listName || !currPlayer.songQueue || !currPlayer.song)
+    if(!store.expanded || !store.foundList || !currPlayer.list || !currPlayer.listName || !currPlayer.songQueue || !currPlayer.song)
         return <Grid container sx={{ display:"flex", justifyContent: "center", alignItems: "center"}}>
                 <Grid item sx={{width: '100%', height: '250px', backgroundColor: "gray"}}>
                 </Grid>

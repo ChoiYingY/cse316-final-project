@@ -71,7 +71,11 @@ function ListCard(props) {
     const [text, setText] = useState("");
     const [expand, setExpand] = useState(false);
 
+    console.log(store);
+
     const { idNamePair, selected } = props;
+
+    console.log(`selected: ${selected}`);
 
     console.log(idNamePair);
 
@@ -105,8 +109,11 @@ function ListCard(props) {
         console.log("Edit list");
         if(event.detail === 1){
             console.log("You have single clicked");
-            event.stopPropagation();
-            store.findAndSavePlaylistById(idNamePair._id);
+
+            console.log("have we expanded? " + store.expanded);
+
+            if(store.expanded)
+                store.findAndSavePlaylistById(idNamePair._id);
 
             console.log("**************************************************************");
             console.log(store.foundList);
@@ -114,7 +121,6 @@ function ListCard(props) {
         }
         if(event.detail === 2){
             console.log("You have double clicked");
-            event.stopPropagation();
             toggleEdit();
         }
     }
@@ -149,6 +155,20 @@ function ListCard(props) {
     }
     else{
         console.log("lol nvm");
+    }
+
+    function handleUndo(event){
+        event.stopPropagation();
+        if(store.canUndo()){
+            store.undo();
+        }
+    }
+
+    function handleRedo(event){
+        event.stopPropagation();
+        if(store.canRedo()){
+            store.redo();
+        }
     }
 
     let cardElement = <Card
@@ -197,6 +217,7 @@ function ListCard(props) {
                             <Button
                                 variant="contained" sx={btnSx}
                                 disabled={!store.canUndo()}
+                                onClick = { handleUndo  }
                             >
                                 Undo
                             </Button>
@@ -204,6 +225,7 @@ function ListCard(props) {
                             <Button
                                 variant="contained" sx={btnSx}
                                 disabled={!store.canRedo()}
+                                onClick = { handleRedo  }
                             >
                                 Redo
                             </Button>
@@ -228,19 +250,21 @@ function ListCard(props) {
                 <ExpandBtn
                     onClick={() => {
                         console.log("expand list");
-                        store.findAndSavePlaylistById(idNamePair._id);
-                        console.log(store.foundList);
                         if(!expand){
+                            store.findAndSavePlaylistById(idNamePair._id);
+                            console.log(store.foundList);
+                        }
+                        else{
                             console.log("unexpand list. Clear transactions");
                             store.clearTransactions();
-                            store.clearFoundList();
+                            store.clearSelected();
 
                             console.log(store.foundList);
                         }
                         setExpand(!expand);
                     }}
                     aria-label="Expand" aria-expanded={expand}
-                    expand={expand}
+                    expand={expand && store.expand}
                 >
                     <KeyboardDoubleArrowDownOutlinedIcon
                         size="large"

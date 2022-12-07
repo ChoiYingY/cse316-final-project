@@ -18,6 +18,9 @@ const style = {
 
 export default function MUIDeleteModal() {
     const { store } = useContext(GlobalStoreContext);
+
+    console.log(store);
+
     let name = "";
     if (store.listMarkedForDeletion) {
         name = store.listMarkedForDeletion.name;

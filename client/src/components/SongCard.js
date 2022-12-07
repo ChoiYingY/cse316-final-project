@@ -41,6 +41,9 @@ function SongCard(props) {
         console.log("index: " + index + " \nsong: " + JSON.stringify(song));
         
         store.showRemoveSongModal(index, song);
+        console.log("fshuifdhudsfiuhdsfhudsfuhidfhudfuhdfhudfhudfiuh")
+        console.log(store)
+        console.log("fshuifdhudsfiuhdsfhudsfuhidfhudfuhdfhudfhudfiuh")
     }
     function handleClick(event) {
         // DOUBLE CLICK IS FOR SONG EDITING
@@ -48,6 +51,11 @@ function SongCard(props) {
             event.stopPropagation();
             console.log("handleDblClick: EDIT_SONG");
             console.log("index: " + index + " \nsong: " + JSON.stringify(song));
+
+            console.log(store.currentModal);
+            console.log(store.currentSong);
+            console.log(store.currentSongIndex);
+
             
             store.showEditSongModal(index, song);
         }

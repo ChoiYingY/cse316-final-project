@@ -15,6 +15,9 @@ import CloseIcon from '@mui/icons-material/HighlightOff';
 function EditToolbar() {
     const { store } = useContext(GlobalStoreContext);
 
+    console.log(store);
+
+
     function handleAddNewSong() {
         store.addNewSong();
     }

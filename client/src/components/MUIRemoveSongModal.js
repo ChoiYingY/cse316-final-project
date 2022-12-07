@@ -22,6 +22,7 @@ export default function MUIRemoveSongModal() {
 
     function handleConfirmRemoveSong () {
         store.addRemoveSongTransaction();
+        store.hideModals();
     }
 
     function handleCancelRemoveSong () {
@@ -39,7 +40,7 @@ export default function MUIRemoveSongModal() {
 
     return (
         <Modal
-            open={store.currentModal === "REMOVE_SONG" && store.currentSong !== null && store.currentSongIndex !== null}
+            open={store.currentModal === "REMOVE_SONG"}
         >
             <Box sx={style}>
             <div

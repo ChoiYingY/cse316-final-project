@@ -25,7 +25,9 @@ export default class CreateSong_Transaction extends jsTPS_Transaction {
     
     undoTransaction() {
         // if it is not doing any do, go ahead & undo!
-        if(!this.store.isPerformingDo())
+        if(!this.store.isPerformingDo()){
+            console.log("undo add @" + this.index);
             this.store.removeSong(this.index);
+        }
     }
 }

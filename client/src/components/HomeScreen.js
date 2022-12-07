@@ -46,6 +46,8 @@ const HomeScreen = () => {
     const { auth } = useContext(AuthContext);
 
     console.log("HomeScreen auth.loggedIn: " + auth.loggedIn);
+    console.log(store);
+
 
     useEffect(() => {
         store.loadIdNamePairs();
@@ -128,6 +130,8 @@ const HomeScreen = () => {
             color: '#b91e1e',
         }
     }
+
+    console.log(store.foundList);
     
     return (
         <div>
