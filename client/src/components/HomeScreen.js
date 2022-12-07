@@ -177,6 +177,29 @@ const HomeScreen = () => {
 
     let tab = "";
     let comments = "";
+    let commentSection = "";
+
+    if(store.foundList && store.foundList.isPublished){
+        comments = store.foundList.comments.map((comment) => (
+                    <CommentCard
+                        id={comment._id}
+                        key={comment._id}
+                        commenter={comment.commenter}
+                        text={comment.text}
+                    />
+                ))
+
+        commentSection = <TextField
+                margin="normal"
+                name="name"
+                onKeyPress={handleKeyPress}
+                onChange={handleUpdateText}
+                placeholder="Add Comment"
+                value = {text}
+                sx={{backgroundColor:"white", width: "95%"}}
+            />
+        
+    }
 
     if(store.playerCommView === "PLAYER"){
         tab = <Grid sx={{width:"100%"}}>
@@ -184,32 +207,18 @@ const HomeScreen = () => {
         </Grid>;
     }
     else if(store.playerCommView === "COMMENTS"){
-        tab = <Grid sx={{width:"100%", backgroundColor: "yellow", display:"flex", justifyContent:"flex-start" , flexDirection:"column", alignItems:"center" }}>
+        tab = <Grid sx={{width:"100%", display:"flex", justifyContent:"flex-start" , flexDirection:"column", alignItems:"center" }}>
             <Grid
-                sx ={{ width:"100%", height:"325px", backgroundColor: "purple", overflowY: "scroll" , display:"flex", justifyContent:"space-between" , flexDirection:"column", alignItems:"center"}}
-            >
-                {
-                    comments = store.commentList.map((comment) => (
-                        <CommentCard
-                            id={comment._id}
-                            key={comment._id}
-                            commenter={comment.commenter}
-                            text={comment.text}
-                        />
-                    ))
-                }
+                sx ={{ width:"100%", height:"410px", backgroundColor: "purple", display:"flex", justifyContent:"space-between" , flexDirection:"column", alignItems:"center"}}
+            >   
+                <Grid sx={{width: "100%",  display:"flex", justifyContent:"flex-start",  overflowY: "scroll" , flexDirection:"column", alignItems:"center" }}>
+                    {    comments   }
+                </Grid>
+                <Grid  sx={{width: "100%",  display:"flex", justifyContent:"flex-start" , flexDirection:"column", alignItems:"center" }}>
+                    {    commentSection   }
+                </Grid>
             </Grid>
-            <Grid  sx={{width: "100%", display:"flex", justifyContent:"flex-start" , flexDirection:"column", alignItems:"center" }}>
-                <TextField
-                    margin="normal"
-                    name="name"
-                    onKeyPress={handleKeyPress}
-                    onChange={handleUpdateText}
-                    placeholder="Add Comment"
-                    value = {text}
-                    sx={{backgroundColor:"white", width: "95%"}}
-                />
-            </Grid>
+            
         </Grid>;
     }
 

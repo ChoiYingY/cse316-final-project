@@ -496,7 +496,7 @@ function GlobalStoreContextProvider(props) {
                 return setStore({
                     currentModal : CurrentModal.NONE,
                     idNamePairs: store.idNamePairs,
-                    currentList: store.currentList,
+                    currentList: payload.list,
                     currentSongIndex: store.currentSongIndex,
                     currentSong: store.currentSong,
                     newListCounter: store.newListCounter,
@@ -505,11 +505,11 @@ function GlobalStoreContextProvider(props) {
                     listMarkedForDeletion: null,
                     currentView: store.currentView,
                     warningMsg: null,
-                    foundList: store.foundList,
+                    foundList: payload.list,
                     publishedPlaylist: store.publishedPlaylist,
                     newPublishData: store.newPublishData,
                     playerCommView: store.playerCommView,
-                    commentList: payload
+                    commentList: payload.comments
                 });
             }
             default:
@@ -1279,7 +1279,10 @@ function GlobalStoreContextProvider(props) {
 
                             storeReducer({
                                 type: GlobalStoreActionType.SAVE_COMMENT_LIST,
-                                payload: playlist.comments
+                                payload: {  
+                                    comments: playlist.comments,
+                                    list: playlist
+                                }
                             });
                         }
                     }
