@@ -9,18 +9,23 @@ import jsTPS_Transaction from "../common/jsTPS.js"
  * @author ?
  */
 export default class CreateSong_Transaction extends jsTPS_Transaction {
-    constructor(initStore, initIndex, initSong) {
+    constructor(initStore, initListId, initIndex, initSong) {
         super();
         this.store = initStore;
+        this.id = initListId;
         this.index = initIndex;
         this.song = initSong;
     }
 
     doTransaction() {
-        this.store.createSong(this.index, this.song);
+        // if it is not doing any undo, go ahead & do!
+        if(!this.store.isPerformingUndo())
+            this.store.addSong(this.id, this.index, this.song);
     }
     
     undoTransaction() {
-        this.store.removeSong(this.index);
+        // if it is not doing any do, go ahead & undo!
+        if(!this.store.isPerformingDo())
+            this.store.removeSong(this.index);
     }
 }

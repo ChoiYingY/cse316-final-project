@@ -80,7 +80,7 @@ function ListCard(props) {
         console.log("add song");
         event.stopPropagation();
         let song = { title: "Untitled", artist: "Unknown", youTubeId: "dQw4w9WgXcQ" };
-        store.addSong(idNamePair._id, store.getPlaylistSize(), song);
+        store.addNewSong(idNamePair._id, store.getPlaylistSize(), song);
     }
 
     function handleDeleteList(event) {

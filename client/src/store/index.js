@@ -668,41 +668,22 @@ function GlobalStoreContextProvider(props) {
         // store.updateCurrentList();
     }
 
-    // // THIS FUNCTION UPDATES THE TEXT IN THE ITEM AT index TO text
-    // store.updateSong = function(index, songData) {
-    //     console.log("store.updateSong() brosssssssss");
-
-    //     let list = store.currentList;
-    //     if(!list)
-    //         return;
-
-    //     let song = list.songs[index];
-    //     song.title = songData.title;
-    //     song.artist = songData.artist;
-    //     song.youTubeId = songData.youTubeId;
-
-    //     // store.updateList(store.currentList);
-
-    //     // // NOW MAKE IT OFFICIAL
-    //     // store.updateCurrentList();
-    // }
-
     // THIS FUNCDTION ADDS A CreateSong_Transaction TO THE TRANSACTION STACK
-    store.addCreateSongTransaction = (index, title, artist, youTubeId) => {
+    store.addCreateSongTransaction = (index, id, title, artist, youTubeId) => {
         // ADD A SONG ITEM AND ITS NUMBER
         let song = {
             title: title,
             artist: artist,
             youTubeId: youTubeId
         };
-        let transaction = new CreateSong_Transaction(store, index, song);
+        console.log("now adding new transaction");
+        let transaction = new CreateSong_Transaction(store, id, index, song);
         tps.addTransaction(transaction);
     }
 
-    store.addNewSong = () => {
-        let playlistSize = store.getPlaylistSize();
-        console.log(playlistSize);
-        store.addCreateSongTransaction(playlistSize, "Untitled", "Unknown", "dQw4w9WgXcQ");
+    store.addNewSong = (id, playlistSize, song) => {
+        console.log("we are at addNewSong. Let's call addCreateSongTransaction");
+        store.addCreateSongTransaction(playlistSize, id, "Untitled", "Unknown", "dQw4w9WgXcQ");
     }
 
     store.addMoveSongTransaction = function (start, end) {
@@ -852,13 +833,6 @@ function GlobalStoreContextProvider(props) {
         }
         asyncAddSong(id);
     }
-
-    // store.addNewSongTransaction = function(currListId, index, song){
-    //     console.log("addNewSongTransaction");
-    //     let transaction = new AddSong_Transaction(store, currListId, index, song);
-    //     tps.addTransaction(transaction);
-    // }
-
 
     store.undo = function () {
         tps.undoTransaction();
