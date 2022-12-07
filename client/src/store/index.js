@@ -172,7 +172,7 @@ function GlobalStoreContextProvider(props) {
                     listMarkedForDeletion: payload.playlist,
                     currentView: store.currentView,
                     warningMsg: null,
-                    foundList: null
+                    foundList: store.foundList
                 });
             }
             // UPDATE A LIST

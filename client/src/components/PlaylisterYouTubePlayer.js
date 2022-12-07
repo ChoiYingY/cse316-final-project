@@ -139,8 +139,8 @@ export default function PlaylisterYouTubePlayer(props) {
         fontSize: "13.5px"
     }
 
-    let songDisplayInfo = <></>;
-    let songInfo = <></>;
+    let songDisplayInfo = "";
+    let songInfo = "";
     if(currPlayer && currPlayer.song && currPlayer.song.title && currPlayer.song.artist)
         songInfo = (<>
             <Typography sx={typographySx}>Song #: { index + 1}</Typography>

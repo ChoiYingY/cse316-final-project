@@ -47,7 +47,7 @@ function SongCard(props) {
         
         store.showRemoveSongModal(index, song);
     }
-    
+
     function handleClick(event) {
         // DOUBLE CLICK IS FOR SONG EDITING
         if (event.detail === 2) {
@@ -100,6 +100,7 @@ function SongCard(props) {
                 value={"\u2715"}
                 disabled={store.isModalOpen()}
                 onClick={handleRemoveSong}
+                style={{fontSize: "20px", margin: "0% 2%"}}
             />
 
             { modalJSX }

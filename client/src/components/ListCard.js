@@ -141,7 +141,7 @@ function ListCard(props) {
         }
     }
 
-    let cards = <></>;
+    let cards = "";
     if(store.foundList){
         cards = store.foundList.songs.map((song, index) => (
             <SongCard
@@ -210,8 +210,8 @@ function ListCard(props) {
             <Collapse in={expand} timeout="auto" unmountOnExit>
                 <Grid container  sx={{ display: "flex", alignItem: "center" }}>
 
-                    <Grid item sx={{ display: "flex", alignItem: "center" }}>
-                        <Box>
+                    <Grid item sx={{ display: "flex", alignItem: "center", width: "100%"}}>
+                        <Box sx={{ width: "100%" }}>
                             {
                                 cards
                             }

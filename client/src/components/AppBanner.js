@@ -14,6 +14,8 @@ import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import Toolbar from '@mui/material/Toolbar';
 
+import Grid from '@mui/material/Grid';
+
 import { useHistory } from 'react-router-dom';
 
 export default function AppBanner() {
@@ -105,36 +107,42 @@ export default function AppBanner() {
         <Box sx={{ flexGrow: 1 }}>
             <AppBar position="static">
                 <Toolbar sx={{  backgroundColor: "#BABFEE"  }}>
-                    <Link to="/">
-                        <Box
-                            component="img"
-                            alt="Playlister_logo"
-                            src="/assets/playlister_logo.png"
-                            width={"28.5%"}
-                            onClick={ () => {
-                                if(auth.loggedIn){
-                                    console.log("HOME");
-                                    store.setCurrentView("HOME");
-                                    history.push("/");
-                                }
-                            }}
-                        />
-                    </Link>
-                    {/* <Box sx={{ flexGrow: 1 }}>{editToolbar}</Box> */}
-                    <Box sx={{ display: { xs: 'none', md: 'flex'} }}>
-                        <IconButton
-                            size="large"
-                            edge="end"
-                            aria-label="account of current user"
-                            aria-controls={menuId}
-                            aria-haspopup="true"
-                            onClick={handleProfileMenuOpen}
-                            color="inherit"
-                            disabled={shouldDisable}
-                        >
-                            { getAccountMenu(auth.loggedIn) }
-                        </IconButton>
-                    </Box>
+                    <Grid container sx={{ display:"flex", justifyContent:"space-between", alignItems:"center"}}>
+                        <Grid item>
+                            <Link to="/">
+                                <Box
+                                    component="img"
+                                    alt="Playlister_logo"
+                                    src="/assets/playlister_logo.png"
+                                    width={"28.5%"}
+                                    onClick={ () => {
+                                        if(auth.loggedIn){
+                                            console.log("HOME");
+                                            store.setCurrentView("HOME");
+                                            history.push("/");
+                                        }
+                                    }}
+                                />
+                            </Link>
+                        </Grid>
+                        
+                        <Grid item>
+                            <Box sx={{ display: { xs: 'none', md: 'flex'} }}>
+                                <IconButton
+                                    size="large"
+                                    edge="end"
+                                    aria-label="account of current user"
+                                    aria-controls={menuId}
+                                    aria-haspopup="true"
+                                    onClick={handleProfileMenuOpen}
+                                    color="inherit"
+                                    disabled={shouldDisable}
+                                >
+                                    { getAccountMenu(auth.loggedIn) }
+                                </IconButton>
+                            </Box>
+                        </Grid>
+                    </Grid>        
                 </Toolbar>
             </AppBar>
             {
