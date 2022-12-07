@@ -464,6 +464,63 @@ function GlobalStoreContextProvider(props) {
         }
     }
 
+    store.duplicateList = async function(idNamePair) {
+        console.log(auth.user);
+        console.log(auth.user.userName);
+
+        console.log(idNamePair.name);
+        console.log(idNamePair._id);
+
+        let id = idNamePair._id;
+
+        console.log("store.foundList: " + JSON.stringify(store.foundList));
+
+        let songs = [];
+        let newListName = "";
+
+        async function findList(id) {
+            let response = await api.getPlaylistById(id);
+            if (response.data.success) {
+                let playlist = response.data.playlist;
+                console.log(playlist);
+                songs = playlist.songs;
+                newListName = playlist.name + "_0";
+
+                response = await api.createPlaylist(auth.user.userName, newListName, songs, auth.user.email);
+                console.log("createNewList response: " + response);
+                
+                while (response.status === 400 && response.data.samePlaylist === true) {
+                    newListName = newListName + "_0";
+                    response = await api.createPlaylist(auth.user.userName, newListName, songs, auth.user.email);
+                }
+
+                if (response.status === 201) {
+                    tps.clearAllTransactions();
+                    let newList = response.data.playlist;
+
+                    console.log(auth.user.userName);
+                    console.log(auth.user.email);
+                    console.log(newList);
+
+                    if(newList.ownerEmail === auth.user.email){
+                        console.log("EMAIL MATCHED. YOU CAN NOW CREATE NEW LIST");
+                        
+                        store.loadIdNamePairs();
+                        
+                        storeReducer({
+                            type: GlobalStoreActionType.CREATE_NEW_LIST,
+                            payload: null
+                        });
+                    }
+                }
+                else {
+                    console.log("API FAILED TO CREATE A NEW LIST");
+                }
+            }
+        }
+        findList(id);
+    }
+
     // THIS FUNCTION LOADS ALL THE ID, NAME PAIRS SO WE CAN LIST ALL THE LISTS
     store.loadIdNamePairs = function () {
         console.log("store.loadIdNamePairs")

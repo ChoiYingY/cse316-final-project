@@ -185,6 +185,11 @@ function ListCard(props) {
         }
     }
 
+    function handleDuplicate(event){
+        event.stopPropagation();
+        store.duplicateList(idNamePair);
+    }
+
     let cardElement = <Card
             id={idNamePair._id}
             key={idNamePair._id}
@@ -253,7 +258,12 @@ function ListCard(props) {
                             >
                                 Delete
                             </Button>
-                            <Button variant="contained" sx={btnSx}>Duplicate</Button>
+                            <Button
+                                variant="contained" sx={btnSx}
+                                onClick={handleDuplicate}
+                            >
+                                Duplicate
+                            </Button>
                         </div>
                     </Grid>
                 </Grid>

@@ -14,6 +14,7 @@ createPlaylist = (req, res) => {
     if (!body) {
         return res.status(400).json({
             success: false,
+            samePlaylist: false , 
             error: 'You must provide a Playlist',
         })
     }
@@ -21,14 +22,26 @@ createPlaylist = (req, res) => {
     const playlist = new Playlist(body);
     console.log("playlist: " + playlist.toString());
     if (!playlist) {
-        return res.status(400).json({ success: false, error: err })
+        return res.status(400).json({ success: false, samePlaylist: false , error: err })
     }
 
     User.findOne({ _id: req.userId }, (err, user) => {
         console.log("user found: " + JSON.stringify(user));
         if(body.ownerEmail !== user.email){
-            return res.status(400).json({ success: false, error: "Authentication error: cannot add playlist to unmatched user." })
+            return res.status(400).json({ success: false, samePlaylist: false , error: "Authentication error: cannot add playlist to unmatched user." })
         }
+
+        Playlist.findOne({ name: body.name }, (err, playlist) => {
+            if(playlist){
+                console.log("playlist found: " + JSON.stringify(playlist));
+                if(body.ownerEmail === user.email){
+                    console.log("can't repeat same playlist for same user");
+                    return res.status(400).json({ success: false, samePlaylist: true , error: "Authentication error: cannot use an existing playlist name under same user." })
+                }
+            }
+        }).catch(error => {
+            console.log("hi");
+        })
 
         user.playlists.push(playlist._id);
         user
@@ -38,11 +51,14 @@ createPlaylist = (req, res) => {
                     .save()
                     .then(() => {
                         return res.status(201).json({
-                            playlist: playlist
+                            playlist: playlist,
+                            samePlaylist: false 
                         })
                     })
                     .catch(error => {
                         return res.status(400).json({
+                            success: false,
+                            samePlaylist: false, 
                             errorMessage: 'Playlist Not Created!'
                         })
                     })
@@ -217,6 +233,13 @@ updatePlaylistById = async (req, res) => {
                     if(body.playlist.songs)
                         console.log("body.playlist.songs: " +  JSON.stringify(body.playlist.songs));
 
+                    // if(list.name === body.playlist.name && list.songs === body.playlist.songs){
+                    //     console.log("Playlist cannot share name with others under one user");
+                    //     // console.log();
+                    //     console.log(body.playlist);
+                    //     // return res.status(400).json({ success: false, description: "Playlist cannot share name with others under one user" });
+                    // }
+
                     list.name = body.playlist.name;
                     list.songs = body.playlist.songs;
 
@@ -266,6 +289,66 @@ asyncFindUserById = async (id) => {
     })
     return user;
 }
+
+// findDuplicateName = async(req, res) => {
+//     const body = req.body;
+//     console.log("findDuplicateName body: " + JSON.stringify(body));
+
+//     if (!body) {
+//         return res.status(400).json({
+//             success: false,
+//             samePlaylist: false , 
+//             error: 'You must provide a Playlist',
+//         })
+//     }
+
+//     const playlist = new Playlist(body);
+//     console.log("playlist: " + playlist.toString());
+//     if (!playlist) {
+//         return res.status(400).json({ success: false, samePlaylist: false , error: err })
+//     }
+
+//     User.findOne({ _id: req.userId }, (err, user) => {
+//         console.log("user found: " + JSON.stringify(user));
+//         // if(body.ownerEmail !== user.email){
+//         //     return res.status(400).json({ success: false, samePlaylist: false , error: "Authentication error: cannot add playlist to unmatched user." })
+//         // }
+
+//         Playlist.findOne({ name: body.name }, (err, playlist) => {
+//             if(playlist){
+//                 console.log("playlist found: " + JSON.stringify(playlist));
+//                 if(body.ownerEmail === user.email){
+//                     console.log("can't repeat same playlist for same user");
+//                     return res.status(400).json({ success: false, samePlaylist: true , error: "Authentication error: cannot use an existing playlist name under same user." })
+//                 }
+//             }
+//         }).catch(error => {
+//             console.log("hi");
+//         })
+//     })
+
+//     //     user.playlists.push(playlist._id);
+//     //     user
+//     //         .save()
+//     //         .then(() => {
+//     //             playlist
+//     //                 .save()
+//     //                 .then(() => {
+//     //                     return res.status(201).json({
+//     //                         playlist: playlist,
+//     //                         samePlaylist: false 
+//     //                     })
+//     //                 })
+//     //                 .catch(error => {
+//     //                     return res.status(400).json({
+//     //                         success: false,
+//     //                         samePlaylist: false, 
+//     //                         errorMessage: 'Playlist Not Created!'
+//     //                     })
+//     //                 })
+//     //         });
+//     // })
+// }
 
 // async function asyncFindDuplicateName(name){
 //     console.log(name);
