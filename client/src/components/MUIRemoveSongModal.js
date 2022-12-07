@@ -40,7 +40,7 @@ export default function MUIRemoveSongModal() {
 
     return (
         <Modal
-            open={store.currentModal === "REMOVE_SONG"}
+            open={store.currentModal === "REMOVE_SONG" && store.currentSong !== null && store.currentSongIndex !== null}
         >
             <Box sx={style}>
             <div

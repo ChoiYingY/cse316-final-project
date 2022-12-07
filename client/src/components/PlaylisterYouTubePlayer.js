@@ -141,14 +141,14 @@ export default function YouTubePlayerExample(props) {
 
     let songDisplayInfo = <></>;
     let songInfo = <></>;
-    if(store.expanded && currPlayer && currPlayer.song && currPlayer.song.title && currPlayer.song.artist)
+    if(currPlayer && currPlayer.song && currPlayer.song.title && currPlayer.song.artist)
         songInfo = (<>
             <Typography sx={typographySx}>Song #: { index + 1}</Typography>
             <Typography sx={typographySx}>Title: { title }</Typography>
             <Typography sx={typographySx}>Artist: { artist }</Typography>
         </>)
 
-    if(store.expanded && currPlayer && currPlayer.listName)
+    if(currPlayer && currPlayer.listName)
         songDisplayInfo = (<>
                     <Typography sx={typographySx}>Playlist: {currPlayer.listName}</Typography>
                     {songInfo}
@@ -206,7 +206,7 @@ export default function YouTubePlayerExample(props) {
         />
     </div>;
 
-    if(!store.expanded || !store.foundList || !currPlayer.list || !currPlayer.listName || !currPlayer.songQueue || !currPlayer.song)
+    if(!store.foundList || !currPlayer.list || !currPlayer.listName || !currPlayer.songQueue || !currPlayer.song)
         return <Grid container sx={{ display:"flex", justifyContent: "center", alignItems: "center"}}>
                 <Grid item sx={{width: '100%', height: '250px', backgroundColor: "gray"}}>
                 </Grid>

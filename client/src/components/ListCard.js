@@ -109,10 +109,9 @@ function ListCard(props) {
         console.log("Edit list");
         if(event.detail === 1){
             console.log("You have single clicked");
+            event.stopPropagation();
 
-            console.log("have we expanded? " + store.expanded);
-
-            if(store.expanded)
+            if(store.foundList && store.foundList._id !== idNamePair._id)
                 store.findAndSavePlaylistById(idNamePair._id);
 
             console.log("**************************************************************");
@@ -121,6 +120,7 @@ function ListCard(props) {
         }
         if(event.detail === 2){
             console.log("You have double clicked");
+            event.stopPropagation();
             toggleEdit();
         }
     }
@@ -158,14 +158,28 @@ function ListCard(props) {
     }
 
     function handleUndo(event){
+        console.log("handleUndo: " + store.currentModal);
         event.stopPropagation();
+
+        if(store.currentModal !== "NONE"){
+            console.log("hiding modal in undo");
+            store.hideModals();
+        }
+
         if(store.canUndo()){
             store.undo();
         }
     }
 
     function handleRedo(event){
+        console.log("handleUndo: " + store.currentModal);
+        
         event.stopPropagation();
+
+        if(store.currentModal !== "NONE"){
+            console.log("hiding modal in redo");
+            store.hideModals();
+        }
         if(store.canRedo()){
             store.redo();
         }
@@ -250,11 +264,9 @@ function ListCard(props) {
                 <ExpandBtn
                     onClick={() => {
                         console.log("expand list");
+                        store.findAndSavePlaylistById(idNamePair._id);
+                        console.log(store.foundList);
                         if(!expand){
-                            store.findAndSavePlaylistById(idNamePair._id);
-                            console.log(store.foundList);
-                        }
-                        else{
                             console.log("unexpand list. Clear transactions");
                             store.clearTransactions();
                             store.clearSelected();
@@ -264,7 +276,7 @@ function ListCard(props) {
                         setExpand(!expand);
                     }}
                     aria-label="Expand" aria-expanded={expand}
-                    expand={expand && store.expand}
+                    expand={expand}
                 >
                     <KeyboardDoubleArrowDownOutlinedIcon
                         size="large"

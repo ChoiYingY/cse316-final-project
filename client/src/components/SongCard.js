@@ -37,13 +37,15 @@ function SongCard(props) {
         // store.addMoveSongTransaction(sourceIndex, targetIndex);
     }
     function handleRemoveSong(event) {
+        event.stopPropagation();
+
         console.log("handleRemoveSong");
         console.log("index: " + index + " \nsong: " + JSON.stringify(song));
         
         store.showRemoveSongModal(index, song);
-        console.log("fshuifdhudsfiuhdsfhudsfuhidfhudfuhdfhudfhudfiuh")
-        console.log(store)
-        console.log("fshuifdhudsfiuhdsfhudsfuhidfhudfuhdfhudfhudfiuh")
+        // console.log("fshuifdhudsfiuhdsfhudsfuhidfhudfuhdfhudfhudfiuh")
+        // console.log(store)
+        // console.log("fshuifdhudsfiuhdsfhudsfuhidfhudfuhdfhudfhudfiuh")
     }
     function handleClick(event) {
         // DOUBLE CLICK IS FOR SONG EDITING
@@ -59,6 +61,14 @@ function SongCard(props) {
             
             store.showEditSongModal(index, song);
         }
+    }
+
+    let modalJSX = "";
+    if (store.isEditSongModalOpen()) {
+        modalJSX = <MUIEditSongModal />;
+    }
+    else if (store.isRemoveSongModalOpen()) {
+        modalJSX = <MUIRemoveSongModal />;
     }
 
     let cardClass = "list-card unselected-list-card";
@@ -91,8 +101,7 @@ function SongCard(props) {
                 onClick={handleRemoveSong}
             />
 
-            <MUIRemoveSongModal/>
-            <MUIEditSongModal/>
+            { modalJSX }
         </div>
     );
 }
