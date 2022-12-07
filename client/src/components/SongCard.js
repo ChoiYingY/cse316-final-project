@@ -10,6 +10,7 @@ function SongCard(props) {
     const { song, index } = props;
 
     function handleDragStart(event) {
+        console.log("drag has started");
         event.dataTransfer.setData("song", index);
     }
 
@@ -33,8 +34,10 @@ function SongCard(props) {
         let sourceIndex = Number(event.dataTransfer.getData("song"));
         setDraggedTo(false);
 
+        console.log("We have dropped");
+
         // UPDATE THE LIST
-        // store.addMoveSongTransaction(sourceIndex, targetIndex);
+        store.addMoveSongTransaction(sourceIndex, targetIndex);
     }
     function handleRemoveSong(event) {
         event.stopPropagation();
@@ -43,10 +46,8 @@ function SongCard(props) {
         console.log("index: " + index + " \nsong: " + JSON.stringify(song));
         
         store.showRemoveSongModal(index, song);
-        // console.log("fshuifdhudsfiuhdsfhudsfuhidfhudfuhdfhudfhudfiuh")
-        // console.log(store)
-        // console.log("fshuifdhudsfiuhdsfhudsfuhidfhudfuhdfhudfhudfiuh")
     }
+    
     function handleClick(event) {
         // DOUBLE CLICK IS FOR SONG EDITING
         if (event.detail === 2) {

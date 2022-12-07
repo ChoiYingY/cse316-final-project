@@ -294,7 +294,7 @@ function GlobalStoreContextProvider(props) {
                     listMarkedForDeletion: null,
                     currentView: payload,
                     warningMsg: null,
-                    foundList: store.foundList
+                    foundList: (payload !== store.currentView) ? null : store.foundList
                 });
             }
             case GlobalStoreActionType.SET_FOUND_LIST: {
@@ -656,29 +656,55 @@ function GlobalStoreContextProvider(props) {
     // THIS FUNCTION MOVES A SONG IN THE CURRENT LIST FROM
     // start TO end AND ADJUSTS ALL OTHER ITEMS ACCORDINGLY
     store.moveSong = function(start, end) {
-        let list = store.currentList;
-        if(!list)
-            return;
+        console.log(store);
+        async function asyncMoveSong(id){
+            let response = await api.getPlaylistById(id);
+            if(response.data.success){
+                let playlist = response.data.playlist;
+                console.log("playlist found");
+                console.log(playlist);
 
-        // WE NEED TO UPDATE THE STATE FOR THE APP
-        if (start < end) {
-            let temp = list.songs[start];
-            for (let i = start; i < end; i++) {
-                list.songs[i] = list.songs[i + 1];
-            }
-            list.songs[end] = temp;
-        }
-        else if (start > end) {
-            let temp = list.songs[start];
-            for (let i = start; i > end; i--) {
-                list.songs[i] = list.songs[i - 1];
-            }
-            list.songs[end] = temp;
-        }
+                if(!playlist)
+                    return;
 
-        // NOW MAKE IT OFFICIAL
-        // store.updateList(store.currentList);
-        // store.updateCurrentList();
+                // WE NEED TO UPDATE THE STATE FOR THE APP
+                if (start < end) {
+                    let temp = playlist.songs[start];
+                    for (let i = start; i < end; i++) {
+                        playlist.songs[i] = playlist.songs[i + 1];
+                    }
+                    playlist.songs[end] = temp;
+                }
+                else if (start > end) {
+                    let temp = playlist.songs[start];
+                    for (let i = start; i > end; i--) {
+                        playlist.songs[i] = playlist.songs[i - 1];
+                    }
+                    playlist.songs[end] = temp;
+                }
+                
+                console.log(playlist);
+
+                async function asyncUpdateList(playlist){
+                    response = await api.updatePlaylistById(playlist._id, playlist);
+                    if (response.data.success) {
+                        console.log(response.data.id);
+                        console.log(response.data.list);
+
+                        console.log(store);
+        
+                        storeReducer({
+                            type: GlobalStoreActionType.SET_FOUND_LIST,
+                            payload: response.data.list
+                        });
+        
+                        history.push("/");
+                    }
+                }
+                asyncUpdateList(playlist); 
+            }
+        }
+        asyncMoveSong(store.currentList._id);
     }
     // THIS FUNCTION REMOVES THE SONG AT THE index LOCATION
     // FROM THE CURRENT LIST

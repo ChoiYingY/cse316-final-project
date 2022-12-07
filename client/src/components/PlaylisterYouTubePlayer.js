@@ -150,7 +150,7 @@ export default function PlaylisterYouTubePlayer(props) {
 
     if(currPlayer && currPlayer.listName)
         songDisplayInfo = (<>
-                    <Typography sx={typographySx}>Playlist: {currPlayer.listName}</Typography>
+                    <Typography sx={typographySx}>Playlist: {store.foundList.name}</Typography>
                     {songInfo}
                 </>)
 
