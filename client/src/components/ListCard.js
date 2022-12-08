@@ -367,7 +367,17 @@ function ListCard(props) {
                     sx={{  fontWeight: 'bold' }}
                 >
                     By:&nbsp;
-                    <Link>{idNamePair.userName}</Link>
+                    <Link
+                        onClick={(event)=>{
+                            console.log("hi bro");
+                            console.log("event.target.innerHTML: " + event.target.innerHTML);
+                            let name = event.target.innerHTML;
+                            store.setCurrentView("USERS");
+                            store.saveAndSearchInput(name);
+                        }}
+                    >
+                        {idNamePair.userName}
+                    </Link>
                 </Typography>
             </Grid>
 

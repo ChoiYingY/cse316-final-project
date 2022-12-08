@@ -1322,6 +1322,18 @@ function GlobalStoreContextProvider(props) {
                 console.log("invalid sort");
                 break;
         }
+
+        let playlist=null;
+
+        if(store.currentView === "HOME"){
+            playlist = store.idNamePairs;
+        }
+        else{
+            playlist = store.searchResult;
+        }
+        console.log("***********************************************************************");
+        console.log(playlist);
+        console.log("***********************************************************************");
     }
 
     store.clearSearch = function(){
