@@ -70,13 +70,16 @@ function ListCard(props) {
 
     const { idNamePair, selected, isPublished, list} = props;
 
+    const { store } = useContext(GlobalStoreContext);
+    const { auth } = useContext(AuthContext);
+
+    console.log("***********************************************");
+    console.log(store.currentView);
     console.log(`selected: ${selected}`);
     console.log(`idNamePair: ${JSON.stringify(idNamePair)}`);
     console.log(`isPublished: ${isPublished}`);
-    console.log(`list: ${list}`);
-
-    const { store } = useContext(GlobalStoreContext);
-    const { auth } = useContext(AuthContext);
+    // console.log(`list: ${list}`);
+    console.log("***********************************************");
 
     const [editActive, setEditActive] = useState(false);
     const [text, setText] = useState("");
@@ -101,8 +104,8 @@ function ListCard(props) {
 
     function toggleEdit() {
         console.log(editActive);
-        if(!list)
-            return;
+        // if(!list)
+        //     return;
         let newActive = !editActive;
         if (newActive) {
             console.log(list);
@@ -207,14 +210,15 @@ function ListCard(props) {
 
     function handleLike(event){
         event.stopPropagation();
-        if(list.isPublished)
-            store.updatePublishedData(list._id, false, true, false);
+        if(idNamePair && idNamePair.isPublished)
+            store.updatePublishedData(idNamePair._id, false, true, false);
+        
     }
 
     function handleDislike(event){
         event.stopPropagation();
-        if(list.isPublished)
-            store.updatePublishedData(list._id, false, false, true);
+        if(idNamePair && idNamePair.isPublished)
+            store.updatePublishedData(idNamePair._id, false, false, true);
     }
 
     let publishedBtn = "";
@@ -349,6 +353,94 @@ function ListCard(props) {
                 </Grid>
             </>
         }
+    }
+    else{
+        console.log("&&&&&&&&&&&&&&&&&&&&&&&&&&&")
+        console.log(idNamePair)
+        console.log(selected)
+        console.log(isPublished);
+        console.log("&&&&&&&&&&&&&&&&&&&&&&&&&&&")
+
+        cardWrapper = <Box sx={{ width: "95%" , marginLeft: "2.5%", maxHeight: "250px" , overflowY: "scroll"}}>
+                <Grid sx={{backgroundColor: "purple"}}>
+                {
+                    cards
+                }
+                </Grid>
+            </Box>
+
+            publishedDate = <>
+                <Typography
+                    fontFamily={"Lexend Exa"}
+                    variant="body2"
+                    sx={{  fontWeight: 'bold', margin: "0% 5%" , fontSize:"11px" }}
+                >
+                    Published
+                </Typography>
+                <Typography
+                    fontFamily={"Lexend Exa"}
+                    variant="body2"
+                    sx={{  fontWeight: 'bold', color: "green" , fontSize:"11px" }}
+                >
+                    {(idNamePair && idNamePair.datePublished) ? new Date(idNamePair.datePublished).toLocaleDateString('en-us', { month:"short", day:"numeric", year:"numeric"}) : ""}
+                </Typography>
+            </>
+            listens = <>
+                <Typography
+                    fontFamily={"Lexend Exa"}
+                    variant="body2"
+                    sx={{fontSize:"11px"}}
+                >
+                    Listens
+                </Typography>
+                <Typography
+                    fontFamily={"Lexend Exa"}
+                    variant="body2"
+                    sx={{  fontWeight: 'bold', color: "green" , fontSize:"11px" }}
+                >
+                    {(idNamePair && published) ? idNamePair.listens : 0}
+                </Typography>
+            </>
+            likeAndDislike= <> <Grid sx={{ display:"flex", justifyContent:"space-between" , flexDirection:"row", alignItems:"center", width: "100%"}}>
+                    <Button onClick={   handleLike  }>
+                        <ThumbUpOutlinedIcon
+                            size="large"
+                            fontSize="large"
+                            edge="end"
+                            aria-label="Disike Button"
+                            aria-haspopup="true"
+                            sx={{  color: "black"   }}
+                            disabled = {auth.isGuest}
+                        />
+                    </Button>
+                    <Typography
+                        fontFamily={"Lexend Exa"}
+                        variant="body1"
+                    >
+                        {(published) ?   idNamePair.likes : ""   }
+                    </Typography>
+                </Grid>
+                
+                <Grid sx={{ display:"flex", justifyContent:"flex-start" , flexDirection:"row", alignItems:"center"}}>
+                    <Button onClick={   handleDislike  }>
+                        <ThumbDownOutlinedIcon
+                            size="large"
+                            fontSize="large"
+                            edge="end"
+                            aria-label="Disike Button"
+                            aria-haspopup="true"
+                            sx={{  color: "black"  }}
+                            disabled = {auth.isGuest}
+                        />
+                    </Button>
+                        <Typography
+                            fontFamily={"Lexend Exa"}
+                            variant="body1"
+                        >
+                            {(published) ?   idNamePair.dislikes : ""   }
+                        </Typography>
+                </Grid>
+            </>
     }
 
     let cardContent = <>
