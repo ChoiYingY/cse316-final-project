@@ -8,6 +8,9 @@ import { useHistory } from 'react-router-dom'
 import List from '@mui/material/List';
 import Box from '@mui/material/Box';
 
+import ToggleButtonGroup from '@mui/material/ToggleButtonGroup';
+import ToggleButton from '@mui/material/ToggleButton';
+
 import AddIcon from '@mui/icons-material/Add';
 import Fab from '@mui/material/Fab';
 import Typography from '@mui/material/Typography';
@@ -52,14 +55,9 @@ const HomeScreen = () => {
 
     const history = useHistory();
     const [text, setText] = useState("");
-    // const [input, setInput] = useState("");
 
     console.log("HomeScreen auth.loggedIn: " + auth.loggedIn);
     console.log(store);
-
-    if(store.publishedPlaylist)
-        console.log("store.publishedPlaylist: " + JSON.stringify(store.publishedPlaylist) + "\nIt has length of " + store.publishedPlaylist.length);
-
 
     useEffect(() => {
         store.loadIdNamePairs();
@@ -105,23 +103,24 @@ const HomeScreen = () => {
             }
             case "ALL_LISTS":{
                 console.log("IN ALL_LISTS VIEW");
-                console.log(store.publishedPlaylist);
 
+                if(store.searchInput && store.searchResult && store.searchResult.length){
+                    console.log(store.searchResult);
+                    bottomBar = <>
+                        <Typography variant="h3" fontFamily="Lexend Exa">{store.searchInput} Playlists</Typography>
+                    </>;
 
-                bottomBar = <>
-                    <Typography variant="h3" fontFamily="Lexend Exa">Playlists</Typography>
-                </>;
-
-                listCard = store.publishedPlaylist.map((pair) => (
-                    <ListCard
-                        id={pair._id}
-                        key={pair._id}
-                        idNamePair={pair}
-                        selected={false}
-                        isPublished={pair.isPublished}
-                        list={ pair.list }
-                    />
-                ))
+                    listCard = store.searchResult.map((pair) => (
+                        <ListCard
+                            id={pair._id}
+                            key={pair._id}
+                            idNamePair={pair}
+                            selected={false}
+                            isPublished={pair.isPublished}
+                            list={ pair.list }
+                        />
+                    ))
+                }
                 break;
             }
             case "USERS":{
@@ -169,7 +168,6 @@ const HomeScreen = () => {
         if (event.code === "Enter") {
             event.stopPropagation();
 
-            console.log()
             store.postComment(auth.user.userName, text);
             setText("");
         }
@@ -189,7 +187,8 @@ const HomeScreen = () => {
                     />
                 ))
 
-        commentSection = <TextField
+        if(!auth.isGuest){
+            commentSection = <TextField
                 margin="normal"
                 name="name"
                 onKeyPress={handleKeyPress}
@@ -198,7 +197,7 @@ const HomeScreen = () => {
                 value = {text}
                 sx={{backgroundColor:"white", width: "95%"}}
             />
-        
+        }
     }
 
     if(store.playerCommView === "PLAYER"){
@@ -246,9 +245,9 @@ const HomeScreen = () => {
                                     </div>
                                 </Grid>
                             </Grid>
-                            <Grid sx={{width:"40%", height: "450px" , backgroundColor:"blue"}}>
-                                <div sx={{width:"100%", display:"flex", flexDirection: "column", justifyContent:"flex-start"}}>
-                                    <Button
+                            <Grid sx={{width:"40%", height: "450px" , backgroundColor:"yellow"}}>
+                                <ToggleButtonGroup exclusive sx={{width:"100%", display:"flex", flexDirection: "row", justifyContent:"flex-start"}}>
+                                    <ToggleButton
                                         outline="filled" sx={playerBtnSx}
                                         onClick={(event) => {
                                             console.log("jump to PLAYER tab");
@@ -256,11 +255,12 @@ const HomeScreen = () => {
                                             store.setPlayerCommentView("PLAYER");
                                             history.push("/");
                                         }}
+                                        selected = { store.playerCommView === "PLAYER"}
                                     >
                                         Player
-                                    </Button>
+                                    </ToggleButton>
 
-                                    <Button
+                                    <ToggleButton
                                         outline="filled" sx={playerBtnSx}
                                         onClick={(event) => {
                                             console.log("jump to COMMENTS tab");
@@ -268,10 +268,11 @@ const HomeScreen = () => {
                                             store.setPlayerCommentView("COMMENTS");
                                             history.push("/");
                                         }}
+                                        selected = { store.playerCommView === "COMMENTS"}
                                     >
                                         Comments
-                                    </Button>
-                                </div>
+                                    </ToggleButton>
+                                </ToggleButtonGroup>
                                 
                                 {tab}
                                 

@@ -2,8 +2,8 @@ import Box from '@mui/material/Box';
 import AppBar from '@mui/material/AppBar';
 import Toolbar from '@mui/material/Toolbar';
 
-import ToggleButton from '@mui/material/ToggleButton';
 import ToggleButtonGroup from '@mui/material/ToggleButtonGroup';
+import ToggleButton from '@mui/material/ToggleButton';
 import HomeOutlinedIcon from '@mui/icons-material/HomeOutlined';
 import GroupsOutlinedIcon from '@mui/icons-material/GroupsOutlined';
 import PersonOutlineOutlinedIcon from '@mui/icons-material/PersonOutlineOutlined';
@@ -37,6 +37,9 @@ export default function UserNavbar() {
         console.log("You have pressed on key");
         if (event.code === "Enter") {
             console.log("You have pressed enter.");
+
+            let searchInput = input;
+            store.saveAndSearchInput(searchInput);
         }
     }
 
@@ -173,6 +176,7 @@ export default function UserNavbar() {
                                 padding: '0 14px'
                             }}}
                             onKeyPress={handleKeyPress}
+                            value={input}
                             onChange={handleUpdateText}
                         />
 
