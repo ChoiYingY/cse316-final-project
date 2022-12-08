@@ -1322,7 +1322,9 @@ function GlobalStoreContextProvider(props) {
                 console.log("invalid sort");
                 break;
         }
+    }
 
+    store.sortBy = function(){
         let playlist=null;
 
         if(store.currentView === "HOME"){
@@ -1331,9 +1333,15 @@ function GlobalStoreContextProvider(props) {
         else{
             playlist = store.searchResult;
         }
-        console.log("***********************************************************************");
-        console.log(playlist);
-        console.log("***********************************************************************");
+
+        console.log("#######################################################################");
+        console.log("store: " + JSON.stringify(store));
+        console.log("playlist: " + JSON.stringify(playlist));
+        console.log("#######################################################################");
+        
+        if(playlist){
+            console.log("playlist: " + JSON.stringify(playlist));
+        }
     }
 
     store.clearSearch = function(){
