@@ -40,6 +40,7 @@ export const GlobalStoreActionType = {
     SET_PLAYER_COMM_VIEW: "SET_PLAYER_COMM_VIEW",
     SAVE_COMMENT_LIST: "SAVE_COMMENT_LIST",
     SAVE_SEARCH: "SAVE_SEARCH",
+    SORT_BY: "SORT_BY",
 }
 
 // WE'LL NEED THIS TO PROCESS TRANSACTIONS
@@ -63,6 +64,15 @@ const PlayerCommentView = {
     COMMENTS: "COMMENTS"
 }
 
+const SortBy = {
+    NONE: "NONE",
+    ATOZ: "ATOZ",
+    PUBLISH_DATE: "PUBLISH_DATE",
+    LISTENS: "LISTENS",
+    LIKES: "LIKES",
+    DISLIKES: "DISLIKES",
+}
+
 // WITH THIS WE'RE MAKING OUR GLOBAL DATA STORE
 // AVAILABLE TO THE REST OF THE APPLICATION
 function GlobalStoreContextProvider(props) {
@@ -82,7 +92,8 @@ function GlobalStoreContextProvider(props) {
         foundList: null,
         playerCommView: PlayerCommentView.PLAYER,
         searchResult: [],
-        searchInput: []
+        searchInput: [],
+        sort: SortBy.NONE
     });
     const history = useHistory();
 
@@ -116,6 +127,7 @@ function GlobalStoreContextProvider(props) {
                     searchResult: store.searchResult,
                     playerCommView: store.playerCommView,
                     searchInput: store.searchInput,
+                    sort: store.sort,
                 });
             }
             // STOP EDITING THE CURRENT LIST
@@ -136,6 +148,7 @@ function GlobalStoreContextProvider(props) {
                     foundList: null,
                     playerCommView: store.playerCommView,
                     searchInput: store.searchInput,
+                    sort: store.sort,
                 })
             }
             // CREATE A NEW LIST
@@ -157,6 +170,7 @@ function GlobalStoreContextProvider(props) {
                     searchResult: store.searchResult,
                     playerCommView: PlayerCommentView.PLAYER,
                     searchInput: store.searchInput,
+                    sort: SortBy.NONE,
                 })
             }
             // GET ALL THE LISTS SO WE CAN PRESENT THEM
@@ -178,6 +192,7 @@ function GlobalStoreContextProvider(props) {
                     searchResult: store.searchResult,
                     playerCommView: store.playerCommView,
                     searchInput: store.searchInput,
+                    sort: store.sort,
                 });
             }
             // PREPARE TO DELETE A LIST
@@ -199,6 +214,7 @@ function GlobalStoreContextProvider(props) {
                     searchResult: store.searchResult,
                     playerCommView: store.playerCommView,
                     searchInput: store.searchInput,
+                    sort: store.sort,
                 });
             }
             // UPDATE A LIST
@@ -220,6 +236,7 @@ function GlobalStoreContextProvider(props) {
                     searchResult: store.searchResult,
                     playerCommView: store.playerCommView,
                     searchInput: store.searchInput,
+                    sort: store.sort,
                 });
             }
             // START EDITING A LIST NAME
@@ -241,6 +258,7 @@ function GlobalStoreContextProvider(props) {
                     searchResult: store.searchResult,
                     playerCommView: store.playerCommView,
                     searchInput: store.searchInput,
+                    sort: store.sort,
                 });
             }
             case GlobalStoreActionType.SET_LIST_NAME_WARNING: {
@@ -261,6 +279,7 @@ function GlobalStoreContextProvider(props) {
                     searchResult: store.searchResult,
                     playerCommView: store.playerCommView,
                     searchInput: store.searchInput,
+                    sort: store.sort,
                 });
             }
             case GlobalStoreActionType.EDIT_SONG: {
@@ -281,6 +300,7 @@ function GlobalStoreContextProvider(props) {
                     searchResult: store.searchResult,
                     playerCommView: store.playerCommView,
                     searchInput: store.searchInput,
+                    sort: store.sort,
                 });
             }
             case GlobalStoreActionType.REMOVE_SONG: {
@@ -301,6 +321,7 @@ function GlobalStoreContextProvider(props) {
                     searchResult: store.searchResult,
                     playerCommView: store.playerCommView,
                     searchInput: store.searchInput,
+                    sort: store.sort,
                 });
             }
             case GlobalStoreActionType.HIDE_MODALS: {
@@ -341,6 +362,7 @@ function GlobalStoreContextProvider(props) {
                     playerCommView: PlayerCommentView.PLAYER,
                     searchInput: [],
                     searchResult: [],
+                    sort: store.sort,
                 });
             }
             case GlobalStoreActionType.SET_FOUND_LIST: {
@@ -362,6 +384,7 @@ function GlobalStoreContextProvider(props) {
                     searchResult: store.searchResult,
                     playerCommView: store.playerCommView,
                     searchInput: store.searchInput,
+                    sort: store.sort,
                 });
             }
             case GlobalStoreActionType.UPDATE_LIST: {
@@ -383,6 +406,7 @@ function GlobalStoreContextProvider(props) {
                     searchResult: store.searchResult,
                     playerCommView: store.playerCommView,
                     searchInput: store.searchInput,
+                    sort: store.sort,
                 });
             }
             case GlobalStoreActionType.SET_CURRENT_SONG: {
@@ -403,6 +427,7 @@ function GlobalStoreContextProvider(props) {
                     searchResult: store.searchResult,
                     playerCommView: store.playerCommView,
                     searchInput: store.searchInput,
+                    sort: store.sort,
                 });
             };
             case GlobalStoreActionType.SAVE_COMMENT_LIST :{
@@ -424,7 +449,8 @@ function GlobalStoreContextProvider(props) {
                     foundList: payload.list,
                     searchResult: store.searchResult,
                     playerCommView: store.playerCommView,
-                    searchInput: payload.comments
+                    searchInput: payload.comments,
+                    sort: store.sort,
                 });
             }
             case GlobalStoreActionType.SAVE_SEARCH :{
@@ -447,7 +473,32 @@ function GlobalStoreContextProvider(props) {
                     foundList: store.foundList,
                     playerCommView: store.playerCommView,
                     searchInput: payload.input,
-                    searchResult: payload.result
+                    searchResult: payload.result,
+                    sort: store.sort,
+                });
+            }
+            case GlobalStoreActionType.SORT_BY :{
+                console.log("SORT_BY")
+                console.log(payload)
+                console.log("SORT_BY")
+
+                return setStore({
+                    currentModal : CurrentModal.NONE,
+                    idNamePairs: store.idNamePairs,
+                    currentList: store.currentList,
+                    currentSongIndex: store.currentSongIndex,
+                    currentSong: store.currentSong,
+                    newListCounter: store.newListCounter,
+                    listNameActive: false,
+                    listIdMarkedForDeletion: null,
+                    listMarkedForDeletion: null,
+                    currentView: store.currentView,
+                    warningMsg: null,
+                    foundList: store.foundList,
+                    playerCommView: store.playerCommView,
+                    searchInput: store.searchInput,
+                    searchResult: store.searchResult,
+                    sort: payload,
                 });
             }
             default:
@@ -1228,6 +1279,28 @@ function GlobalStoreContextProvider(props) {
             }
         }
         asyncFindAllList(input);
+    }
+
+    store.setSortBy = function(sorting){
+        switch(sorting){
+            case (SortBy.ATOZ):
+            case (SortBy.PUBLISH_DATE):
+            case (SortBy.LISTENS):
+            case (SortBy.LIKES):
+            case (SortBy.DISLIKES):
+            {
+                console.log(sorting);
+
+                storeReducer({
+                    type: GlobalStoreActionType.SORT_BY,
+                    payload: sorting
+                });
+                break;
+            }
+            default:
+                console.log("invalid sort");
+                break;
+        }
     }
 
     store.clearSearch = function(){

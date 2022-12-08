@@ -259,6 +259,7 @@ const HomeScreen = () => {
                                             history.push("/");
                                         }}
                                         selected = { store.playerCommView === "PLAYER"}
+                                        value="PLAYER"
                                     >
                                         Player
                                     </ToggleButton>
@@ -272,6 +273,7 @@ const HomeScreen = () => {
                                             history.push("/");
                                         }}
                                         selected = { store.playerCommView === "COMMENTS"}
+                                        value="COMMENTS"
                                     >
                                         Comments
                                     </ToggleButton>
