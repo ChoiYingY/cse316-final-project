@@ -359,7 +359,7 @@ function GlobalStoreContextProvider(props) {
                     currentView: payload,
                     warningMsg: null,
                     foundList: (payload !== store.currentView) ? null : store.foundList,
-                    playerCommView: PlayerCommentView.PLAYER,
+                    playerCommView: store.playerCommView,
                     searchInput: [],
                     searchResult: [],
                     sort: store.sort,
@@ -409,6 +409,27 @@ function GlobalStoreContextProvider(props) {
                     sort: store.sort,
                 });
             }
+            case GlobalStoreActionType.SET_PLAYER_COMM_VIEW: {
+                console.log("SET_PLAYER_COMM_VIEW");
+                return setStore({
+                    currentModal : CurrentModal.NONE,
+                    idNamePairs: store.idNamePairs,
+                    currentList: store.currentList,
+                    currentSongIndex: store.currentSongIndex,
+                    currentSong: store.currentSong,
+                    newListCounter: store.newListCounter,
+                    listNameActive: false,
+                    listIdMarkedForDeletion: null,
+                    listMarkedForDeletion: null,
+                    currentView: store.currentView,
+                    warningMsg: null,
+                    foundList: store.foundList,
+                    searchResult: store.searchResult,
+                    playerCommView: payload,
+                    searchInput: store.searchInput,
+                    sort: store.sort,
+                });
+            };
             case GlobalStoreActionType.SET_CURRENT_SONG: {
                 console.log("SET_CURRENT_SONG");
                 return setStore({
@@ -448,7 +469,7 @@ function GlobalStoreContextProvider(props) {
                     warningMsg: null,
                     foundList: payload.list,
                     searchResult: store.searchResult,
-                    playerCommView: store.playerCommView,
+                    playerCommView: PlayerCommentView.COMMENTS,
                     searchInput: payload.comments,
                     sort: store.sort,
                 });
@@ -495,7 +516,7 @@ function GlobalStoreContextProvider(props) {
                     currentView: store.currentView,
                     warningMsg: null,
                     foundList: store.foundList,
-                    playerCommView: store.playerCommView,
+                    playerCommView: PlayerCommentView.PLAYER,
                     searchInput: store.searchInput,
                     searchResult: store.searchResult,
                     sort: payload,

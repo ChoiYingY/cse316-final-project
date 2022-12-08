@@ -203,6 +203,8 @@ const HomeScreen = () => {
         }
     }
 
+    console.log("store.playerCommView: " + store.playerCommView);
+
     if(store.playerCommView === "PLAYER"){
         tab = <Grid sx={{width:"100%"}}>
             <PlaylisterYouTubePlayer currPlayer={currPlayer}/>
