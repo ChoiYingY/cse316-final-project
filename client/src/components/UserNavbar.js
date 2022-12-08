@@ -66,18 +66,13 @@ export default function UserNavbar() {
         onClick={(event) => {
             console.log("jump to home screen");
             event.stopPropagation();
+            setInput("");
             store.setCurrentView("HOME");
             history.push("/");
         } } />
         : <HomeOutlinedIcon
             size="large" fontSize="large" edge="end" aria-label="Home Button" aria-haspopup="true"
-            className={classes.disabledIcon}
-            onClick={(event) => {
-                console.log("jump to home screen");
-                event.stopPropagation();
-                store.setCurrentView("HOME");
-                history.push("/");
-            } } />;
+            className={classes.disabledIcon}/>;
 
 
     const btnSx = {
@@ -129,6 +124,7 @@ export default function UserNavbar() {
                                 onClick={ (event) => {
                                     console.log("jump to all lists screen");
                                     event.stopPropagation();
+                                    setInput("");
                                     store.setCurrentView("ALL_LISTS");
                                     history.push("/");
                                 } }
@@ -150,6 +146,7 @@ export default function UserNavbar() {
                                 onClick={ (event) => {
                                     console.log("jump to users screen");
                                     event.stopPropagation();
+                                    setInput("");
                                     store.setCurrentView("USERS");
                                     history.push("/");
                                 } }

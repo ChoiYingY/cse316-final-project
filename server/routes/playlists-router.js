@@ -20,7 +20,8 @@ router.post('/playlist', auth.verify, PlaylistController.duplicatePlaylist)
 router.put('/playlistPublish/:id', auth.verify, PlaylistController.publishPlaylist)
 router.put('/playlistPublishP/:id', auth.verify, PlaylistController.updatePublishPlaylist)
 
-router.get("/playlistPP/:name", auth.verify, PlaylistController.findAllPublishedPlaylistByUser)
+router.get("/playlistPP/:user", auth.verify, PlaylistController.findAllPublishedPlaylistByUser)
+router.get("/playlistPPL/:list", auth.verify, PlaylistController.findAllPublishedPlaylistByLists)
 
 // router.get('/playlist', auth.verify, PlaylistController.asyncFindDuplicateName)
 

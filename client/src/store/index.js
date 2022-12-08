@@ -338,9 +338,9 @@ function GlobalStoreContextProvider(props) {
                     currentView: payload,
                     warningMsg: null,
                     foundList: (payload !== store.currentView) ? null : store.foundList,
-                    searchResult: store.searchResult,
                     playerCommView: PlayerCommentView.PLAYER,
-                    searchInput: store.searchInput,
+                    searchInput: [],
+                    searchResult: [],
                 });
             }
             case GlobalStoreActionType.SET_FOUND_LIST: {
@@ -1190,10 +1190,28 @@ function GlobalStoreContextProvider(props) {
     }
 
     store.saveAndSearchInput = function(input){
-        async function asyncFindAllList(text){
+        async function asyncFindAllList(input){
             console.log("asyncFindAllList based on text: ");
-            if(store.currentView && store.currentView === CurrentView.ALL_LISTS){
+            if(store.currentView && store.currentView === CurrentView.USERS){
+                console.log("findAllPublishedPlaylistByUser");
                 let response = await api.findAllPublishedPlaylistByUser(input);
+                if(response.data.success){
+                    let playlist = response.data.playlist;
+                    console.log("playlist found: ");
+                    console.log(playlist);
+
+                    storeReducer({
+                        type: GlobalStoreActionType.SAVE_SEARCH,
+                        payload: {
+                            input: input,
+                            result: playlist
+                        }
+                    });
+                }
+            }
+            else if(store.currentView && store.currentView === CurrentView.ALL_LISTS){
+                console.log("findAllPublishedPlaylistByLists");
+                let response = await api.findAllPublishedPlaylistByLists(input);
                 if(response.data.success){
                     let playlist = response.data.playlist;
                     console.log("playlist found: ");
@@ -1210,6 +1228,16 @@ function GlobalStoreContextProvider(props) {
             }
         }
         asyncFindAllList(input);
+    }
+
+    store.clearSearch = function(){
+        storeReducer({
+            type: GlobalStoreActionType.SAVE_SEARCH,
+            payload: {
+                input: [],
+                result: []
+            }
+        });
     }
 
 

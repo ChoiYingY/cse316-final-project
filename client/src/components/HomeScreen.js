@@ -101,14 +101,23 @@ const HomeScreen = () => {
                 ))
                 break;
             }
-            case "ALL_LISTS":{
-                console.log("IN ALL_LISTS VIEW");
+            case "ALL_LISTS":
+            case "USERS": {
+                console.log("IN USERS/ALL_LISTS VIEW");
 
                 if(store.searchInput && store.searchResult && store.searchResult.length){
                     console.log(store.searchResult);
-                    bottomBar = <>
-                        <Typography variant="h3" fontFamily="Lexend Exa">{store.searchInput} Playlists</Typography>
-                    </>;
+
+                    if(store.currentView === "ALL_LISTS"){
+                        bottomBar = <>
+                            <Typography variant="h3" fontFamily="Lexend Exa">{store.searchInput} Playlists</Typography>
+                        </>;
+                    }
+                    else{
+                        bottomBar = <>
+                            <Typography variant="h3" fontFamily="Lexend Exa">{store.searchInput} Lists</Typography>
+                        </>;
+                    }
 
                     listCard = store.searchResult.map((pair) => (
                         <ListCard
@@ -121,12 +130,6 @@ const HomeScreen = () => {
                         />
                     ))
                 }
-                break;
-            }
-            case "USERS":{
-                console.log("IN USERS VIEW");
-                // arrList = store.idNamePairs;
-                // console.log(arrList);
                 break;
             }
         }

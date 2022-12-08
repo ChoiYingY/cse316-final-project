@@ -75,6 +75,8 @@ export const updatePublishPlaylist = (id, playlist) => {
 }
 
 export const findAllPublishedPlaylistByUser = (userName) => api.get(`/playlistPP/${userName}`);
+export const findAllPublishedPlaylistByLists = (list) => api.get(`/playlistPPL/${list}`);
+
 
 
 // export const asyncFindDuplicateName = (name) => api.get(`/playlist/`, {
@@ -90,7 +92,8 @@ const apis = {
     duplicatePlaylist,
     publishPlaylist,
     updatePublishPlaylist,
-    findAllPublishedPlaylistByUser
+    findAllPublishedPlaylistByUser,
+    findAllPublishedPlaylistByLists
     // asyncFindDuplicateName
 }
 

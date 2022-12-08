@@ -466,11 +466,34 @@ updatePlaylistById = async (req, res) => {
     })
 }
 
-findAllPublishedPlaylistByUser = async(req, res) => {
-    console.log("Find Playlist with name: " + JSON.stringify(req.params.name));
+findAllPublishedPlaylistByLists = async(req, res) => {
+    console.log("Find Playlist with list: " + JSON.stringify(req.params.list));
     console.log("findAllPublishedPlaylist:");
 
-    Playlist.find({ "userName": {$regex : req.params.name} }, (err, playlist) => {
+    Playlist.find({ "name": {$regex : req.params.list} }, (err, playlist) => {
+        if (err) {
+            return res.status(404).json({
+                errorMessage: 'Playlist not found!',
+            })
+        }
+
+        console.log("playlist found: " + JSON.stringify(playlist));
+
+        let publishedUserList = playlist.filter(list => (list.isPublished === true))
+        console.log(publishedUserList);
+
+        return res.status(200).json({
+            success: true,
+            playlist: publishedUserList
+        });
+    })
+}
+
+findAllPublishedPlaylistByUser = async(req, res) => {
+    console.log("Find Playlist with user: " + JSON.stringify(req.params.user));
+    console.log("findAllPublishedPlaylist:");
+
+    Playlist.find({ "userName": {$regex : req.params.user} }, (err, playlist) => {
         if (err) {
             return res.status(404).json({
                 errorMessage: 'Playlist not found!',
@@ -595,6 +618,7 @@ module.exports = {
     duplicatePlaylist,
     publishPlaylist,
     updatePublishPlaylist,
-    findAllPublishedPlaylistByUser
+    findAllPublishedPlaylistByUser,
+    findAllPublishedPlaylistByLists
         // asyncFindDuplicateName
 }
